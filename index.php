@@ -43,13 +43,7 @@ $meta["og:url"] = currentUrlDir();
 <script type="text/javascript" src="js/ng14/angular-animate.min.js"></script>
 <script type="text/javascript" src="js/ng14/angular-ui-router.min.js"></script>
 
-<script type="text/javascript" src="js/fp.app.js"></script>
-<script type="text/javascript" src="js/fp.services.js"></script>
-<script type="text/javascript" src="js/fp.controllers.js"></script>
-<script type="text/javascript" src="js/objectForm/objectForm.js"></script>
-<script type="text/javascript" src="js/objectForm/question.js"></script>
-
-
+<script type="text/javascript" src="js/md5.min.js"></script>
 <script type="text/javascript" src="js/jquery.min.js"></script>
 <script type="text/javascript" src="../bootstrap/js/bootstrap.min.js"></script>
 
@@ -62,10 +56,14 @@ $meta["og:url"] = currentUrlDir();
 <script type="text/javascript" src="/mt/js/mt.slideshow.js"></script>
 <script type="text/javascript" src="/mt/js/mt.html5player.js"></script-->
 
+<script type="text/javascript" src="js/fp.app.js"></script>
+<script type="text/javascript" src="js/fp.services.js"></script>
+<script type="text/javascript" src="js/fp.controllers.js"></script>
+<script type="text/javascript" src="js/objectForm/objectForm.js"></script>
+<script type="text/javascript" src="js/objectForm/question.js"></script>
+
 <script type="text/javascript">
-<?php echoJsVar("fpConfig"); 
-echoJsVar("fpUser"); 
-?>
+<?php echoJsVar("fpConfig"); echoJsVar("fpUser"); ?>
 </script>
 
 </head>
