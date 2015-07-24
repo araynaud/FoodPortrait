@@ -1,0 +1,12 @@
+{
+	"success": true, 
+	"message": "User logged in.", 
+	"user": 
+	{
+		"username": "amy", 
+		"email": "amylm41@hotmail.com", 
+		"first_name": "Amy", 
+		"last_name": "Raynaud", 
+		"create_time": "2015-06-25 19:46:41"
+	}
+}

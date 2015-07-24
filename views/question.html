@@ -1,0 +1,39 @@
+<div>
+    <label class="fieldLabel" for="{{q.field_name}}">{{q.label}} 
+      <span class="glyphicon glyphicon-info-sign" ng-if="q.help_text" title="{{q.help_text}}"></span>
+    </label>
+    <br/>
+    <input id="{{q.field_name}}" type="text" ng-if="q.data_type=='text'" maxlength="{{q.max_value}}" ng-model="vm.formData[q.id]"/>
+    <input id="{{q.field_name}}" type="number" ng-if="q.data_type=='number'" min="{{q.min_value}}" max="{{q.max_value}}" ng-model="vm.formData[q.id]"/>
+
+    <span ng-show="vm.showDebug"> {{q.id}} ({{q.data_type}}) {{q.field_name}}: {{vm.formData[q.id]}}</span>
+
+    <div ng-if="q.data_type=='single'">
+        <div class="radioOption" ng-repeat="opt in q.form_answers">            
+          <input type="radio" id="rd_{{q.id}}_{{opt.id}}" ng-model="vm.formData[q.id].id" ng-value="opt.id"/>
+          <label for="rd_{{q.id}}_{{opt.id}}"></label>
+          {{opt.label}} 
+
+          <input id="{{q.field_name}}" type="text" ng-if="opt.data_type=='text'" ng-disabled="vm.formData[q.id].id!=opt.id" maxlength="{{q.max_value}}" 
+          ng-model="vm.formData[q.id].text"/>
+
+          <span ng-show="vm.showDebug && opt.value!=null"> ({{opt.value}})</span> 
+        </div>
+    </div>
+
+    <div ng-if="q.data_type=='multiple'">
+        <div class="radioOption" ng-repeat="opt in q.form_answers">            
+          <input type="checkbox" id="cb_{{q.id}}_{{opt.id}}" ng-model="vm.formData[q.id][opt.id].id" ng-value="opt.id"/>
+          <label for="cb_{{q.id}}_{{opt.id}}"></label>
+          {{opt.label}} 
+
+          <input id="{{q.id}}" type="text" ng-if="opt.data_type=='text'" ng-disabled="!vm.formData[q.id] || !vm.formData[q.id][opt.id] || !vm.formData[q.id][opt.id].id" maxlength="{{q.max_value}}" 
+            ng-model="vm.formData[q.id][opt.id].text" ng-value="opt.id"/>
+
+          <span ng-show="vm.showDebug  && opt.value!=null"> ({{opt.value}}) enabled:{{vm.formData[q.id][opt.id].id}}</span> 
+          <span ng-show="vm.showDebug ">d:{{!vm.formData[q.id][opt.id].id}}</span> 
+
+        </div>
+    </div>
+
+</div>

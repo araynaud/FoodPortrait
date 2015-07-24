@@ -1,0 +1,168 @@
+div#main
+{
+  margin-top: 50px;
+}
+
+.navbar-brand
+{
+    padding-top: 6px;
+    padding-bottom: 0;
+    font-weight: bold;
+}
+
+.navbar-brand.active
+{
+  color: #555;
+  background-color: #e7e7e7;
+}
+
+.textOutline
+{
+  color: white;
+  text-shadow: 
+     -1px -1px 0 #000,  
+      1px -1px 0 #000,
+      -1px 1px 0 #000,
+       1px 1px 0 #000;
+}
+
+.textOutline2
+{
+  color: white;
+  text-shadow: 
+     -2px -2px 0 #000,  
+      2px -2px 0 #000,
+      -2px 2px 0 #000,
+       2px 2px 0 #000,
+     -2px 0px 0 #000,  
+      2px 0px 0 #000,
+      0px -2px 0 #000,
+      0px 2px 0 #000;
+}
+
+
+img.logo
+{
+    margin-top: 50px;
+    height: 3cm;
+}
+
+.object-form
+{	
+  font-size: 10pt;
+}
+
+.object-form ul
+{
+    list-style-type: none;
+}
+
+.main-form-header
+{
+    font-size: 27px;
+    margin-top: -23px;
+    font-weight: 100;
+    margin-bottom: 7px;
+}
+
+input[type=text], textarea
+{
+    border: 1px solid #AAA;
+    border-radius: 4px;
+}
+
+textarea
+{
+    margin-left: 2em;
+}
+
+input[type=date]{
+    width: 168px;
+}
+
+.doc-attachment{
+    font-size: 13px;
+}
+
+.inlineHelp {
+    color: #AAA;
+}
+
+.red-star {
+    color: #D41E1E;
+    padding: 2px;
+}
+/*
+.white-button{
+    color: #5A5A5A;
+    background-color: #FFFFFF;
+    border-color: rgb(193, 193, 193);
+}
+
+.blue-button{
+    background-color: #3b97d3;
+    color: white;
+}
+
+.small-button {
+    padding-top: 3px;
+    padding-bottom: 3px;
+    font-size: 12px;
+}
+
+.large-button{
+    padding-left: 24px;
+    padding-right: 24px;
+    border-radius: 9px;
+    margin-right: 6px;
+}
+*/
+
+.disabled {
+    opacity: 0.1;
+}
+
+.submit-bar{
+    margin-top: 50px;
+}
+
+.fieldLabel {
+    font-weight: bold;
+    width: 400px;
+}
+
+.radioOption
+{
+    line-height: 1em;
+    margin-bottom: 5px;
+}
+
+.radioOption input[type=checkbox], .radioOption input[type=radio]
+{
+  width     : 2em;
+  margin    : 0;
+  padding   : 0;
+  font-size : 1em;
+  opacity   : 0;
+}
+
+.radioOption input[type=checkbox] + label, .radioOption input[type=radio] + label
+{
+  display      : inline-block;
+  margin-left  : -2em;
+  height: 1.2em;
+  width: 1.2em;
+  border: 1px solid black;  
+  margin-bottom: 0px;
+}
+
+.radioOption input[type=radio] + label
+{
+  border-radius: 1em;
+}
+
+.radioOption input[type=checkbox]:checked  + label, .radioOption input[type=radio]:checked + label
+{
+    background-color: #3b97d3;
+    color: white;
+}

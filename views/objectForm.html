@@ -1,0 +1,31 @@
+<div class="container object-form">
+    <h2 class="form-signin-heading">{{vm.title}}</h2>
+
+	<p class="" ng-if="vm.intro">{{vm.intro}} intro</p>
+	<span ng-show="vm.showDebug">questions: {{vm.questions.length}}</span>
+
+    <div ng-repeat="q in vm.questions">
+       <br/>
+       <question vm="vm" q="q"/>
+    </div>
+    <br/>
+    <div>
+        <button id="btnSubmit" class="btn blue-button large-button"  ng-click="vm.saveForm()">Submit</button>
+        <button id="btnCancel" class="btn white-button large-button" ng-click="" type="button">Cancel</button>
+        <button id="btnReload" class="btn white-button large-button" ng-click="vm.loadUserAnswers()" ng-show="vm.showDebug">Reload</button>
+        {{step}}
+        <a ng-click="vm.showDebug = !vm.showDebug">debug</a>
+    </div>
+    <div ng-show="vm.showDebug">       
+        <div class="col-md-4">
+            loaded questions: <pre>{{vm.toJson(vm.questions)}}</pre>
+        </div>
+        <div class="col-md-4">
+            formData: <pre>{{vm.toJson(vm.formData)}}</pre>
+            loaded user answers: <pre>{{vm.toJson(vm.userAnswers)}}</pre>
+        </div>
+        <div class="col-md-4">
+            postData: <pre>{{vm.toJson(vm.postData)}}</pre>
+        </div>
+    </div>
+</div>
