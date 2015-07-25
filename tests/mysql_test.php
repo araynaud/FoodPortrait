@@ -1,8 +1,6 @@
 <?php
 require_once("../include/includes.php");
 
-$fpConfig = readConfigFile("../fp.config");
-
 debug("phpversion", phpversion());
 $db = new SqlManager($fpConfig);
 $table = reqParam("table", "form_question");
@@ -41,7 +39,8 @@ $params["table"] = $table;
 debugVar("params");
 
 $rows = $db->selectWhere($params);
-echo rowsToTextTable($rows, true, "|", 30); 
+echo rowsToTextTable($rows, true, "|", 20); 
+//echo rowsToHtmlTable($rows); 
 getTimer(true);
 
 $exists = $db->count($params);
@@ -54,4 +53,6 @@ getTimer(true);
 
 $db->disconnect();
 getTimer(true);
+
+echo jsValue($rows, true, false);
 ?>

@@ -23,6 +23,13 @@ $response = array();
 
 // response: {success: true, user: {}, message: }
 
+function validatePassword($dbUser, $postData)
+{
+	if(!$dbUser || !isset($postData["password"]))	return false;
+
+	return $dbUser["password"] == $postData["password"];
+}
+
 switch ($action)
 {
 	case "login":
@@ -32,8 +39,7 @@ switch ($action)
 		$dbUser = reset($dbUser);
 		debugVar("dbUser");
 		$response["success"] = false;
-		$pwmatch = isset($postData["password"]) && @$dbUser["password"] == @$postData["password"];
-		if($dbUser && $pwmatch)
+		if(validatePassword($dbUser, $postData))
 		{
 			//TODO compare MD5
 			$response["success"] = true;

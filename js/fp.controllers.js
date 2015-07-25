@@ -19,12 +19,28 @@ function ($window, $state, ProfileService)
     this.state = $state;
 
     lc.title="Please sign in";
-    lc.form = {action: "login"};
-
+    lc.form = { };
+    
     lc.login = function()
     {
+      var postData = {action: "login"};
+      angular.merge(postData, lc.form);
+      if($window.md5)
+        postData.password = md5(lc.form.password);
+      lc.post(postData);
+    };
+
+    lc.register = function()
+    {
+      var postData = {action: "register"};
+      angular.merge(postData, lc.form);
+      lc.post(postData);
+    };
+
+    lc.post = function(postData)
+    {
       lc.loading = true;
-      ProfileService.login(lc.form).then(function(response) 
+      ProfileService.login(postData).then(function(response) 
       {
           lc.loading = false;
           lc.user = response.user; 
@@ -34,6 +50,7 @@ function ($window, $state, ProfileService)
             $state.go('profile');
       });
     };
+
 }])
 
 // =========== LayoutController ===========
