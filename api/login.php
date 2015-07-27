@@ -62,7 +62,7 @@ switch ($action)
 		if($db->insert($params))
 			$response["user"] = fpSetUser($postData);
 		else
-			$response["message"] = "User already exists.";
+			$response["message"] = "This username is already taken. Please choose a different username, or log in to your account.";
 		break;
 
 	case "logout":

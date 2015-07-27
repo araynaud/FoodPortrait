@@ -10,8 +10,8 @@ app.config(function($stateProvider, $urlRouterProvider)
   // For any unmatched url, send to /route1
   $urlRouterProvider.otherwise("/");
   $stateProvider
-  	.state('home',    { url: "/",        template: '<h2 class="form-signin-heading">Welcome home to Food Portrait</h2>' })
-  	.state('about',   { url: "/about",   template: '<h2 class="form-signin-heading">About Food Portrait</h2>' })
+  	.state('home',    { url: "/",        templateUrl: 'views/home.html' })
+  	.state('about',   { url: "/about",   templateUrl: 'views/about.html' })
   	.state('signin',  { url: "/signin",  controller: 'LoginController', controllerAs: 'lc', templateUrl: "views/signin.html" })
   	.state('signup',  { url: "/signup",  controller: 'LoginController', controllerAs: 'lc', templateUrl: "views/signup.html" })
   	.state('profile', { url: "/profile",

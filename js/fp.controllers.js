@@ -112,12 +112,12 @@ function ($window, $state, ProfileService)
     lc.stateIs = function(st)
     {
         return $state.is(st);
-    }
+    };
 
-    lc.currentState = function(st)
+    lc.currentState = function()
     {
         return $state.current.name;
-    }
+    };
 
     lc.title = function()
     {

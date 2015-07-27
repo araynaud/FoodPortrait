@@ -102,7 +102,7 @@ $meta["og:url"] = currentUrlDir();
     </nav>
 
   <a class="navbar-brand navbar-collapse collapse" href="#/" >
-    <img class="logo" src="images/FoodPortrait192.png" alt="logo" ng-hide0="true"/>
+    <img class="logo" src="images/FoodPortrait192.png" alt="logo" ng-hide="lc.stateIs('home')"  />
   </a>
 
   <div id="main" class="container" ui-view>
