@@ -1,6 +1,5 @@
       <form class="form-signin">
-        <h2 class="form-signin-heading">{{lc.title}}</h2>
-        <p>{{lc.message}}</p>
+        <h2 class="form-signin-heading">Please log in</h2>
         <label for="inputUsername" class="sr-only">Username or Email address</label>
         <input type="text" id="inputUsername" class="form-control first" ng-model="lc.form.username" placeholder="User" required autofocus>
         <!--label for="inputEmail" class="sr-only">Email address</label>
@@ -12,5 +11,6 @@
             <input type="checkbox" value="remember-me"> Remember me
           </label>
         </div>
+        <p>{{lc.message}}</p>
         <button class="btn btn-lg btn-primary btn-block" type="submit" ng-click="lc.login()">Sign in</button>
       </form>

@@ -17,10 +17,8 @@ function ($window, $state, ProfileService)
     var lc = this;
     $window.LoginController = this;
     this.state = $state;
-
-    lc.title="Please sign in";
     lc.form = { };
-    
+
     lc.login = function()
     {
       var postData = {action: "login"};
@@ -30,10 +28,16 @@ function ($window, $state, ProfileService)
       lc.post(postData);
     };
 
-    lc.register = function()
+    lc.signup = function()
     {
-      var postData = {action: "register"};
+      var postData = {action: "signup"};
       angular.merge(postData, lc.form);
+      if(lc.form.password != lc.form.password2)
+        return lc.message = "Passwords do not match.";
+
+      if($window.md5)
+        postData.password = md5(lc.form.password);
+      delete postData.password2;
       lc.post(postData);
     };
 

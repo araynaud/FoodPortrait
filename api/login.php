@@ -28,6 +28,7 @@ function validatePassword($dbUser, $postData)
 	if(!$dbUser || !isset($postData["password"]))	return false;
 
 	return $dbUser["password"] == $postData["password"];
+	return $dbUser["password"] == md5($postData["password"]);
 }
 
 switch ($action)
@@ -54,7 +55,16 @@ switch ($action)
 		}
 		break;
 
-//	case "register":
+	case "signup":
+		$params = $postData;
+		$params["table"] = "user";
+		unset($params["action"]);
+		if($db->insert($params))
+			$response["user"] = fpSetUser($postData);
+		else
+			$response["message"] = "User already exists.";
+		break;
+
 	case "logout":
 		fpUserLogout();
 		$response["message"] = "User logged out.";
