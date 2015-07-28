@@ -23,6 +23,8 @@ function ($window, $state, ProfileService)
     {
       var postData = {action: "login"};
       angular.merge(postData, lc.form);
+      if(!lc.form.username || !lc.form.password) 
+        return false;
       if($window.md5)
         postData.password = md5(lc.form.password);
       lc.post(postData);
@@ -32,6 +34,9 @@ function ($window, $state, ProfileService)
     {
       var postData = {action: "signup"};
       angular.merge(postData, lc.form);
+      if(!lc.form.username || !lc.form.password || !lc.form.password2 || !lc.form.email) 
+        return false;
+
       if(lc.form.password != lc.form.password2)
         return lc.message = "Passwords do not match.";
 
