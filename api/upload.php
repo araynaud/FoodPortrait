@@ -80,7 +80,16 @@ debug("moving to $uploadFile", $moved);
 if(!$moved)
 	return errorMessage("Cannot move file into target dir.");
 
+//save exif data
+//$exif = getExifData($uploadFile, true);
+$exif = exif_read_data($uploadFile, null, false, false);
+//$dateTaken = arrayGetCoalesce($exif, "DateTimeOriginal", "DateTimeDigitized", "DateTime");
+$dateTaken = getExifDateTaken($uploadFile, $exif);
+
+writeCsvFile("$uploadFile.exif.txt", $exif);
+
 $message =  "File uploaded.";
+addVarToArray($response, "dateTaken");
 addVarToArray($response, "message");
 $response["time"] = getTimer(true);
 echo jsValue($response,true, true);

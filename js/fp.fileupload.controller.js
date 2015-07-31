@@ -46,6 +46,7 @@ function ($scope, Upload, $window, $state, ProfileService)
                 .success(function (data, status, headers, config) 
                 {
                     $scope.uploadUrl = data.uploadUrl;
+                    uc.form.dateTaken = data.dateTaken;
                     var dataLog = data;
                     if(angular.isObject(data))
                         dataLog = angular.toJson(data, true);
