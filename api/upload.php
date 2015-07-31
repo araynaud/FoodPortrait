@@ -6,6 +6,9 @@ session_start();
 //move file to temp location:  $BASE_IMAGE_DIR/$username/$filename
 //load, resize, crop image.
 //do not keep original file
+//insert into upload table.
+//What if user/filename already exists? can user reuse existing image, select from uploads?
+
 
 $_REQUEST["debug"]=true;
 //response: image metadata from EXIF and url.

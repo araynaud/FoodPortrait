@@ -1,4 +1,4 @@
-<div class="file-uploader">
+<form class="file-uploader" name="uploadForm">
     <!--div class="col-md-2">basic:
       File: <input type="file" ng-model="basicfile" multiple/>Select:</div>
     </div-->
@@ -32,7 +32,7 @@
       </p>
       <p>
         <label for="inputContext" class="sr-only">Context:</label> 
-        <input type="text" id="inputContext" name="context" class="form-control" ng-model="ic.form.context" placeholder="Context" required>
+        <input type="text" id="inputContext" name="context" class="form-control" ng-model="uc.form.context" placeholder="Context" required>
       </p>
     </div>
       <p class="col-md-4">
@@ -53,4 +53,4 @@
       <img id="thumbnail" ng-src="{{uploadUrl}}" ng-show="uploadUrl"/>
     </div>
 
-</div>
+</form>
