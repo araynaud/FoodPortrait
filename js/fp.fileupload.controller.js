@@ -45,10 +45,13 @@ function ($scope, Upload, $window, $state, ProfileService)
                 })
                 .success(function (data, status, headers, config) 
                 {
+                    $scope.uploadUrl = data.uploadUrl;
+                    var dataLog = data;
                     if(angular.isObject(data))
-                        data = JSON.stringify(data);
+                        dataLog = angular.toJson(data, true);
+
                     $scope.log = 'uploaded file: ' + (config.file ? config.file.name : "(none)")
-                    + ', Response: ' + data + '\n' + $scope.log;
+                    + ', status: '+ status + ', Response: ' + dataLog + '\n' + $scope.log;
                 });
             }
         }

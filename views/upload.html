@@ -1,43 +1,56 @@
 <div class="file-uploader">
-    <div class="col-md-3">Single file:
+    <!--div class="col-md-2">basic:
+      File: <input type="file" ng-model="basicfile" multiple/>Select:</div>
+    </div-->
+
+    <div class="col-md-2">Single file:
       <input type="file" ngf-select ng-model="file" ngf-multiple="false"/>
     </div>
 
-    <div class="col-md-3">Multiple files:
+    <!--div class="col-md-2">Multiple files:
       <input type="file" ngf-select ngf-change="upload($files)" ngf-multiple="true"/>
     </div>
 
-    <div class="col-md-3">Drop File:
+    <div class="col-md-4">Drop File:
       <div ngf-drop ngf-select ng-model="files" class="drop-box" 
           ngf-drag-over-class="dragover" ngf-multiple="true" ngf-allow-dir="true"
           accept="image/*,application/pdf">Drop pdfs or images here or click to upload</div>
       <div ngf-no-file-drop>File Drag/Drop is not supported for this browser</div>
     </div>
 
-    <div class="col-md-3">Drop File:
+    <div class="col-md-4">Drop File:
       Files:
       <ul>
           <li ng-repeat="f in files" style="font:smaller">{{f.name}}</li>
       </ul>
-    </div>
+    </div-->
 
     <div class="col-md-12">
+      <p>
+        <label for="inputDescription" class="sr-only">Description:</label> 
+        <input type="text" id="inputDescription" name="description" class="form-control" ng-model="uc.form.description" placeholder="Description" required>
+      </p>
+      <p>
+        <label for="inputContext" class="sr-only">Context:</label> 
+        <input type="text" id="inputContext" name="context" class="form-control" ng-model="ic.form.context" placeholder="Context" required>
+      </p>
+    </div>
+      <p class="col-md-4">
+        <label for="inputShared" class="sr-only">Shared with:</label> 
+        <input type="number" id="inputShared" name="shared" class="form-control" ng-model="uc.form.shared" placeholder="Shared with" required>
+      </p>
+      <p class="col-md-4">
+        <label for="inputDate" class="sr-only">Date:</label> 
+        <input type="date" id="inputDate" name="shared" class="form-control" ng-model="uc.form.date" placeholder="Date" required>
+      </p>
 
-    <p>
-      <label for="inputDescription" class="sr-only">Description:</label> 
-      <input type="text" id="inputDescription" name="description" class="form-control" ng-model="uc.form.description" placeholder="Description" required>
-    </p>
-    <p>
-      <label for="inputContext" class="sr-only">Context:</label> 
-      <input type="text" id="inputContext" name="context" class="form-control" ng-model="ic.form.context" placeholder="Context" required>
-    </p>
-    <p>
-      <label for="inputShared" class0="sr-only">Shared with:</label> 
-      <input type="number" id="inputShared" name="shared" class="form-control" ng-model="uc.form.shared" placeholder="Shared with" required>
-    </p>
-
-
+    <div class="col-md-8">
       Upload Log:
       <pre>{{log}}</pre>
     </div>
+
+    <div class="col-md-4">
+      <img id="thumbnail" ng-src="{{uploadUrl}}" ng-show="uploadUrl"/>
+    </div>
+
 </div>
