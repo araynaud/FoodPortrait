@@ -30,6 +30,7 @@ $meta["og:url"] = currentUrlDir();
 <link rel="stylesheet" href="style/signin.css">
 <link rel="stylesheet" href="style/objectForm.css">
 <link rel="stylesheet" href="style/sticky-footer.css">
+<link rel="stylesheet" href="style/fileUpload.css">
 
 <link rel="icon" href="images/FoodPortrait128.png">
 <link rel="icon" sizes="192x192" href="images/FoodPortrait192.png">
@@ -37,15 +38,17 @@ $meta["og:url"] = currentUrlDir();
 <link rel="apple-touch-icon" sizes="128x128" href="images/FoodPortrait128.png">
 <link rel="apple-touch-icon-precomposed" sizes="128x128" href="images/FoodPortrait128.png">
 
+<script type="text/javascript" src="js/lib/jquery.min.js"></script>
+<script type="text/javascript" src="../bootstrap/js/bootstrap.min.js"></script>
+
 <script type="text/javascript" src="js/ng14/angular.min.js"></script>
 <script type="text/javascript" src="js/ng14/angular-resource.min.js"></script>
 <script type="text/javascript" src="js/ng14/angular-sanitize.min.js"></script>
 <script type="text/javascript" src="js/ng14/angular-animate.min.js"></script>
 <script type="text/javascript" src="js/ng14/angular-ui-router.min.js"></script>
 
-<script type="text/javascript" src="js/md5.min.js"></script>
-<script type="text/javascript" src="js/jquery.min.js"></script>
-<script type="text/javascript" src="../bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/lib/ng-file-upload.js"></script>
+<script type="text/javascript" src="js/lib/md5.min.js"></script>
 
 <script type="text/javascript" src="/mt/js/mt.extensions.js"></script>
 <!--script type="text/javascript" src="/mt/js/mt.extensions.jquery.js"></script>
@@ -59,6 +62,8 @@ $meta["og:url"] = currentUrlDir();
 <script type="text/javascript" src="js/fp.app.js"></script>
 <script type="text/javascript" src="js/fp.services.js"></script>
 <script type="text/javascript" src="js/fp.controllers.js"></script>
+<script type="text/javascript" src="js/fp.main.controller.js"></script>
+<script type="text/javascript" src="js/fp.fileupload.controller.js"></script>
 <script type="text/javascript" src="js/objectForm/objectForm.js"></script>
 <script type="text/javascript" src="js/objectForm/question.js"></script>
 
@@ -72,7 +77,7 @@ $meta["og:url"] = currentUrlDir();
     <!-- Static navbar -->
     <nav class="navbar navbar-default navbar-fixed-top">
       <div class="container">
-          <a class="navbar-brand textOutline" ng-class="{active: lc.stateIs('home')}" style="font-size: 34px; color: #F44;" href="#/">
+          <a class="navbar-brand textOutline" ng-class="{active: lc.stateIs('main')}" style="font-size: 34px; color: #F44;" href="#/main">
             FOOD
             <div style="font-size: 19px; color: #FE0;">PORTRAIT</div>
           </a>
@@ -88,21 +93,22 @@ $meta["og:url"] = currentUrlDir();
 
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li ng-show="lc.loggedIn()" ng-class="{active: lc.stateIs('profile')}"><a href="#/profile">Profile</a></li>
             <li ng-class="{active: lc.stateIs('about')}"><a href="#/about">About</a></li>
+            <li ng-show="lc.loggedIn()" ng-class="{active: lc.stateIs('profile')}"><a href="#/profile">Profile</a></li>
+            <li ng-show="lc.loggedIn()" ng-class="{active: lc.stateIs('upload')}"><a href="#/upload">Upload</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li ng-hide="lc.loggedIn()" ng-class="{active: lc.stateIs('signin')}"><a href="#/signin">Log in</span></a></li>
             <li ng-hide="lc.loggedIn()" ng-class="{active: lc.stateIs('signup')}"><a href="#/signup">Sign up</a></li>
-            <li ng-show="lc.loggedIn()"><a href="#/profile">{{lc.userFullName()}}</a></li>
+            <li ng-show="lc.loggedIn()" ng-class="{active: lc.stateIs('user')}"><a href="#/main">{{lc.userFullName()}}</a></li>
             <li ng-show="lc.loggedIn()"><a href="#/login" ng-click="lc.logout()">Sign out</a></li>
           </ul>
         </div>
       </div>
     </nav>
 
-  <a class="navbar-brand navbar-collapse collapse" href="#/" >
-    <img class="logo" src="images/FoodPortrait192.png" alt="logo" ng-hide="lc.stateIs('home')"  />
+  <a class="navbar-brand navbar-collapse collapse" href="#/">
+    <img class="logo" src="images/FoodPortrait192.png" alt="logo" ng-hide="true || lc.stateIs('home')" />
   </a>
 
   <div id="main" class="container" ui-view>

@@ -1,9 +1,9 @@
 <?php
 require_once("../include/includes.php");
-$db = new SqlManager($fpConfig);
-
+setContentType("text","plain");
 session_start(); 
 
+$db = new SqlManager($fpConfig);
 $postData = $_POST;
 if(!$postData)
 	$postData = getJsonPostData();

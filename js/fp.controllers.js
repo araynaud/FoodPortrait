@@ -1,6 +1,5 @@
 'use strict';
 
-// =========== ProfileController ===========
 angular.module('fpControllers', [])
 // =========== LoginController ===========
 // handles login (sign in), register (sign up), logout, 
@@ -138,6 +137,7 @@ function ($window, $state, ProfileService)
 
 }])
 
+// =========== ProfileController ===========
 .controller('ProfileController', ['$window', '$state', 'ProfileService',  
 function ($window, $state, ProfileService)
 {
@@ -178,7 +178,8 @@ function ($window, $state, ProfileService)
     {
         pc.form = response;
         pc.questions = response.questions;
-        pc.questions.byId = pc.questions.indexBy("id");
+        if(pc.questions)
+          pc.questions.byId = pc.questions.indexBy("id");
         pc.user_answers = response.user_answers; 
         pc.formData = pc.actions.loadUserAnswers();
         pc.successMessage();
@@ -190,7 +191,7 @@ function ($window, $state, ProfileService)
   pc.actions.loadUserAnswers = function() 
   {
       var formData = {};
-      if(!pc.user_answers) return formData;
+      if(!pc.user_answers || !pc.questions) return formData;
 
       for(var i=0; i < pc.user_answers.length; i++)
       {
