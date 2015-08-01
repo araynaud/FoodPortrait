@@ -62,6 +62,8 @@ $meta["og:url"] = currentUrlDir();
 <script type="text/javascript" src="js/fp.app.js"></script>
 <script type="text/javascript" src="js/fp.services.js"></script>
 <script type="text/javascript" src="js/fp.controllers.js"></script>
+<script type="text/javascript" src="js/fp.login.controller.js"></script>
+<script type="text/javascript" src="js/fp.profile.controller.js"></script>
 <script type="text/javascript" src="js/fp.main.controller.js"></script>
 <script type="text/javascript" src="js/fp.fileupload.controller.js"></script>
 <script type="text/javascript" src="js/objectForm/objectForm.js"></script>
