@@ -86,7 +86,17 @@ $exif = exif_read_data($uploadFile, null, false, false);
 //$dateTaken = arrayGetCoalesce($exif, "DateTimeOriginal", "DateTimeDigitized", "DateTime");
 $dateTaken = getExifDateTaken($uploadFile, $exif);
 
+$size = getimagesize($uploadFile, $info);
+if($info)
+{
+	$exif['IPTC'] = array();
+	foreach ($info as $key => $value) 
+		if($value && $iptc= iptcparse($value))
+			$exif['IPTC'][$key] = $iptc;
+}
+
 writeCsvFile("$uploadFile.exif.txt", $exif);
+writeTextFile("$uploadFile.exif.js", jsValue($exif));
 
 $message =  "File uploaded.";
 addVarToArray($response, "dateTaken");
