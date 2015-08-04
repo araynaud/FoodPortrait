@@ -28,6 +28,11 @@ function getJsonPostData()
     return $postdata;
 }
 
+function hasProfile($db, $username)
+{
+    return $db->exists(array("table" => "user_answer", "username" => $username));
+}
+
 //save form: insert,update,delete user_answers for this user
 //loop through $user_answers 
 //try to save each

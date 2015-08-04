@@ -46,6 +46,8 @@ switch ($action)
 			$response["success"] = true;
 			$response["message"] = "User logged in.";			
 			unset($dbUser["password"]);
+			$dbUser["hasProfile"] = hasProfile($db, $dbUser["username"]);
+
 			$response["user"] = fpSetUser($dbUser);
 		}
 		else

@@ -84,6 +84,7 @@ function ($window, $state, ProfileService)
     {
         pc.saveStatus = response; 
         pc.successMessage();
+        $state.go("main");
     }, 
     pc.errorMessage);
   };

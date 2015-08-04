@@ -25,7 +25,12 @@ angular.module('app').directive('objectForm', function ()
                 if(vm.actions && vm.actions.loadUserAnswers)
                     return vm.formData = vm.actions.loadUserAnswers();
             }
-
+            
+			vm.cancel = function() 
+            {
+				history.back();
+			}
+			
             vm.saveForm = function() 
             {
                 vm.status = "saveForm\n";
