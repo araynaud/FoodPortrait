@@ -82,18 +82,12 @@ if(!$moved)
 
 //save exif data
 //$exif = getExifData($uploadFile, true);
-$exif = exif_read_data($uploadFile, null, false, false);
-//$dateTaken = arrayGetCoalesce($exif, "DateTimeOriginal", "DateTimeDigitized", "DateTime");
-$dateTaken = getExifDateTaken($uploadFile, $exif);
+$exif = getImageMetadata($uploadFile);
 
-$size = getimagesize($uploadFile, $info);
-if($info)
-{
-	$exif['IPTC'] = array();
-	foreach ($info as $key => $value) 
-		if($value && $iptc= iptcparse($value))
-			$exif['IPTC'][$key] = $iptc;
-}
+//TODO: insert row in upload table
+//when to update?
+$db = new SqlManager($fpConfig);
+$db->disconnect();
 
 writeCsvFile("$uploadFile.exif.txt", $exif);
 writeTextFile("$uploadFile.exif.js", jsValue($exif));

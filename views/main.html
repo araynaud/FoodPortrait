@@ -12,7 +12,13 @@ My Meals: view latest for this user
 
 <div class="col-md-3">
 	Filters<br/>
-	Menu<br/>
+
+<div ng-repeat="f in mc.filters">
+{{f.id}} {{f.field_name}}
+
+</div>
+
+
 </div>
 
 <div class="col-md-6">

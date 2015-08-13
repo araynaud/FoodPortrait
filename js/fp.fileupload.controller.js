@@ -34,7 +34,7 @@ function ($scope, Upload, $window, $state, ProfileService)
         || $scope.uploadForm.shared.$invalid;
     }
 
-    $scope.upload = function (files) 
+    uc.upload = function (files) 
     {
         if (!files || !files.length) return false;
 

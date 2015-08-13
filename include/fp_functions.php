@@ -48,9 +48,47 @@ function saveAnswers($db, $username, $user_answers)
     {
         $answer["username"] = $username;
         $answer["table"] = "user_answer";
-        $status = $db->saveRow($answer); //, "question_id, answer_id");
+        $status = $db->saveRow($answer);
         if($status) $result++;
     }
     return $result;
+}
+
+
+function saveUploadData($db, $username, $data)
+{
+    $data["username"] = $username;
+    $data["table"] = "user_upload";
+
+    $result = $db->saveRow($answer);
+    return $result;
+}
+
+// Extract metadata from uploaded image
+function getImageMetadata($filename)
+{
+    $exif = exif_read_data($filename, null, false, false);
+    //$dateTaken = arrayGetCoalesce($exif, "DateTimeOriginal", "DateTimeDigitized", "DateTime");
+    $dateTaken = getExifDateTaken($filename, $exif);
+    $exif['size'] = $size = getimagesize($filename, $info);
+
+    if(!$info) return $exif;
+    $exif['IPTC'] = array();
+    $exif['IPTC_str'] = array();
+    $tags = array();
+    foreach ($info as $key => $value)
+    { 
+        $exif['IPTC_str'][]=$value;
+        if($value && $iptc = iptcparse($value))
+        {
+            $exif['IPTC'][$key] = $iptc;
+            if(is_array($iptc))
+                foreach ($iptc as $tag)
+                    $tags[] = (is_array($tag) && count($tag)==1) ? reset($tag) : $tag;
+        }
+    }
+
+    $exif['tags'] = array_filter($tags);
+    return $exif;
 }
 ?>

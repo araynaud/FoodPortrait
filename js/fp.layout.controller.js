@@ -1,7 +1,7 @@
 'use strict';
 
 // =========== LayoutController ===========
-angular.module('fpControllers', [])
+angular.module('fpControllers')
 .controller('LayoutController', ['$window', '$state', 'ProfileService', 
 function ($window, $state, ProfileService)
 {

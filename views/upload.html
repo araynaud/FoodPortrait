@@ -21,17 +21,21 @@
        <input type="file" ng-model="file" name="file"/>
     </div-->
 
-    <div class="col-md-6">
-      <label for="inputFiles">Photo:</label> 
-      <input type="file" id="inputFiles" ngf-select ng-model="file" name="file" ngf-multiple="false" required/>
+    <div class="col-md-4">
+      <label for="inputFiles">
+        <span ng-show="!uploadUrl">Photo:</span>
+        <img id="thumbnail" ng-src="{{uploadUrl}}" ng-show="uploadUrl"/>
+      </label> 
+      <input type="file" id="inputFiles" ngf-select ng-model="uc.file" name="file" ngf-multiple="false" 
+      accept="image/*,application/pdf" required/>
     </div>
 
-    <div class="col-md-3">
+    <div class="col-md-4">
       <label for="inputDate">Date:</label> 
       <input type="dateTimeLocal" id="inputDate" name="dateTaken" class="form-control" ng-model="uc.form.dateTaken" placeholder="Date">
     </div>
 
-    <div class="col-md-3">
+    <div class="col-md-4">
       <label for="inputShared">Shared with:</label> 
       <input type="number" id="inputShared" name="shared" class="form-control" ng-model="uc.form.shared" 
       min="1" max="20" placeholder="Shared with" required>
@@ -42,21 +46,24 @@
         <label for="inputDescription">Description:</label> 
         <input type="text" id="inputDescription" name="description" class="form-control" ng-model="uc.form.description" placeholder="Description" required>
       </p>
+
+      <p>
+        <label for="inputContext">Mood:</label> 
+        <input type="text" id="inputMood" name="context" class="form-control" ng-model="uc.form.mood" placeholder="Context" required>
+      </p>
       
       <p>
         <label for="inputContext">Context:</label> 
         <input type="text" id="inputContext" name="context" class="form-control" ng-model="uc.form.context" placeholder="Context" required>
       </p>
+
+
     </div>
 
-    <button class="btn btn-primary" type="submit" ng-click="upload([file])"
+    <button class="btn btn-primary" type="submit" ng-click="uc.upload([uc.file])"
       ng-disabled="uc.validate(uploadForm)">Upload</button>
 
-    <div class="col-md-4">
-      <img id="thumbnail" ng-src="{{uploadUrl}}" ng-show="uploadUrl"/>
-    </div>
-
-    <div class="col-md-8">
+    <div class="col-md-12">
       Upload Log:
       <pre>{{log}}</pre>
     </div>

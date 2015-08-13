@@ -20,3 +20,5 @@ app.config(function($stateProvider, $urlRouterProvider)
   		controller: 'ProfileController', controllerAs: 'pc', 
   		template: '<object-form actions="pc.actions" questions="pc.questions" form-data="pc.formData"/>'});
 });
+
+angular.module('fpControllers', []);
