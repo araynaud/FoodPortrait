@@ -55,40 +55,65 @@ function saveAnswers($db, $username, $user_answers)
 }
 
 
-function saveUploadData($db, $username, $data)
+function saveUploadData($db, $data, $username = NULL)
 {
-    $data["username"] = $username;
     $data["table"] = "user_upload";
+    if(!isset($data["username"]))
+        $data["username"] = $username;
 
-    $result = $db->saveRow($answer);
+    $result = $db->saveRow($data);
     return $result;
 }
 
 // Extract metadata from uploaded image
 function getImageMetadata($filename)
 {
-    $exif = exif_read_data($filename, null, false, false);
-    //$dateTaken = arrayGetCoalesce($exif, "DateTimeOriginal", "DateTimeDigitized", "DateTime");
-    $dateTaken = getExifDateTaken($filename, $exif);
-    $exif['size'] = $size = getimagesize($filename, $info);
+debug("getImageMetadata", $filename);
+    $exif = getExifData($filename); //, true, true);
+debug("getImageMetadata getExifData", $exif);
+  
+//    $exif['format'] = getImageSizeInfo($filename);
+    $size = getimagesize($filename, $iptc);
 
-    if(!$info) return $exif;
-    $exif['IPTC'] = array();
-    $exif['IPTC_str'] = array();
+    if(!$iptc) return $exif;
+
+    $exif['IPTC'] = parseIptcTags($iptc);
+    return $exif;
+}
+
+
+/*
+
+IPTC.APP13.1#090;%G
+IPTC.APP13.2#005;BAK20100907_3124
+IPTC.APP13.2#025;Brian Knapp
+IPTC.APP13.2#055;20100907
+IPTC.APP13.2#060;144209
+IPTC.APP13.2#120;Mid-morning snack: chocolate chips
+
+*/
+
+
+function parseIptcTags($iptcInfo)
+{
+    $iptcHeaderArray = getConfig("_IPTC.headers");
     $tags = array();
-    foreach ($info as $key => $value)
+    foreach ($iptcInfo as $key => $value)
     { 
-        $exif['IPTC_str'][]=$value;
-        if($value && $iptc = iptcparse($value))
+        if(!$value) continue;
+        $iptc = iptcparse($value);
+debug("IPTC $key", $iptc);        
+        if(!$iptc || !is_array($iptc)) continue;
+        foreach ($iptc as $key2 => $arr)
         {
-            $exif['IPTC'][$key] = $iptc;
-            if(is_array($iptc))
-                foreach ($iptc as $tag)
-                    $tags[] = (is_array($tag) && count($tag)==1) ? reset($tag) : $tag;
+debug("IPTC $key.$key2", $arr);            
+            if(!array_key_exists($key2, $iptcHeaderArray)) continue;
+            $tk = $iptcHeaderArray[$key2];
+            $tags[$tk] = arraySingleToScalar($arr);
         }
     }
 
-    $exif['tags'] = array_filter($tags);
-    return $exif;
+    return $tags;
 }
+
 ?>

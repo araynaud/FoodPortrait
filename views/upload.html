@@ -1,22 +1,4 @@
 <form class="file-uploader" name="uploadForm" novalidate>
-    <!--div class="col-md-2">Multiple files:
-      <input type="file" ngf-select ngf-change="upload($files)" ngf-multiple="true"/>
-    </div>
-
-    <div class="col-md-4">Drop File:
-      <div ngf-drop ngf-select ng-model="files" class="drop-box" 
-          ngf-drag-over-class="dragover" ngf-multiple="true" ngf-allow-dir="true"
-          accept="image/*,application/pdf">Drop pdfs or images here or click to upload</div>
-      <div ngf-no-file-drop>File Drag/Drop is not supported for this browser</div>
-    </div>
-
-    <div class="col-md-4">Drop File:
-      Files:
-      <ul>
-          <li ng-repeat="f in files" style="font:smaller">{{f.name}}</li>
-      </ul>
-    </div-->
-
     <!--div class="col-md-6">Basic file:
        <input type="file" ng-model="file" name="file"/>
     </div-->
@@ -27,7 +9,7 @@
         <img id="thumbnail" ng-src="{{uploadUrl}}" ng-show="uploadUrl"/>
       </label> 
       <input type="file" id="inputFiles" ngf-select ng-model="uc.file" name="file" ngf-multiple="false" 
-      accept="image/*,application/pdf" required/>
+      accept="image/*" required/>
     </div>
 
     <div class="col-md-4">

@@ -32,12 +32,12 @@ debug("POST files", $_FILES, true);
 
 $response=array();
 if(empty($_FILES))
-	return errorMessage("No File uploaded.");
+	return errorMessage("No File uploaded.");		
 
-$uploadedFile = reset($_FILES);
-$tmpFile = $uploadedFile["tmp_name"];
-$mimeType = $uploadedFile["type"];
-$filename = $uploadedFile["name"];
+$firstFile = reset($_FILES);
+$tmpFile = $firstFile["tmp_name"];
+$mimeType = $firstFile["type"];
+$filename = $firstFile["name"];
 
 $getcwd=getcwd();
 $freeSpace=disk_free_space("/");
@@ -58,11 +58,10 @@ $dataRootUrl = getConfig("_upload.url");
 
 createDir($dataRoot, "$username/original"); //depending on user permissions? // username/subdir
 $uploadDir  = combine($dataRoot, $username, "original");
-$uploadFile = combine($dataRoot, $username, "original", $filename);
+$uploadedFile = combine($dataRoot, $username, "original", $filename);
 $uploadUrl = combine($dataRootUrl, $username, $filename);
-debug($tmpFile, $uploadFile);
 $filesize = filesize($tmpFile);
-$moved = move_uploaded_file($tmpFile, $uploadFile);
+$success = move_uploaded_file($tmpFile, $uploadedFile);
 $maxUploadSize = ini_get("upload_max_filesize");
 //$resized = createThumbnail($uploadDir, $filename, '..', 1000);
 $resized = createThumbnail($uploadDir, $filename, '..', 225);
@@ -72,29 +71,35 @@ addVarToArray($response, "filename");
 addVarToArray($response, "uploadUrl");
 addVarToArray($response, "resized");
 
-addVarToArray($response, "moved");
+addVarToArray($response, "success");
 addVarToArray($response, "filesize");
 addVarToArray($response, "mimeType");
 //addVarToArray($response, "maxUploadSize");
-debug("moving to $uploadFile", $moved);
-if(!$moved)
+debug("moving to $uploadUrl", $success);
+if(!$success)
 	return errorMessage("Cannot move file into target dir.");
 
 //save exif data
-//$exif = getExifData($uploadFile, true);
-$exif = getImageMetadata($uploadFile);
+$exif = getImageMetadata($uploadedFile);
+
+$dateTaken = getExifDateTaken($filename, $exif);
+
+$description = arrayGetCoalesce($exif, "ImageDescription", "IPTC.Caption");
+
+writeCsvFile("$uploadedFile.exif.txt", $exif);
+writeTextFile("$uploadedFile.exif.js", jsValue($exif));
 
 //TODO: insert row in upload table
 //when to update?
 $db = new SqlManager($fpConfig);
 $db->disconnect();
 
-writeCsvFile("$uploadFile.exif.txt", $exif);
-writeTextFile("$uploadFile.exif.js", jsValue($exif));
-
 $message =  "File uploaded.";
-addVarToArray($response, "dateTaken");
 addVarToArray($response, "message");
+addVarToArray($response, "dateTaken");
+addVarToArray($response, "description");
+addVarToArray($response, "exif");
+
 $response["time"] = getTimer(true);
 echo jsValue($response,true, true);
 ?>

@@ -29,7 +29,7 @@ function ($scope, Upload, $window, $state, ProfileService)
     uc.validate = function(uploadForm)
     {
         return $scope.uploadForm.file.$invalid
-        || $scope.uploadForm.description.$invalid
+//        || $scope.uploadForm.description.$invalid
 //        || $scope.uploadForm.context.$invalid
         || $scope.uploadForm.shared.$invalid;
     }
@@ -57,6 +57,7 @@ function ($scope, Upload, $window, $state, ProfileService)
             {
                 $scope.uploadUrl = data.uploadUrl;
                 uc.form.dateTaken = data.dateTaken;
+                uc.form.description = data.description;
                 var dataLog = data;
                 if(angular.isObject(data))
                     dataLog = angular.toJson(data, true);
