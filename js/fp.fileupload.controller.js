@@ -12,6 +12,8 @@ function ($scope, Upload, $window, $state, ProfileService)
     $window.UploadController = this;
     this.state = $state;
 
+    uc.showDebug = $window.fpConfig && $window.fpConfig.debug ? $window.fpConfig.debug.angular : false;
+
     uc.form = {};
     uc.form.shared=1;
 /*
@@ -34,6 +36,9 @@ function ($scope, Upload, $window, $state, ProfileService)
         || $scope.uploadForm.shared.$invalid;
     }
 
+    //post file
+    //insert db record
+    //return file metadata to form
     uc.upload = function (files) 
     {
         if (!files || !files.length) return false;
@@ -41,30 +46,46 @@ function ($scope, Upload, $window, $state, ProfileService)
         for (var i = 0; i < files.length; i++) 
         {
             var file = files[i];
-            Upload.upload({
-                url: 'api/upload.php',
-                fields: uc.form,
-                file: file
-            })
+            uc.progressPercentage="";
+            uc.uploadUrl="";
+            uc.log="";
+            Upload.upload({ url: 'api/upload.php', fields: uc.form, file: file })
             .progress(function (evt) 
             {
-                var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-                $scope.log = 'progress: ' + i +' ' + progressPercentage + '% '
-                    + (evt.config && evt.config.file? evt.config.file.name : "(none)")
-                    + '\n' + $scope.log;
+                uc.progressPercentage = parseInt(100.0 * evt.loaded / evt.total) + '%';
+                if(!uc.showDebug) return;
+
+                var fname = (evt.config && evt.config.file? evt.config.file.name : "(none)");
+                uc.log = 'progress: {0} {1}\n'.format(uc.progressPercentage, fname) + uc.log;
             })
             .success(function (data, status, headers, config) 
             {
-                $scope.uploadUrl = data.uploadUrl;
+                uc.progressPercentage="";
+                uc.uploadUrl = data.uploadUrl;
                 uc.form.dateTaken = data.dateTaken;
                 uc.form.description = data.description;
+                if(!uc.showDebug) return;
+
                 var dataLog = data;
                 if(angular.isObject(data))
                     dataLog = angular.toJson(data, true);
-
-                $scope.log = 'uploaded file: ' + (config.file ? config.file.name : "(none)")
-                + ', status: '+ status + ', Response: ' + dataLog + '\n' + $scope.log;
+                var fname = (config.file ? config.file.name : "(none)");
+                uc.log = 'uploaded file: {0}, status: {1}, Response: {2}\n'.format(fname, status, dataLog) + uc.log;
             });
         }
     };
+
+    //post details
+    //update db record
+    uc.saveUpload = function (files) 
+    {
+    }
+
+    //if upload canceled: delete details
+    //delete db record and uploaded file
+    uc.cancelUpload = function (files) 
+    {
+    }
+
+
 }]);

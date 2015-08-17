@@ -9,7 +9,6 @@ session_start();
 //insert into upload table.
 //What if user/filename already exists? can user reuse existing image, select from uploads?
 
-
 $_REQUEST["debug"]=true;
 //response: image metadata from EXIF and url.
 
@@ -37,7 +36,8 @@ if(empty($_FILES))
 $firstFile = reset($_FILES);
 $tmpFile = $firstFile["tmp_name"];
 $mimeType = $firstFile["type"];
-$filename = $firstFile["name"];
+$filename = utf8_decode($firstFile["name"]);
+$filename = cleanupFilename($filename);
 
 $getcwd=getcwd();
 $freeSpace=disk_free_space("/");
@@ -81,9 +81,7 @@ if(!$success)
 
 //save exif data
 $exif = getImageMetadata($uploadedFile);
-
 $dateTaken = getExifDateTaken($filename, $exif);
-
 $description = arrayGetCoalesce($exif, "ImageDescription", "IPTC.Caption");
 
 writeCsvFile("$uploadedFile.exif.txt", $exif);

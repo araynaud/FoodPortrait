@@ -71,11 +71,6 @@ input[type=text], textarea
     border-radius: 4px;
 }
 
-textarea
-{
-    margin-left: 2em;
-}
-
 input[type=date]{
     width: 168px;
 }
