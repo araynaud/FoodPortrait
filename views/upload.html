@@ -4,21 +4,12 @@
     </div-->
 
     <div class="col-md-12">
-      <div class="col-md-3">
-        <label for="inputFiles">
-          <span ng-show="!uc.uploadUrl">Photo: {{uc.progressPercentage}}</span>
-          <img id="thumbnail" ng-src="{{uc.uploadUrl}}" ng-show="uc.uploadUrl"/> 
+        <label for="inputFiles" class="uploadThumbnail">
+          <div ng-show="!uc.uploadUrl"><br/>Click to Select Photo<br/>{{uc.progressPercentage}}</div>
+          <img id="thumbnail" class="shadow" ng-src="{{uc.uploadUrl}}" ng-show="uc.uploadUrl"/> 
         </label> 
-      </div>
-
-      <div class="col-md-6">
        <input type="file" id="inputFiles" ngf-select ng-model="uc.file" name="file" ngf-multiple="false" 
-        accept="image/*" required/>
-      </div>
-
-      <div class="col-md-3">
-        <button class="btn btn-primary" type="submit" ng-click="uc.upload([uc.file])" ng-disabled="uc.validate(uploadForm)">Upload</button>
-      </div>
+        accept="image/*" required ngf-change="uc.upload([uc.file])" style="width: 0px;" />
     </div>
 
     <div class="col-md-6">
@@ -32,19 +23,36 @@
       min="1" max="20" placeholder="Shared with" required/>
     </div>
 
-     <div class="col-md-12">
-      <p>
-        <label for="inputDescription">Description:</label> 
+    <div class="col-md-6">
+        <label for="ddMeal">Meal:</label> 
+        <select dd="ddMeal" class="form-control" ng-model="uc.form.meal" ng-options="item for item in uc.fpConfig.dropdown.meal" required/>
+    </div>
+
+    <div class="col-md-6">
+        <label for="ddCourse">Course:</label> 
+        <select dd="ddCourse" ng-model="uc.form.course" class="form-control" ng-options="item for item in uc.fpConfig.dropdown.course" />
+    </div>
+
+    <div class="col-md-12">
+        <label for="inputDescription">Food Description:</label> 
         <textarea id="inputDescription" name="description" class="form-control" ng-model="uc.form.description" placeholder="Description"></textarea>
-      </p>
-      <p>
-        <label for="inputContext">Mood:</label> 
-        <input type="text" id="inputMood" name="context" class="form-control" ng-model="uc.form.mood" placeholder="Context" required/>
-      </p>
-      <p>
-        <label for="inputContext">Context:</label> 
+    </div>
+
+    <div class="col-md-4">
+        <label for="ddMood">Mood:</label> 
+        <select dd="ddMood" ng-model="uc.form.mood" class="form-control" ng-options="item for item in uc.fpConfig.dropdown.mood"/>
+    </div>
+
+    <div class="col-md-8">
+        <label for="inputContext">Meal Context:</label> 
         <input type="text" id="inputContext" name="context" class="form-control" ng-model="uc.form.context" placeholder="Context" required/>
-      </p>
+    </div>
+    <div class="col-md-8">
+      <br/>
+      <button class="btn btn-primary" type="submit" ng-click="uc.saveUpload()" ng-disabled="uc.validate(uploadForm)">Upload</button>
+
+      <button class="btn" type="submit" ng-click="uc.cancelUpload()">Cancel</button>
+
     </div>
 
     <div class="col-md-12" ng-if="uc.showDebug">

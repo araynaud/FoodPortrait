@@ -11,34 +11,33 @@ function ($scope, Upload, $window, $state, ProfileService)
     this.scope = $scope;
     $window.UploadController = this;
     this.state = $state;
-
+    uc.fpConfig = $window.fpConfig;
+    uc.showDebug = valueIfDefined("fpConfig.debug.angular", uc);
     uc.showDebug = $window.fpConfig && $window.fpConfig.debug ? $window.fpConfig.debug.angular : false;
 
     uc.form = {};
     uc.form.shared=1;
-/*
-    $scope.$watch('files', function () 
-    {
-        $scope.upload($scope.files);
-    });
-    $scope.$watch('file', function () 
-    {
-        $scope.upload([$scope.file]);
-    });
-*/
     $scope.log = '';
 
     uc.validate = function(uploadForm)
     {
         return $scope.uploadForm.file.$invalid
 //        || $scope.uploadForm.description.$invalid
+//        || $scope.uploadForm.meal.$invalid
 //        || $scope.uploadForm.context.$invalid
+//        || $scope.uploadForm.mood.$invalid
         || $scope.uploadForm.shared.$invalid;
+    }
+
+    uc.showFileChanged = function()
+    {
+        uc.log = uc.file;
+//        alert(angular.toJson(uc.file));
     }
 
     //post file
     //insert db record
-    //return file metadata to form
+    //return file metadata and upload id to form
     uc.upload = function (files) 
     {
         if (!files || !files.length) return false;
@@ -77,14 +76,25 @@ function ($scope, Upload, $window, $state, ProfileService)
 
     //post details
     //update db record
-    uc.saveUpload = function (files) 
+    uc.saveUpload = function () 
     {
+        //file is already uploaded: post only form data to upload api
+        Upload.upload({ url: 'api/upload.php', fields: uc.form }).success(function (data, status, headers, config) 
+        {
+                if(!uc.showDebug) return;
+
+                var dataLog = data;
+                if(angular.isObject(data))
+                    dataLog = angular.toJson(data, true);
+                uc.log = dataLog;
+        });
     }
 
     //if upload canceled: delete details
     //delete db record and uploaded file
-    uc.cancelUpload = function (files) 
+    uc.cancelUpload = function () 
     {
+        $state.go('main');
     }
 
 

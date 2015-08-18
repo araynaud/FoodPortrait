@@ -117,10 +117,6 @@ input[type=date]{
     opacity: 0.1;
 }
 
-.submit-bar{
-    margin-top: 50px;
-}
-
 .fieldLabel {
     font-weight: bold;
     width: 400px;
@@ -130,6 +126,30 @@ input[type=date]{
 {
     line-height: 1em;
     margin-bottom: 5px;
+}
+
+.uploadThumbnail
+{
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    max-width: 100%;
+    height: 150px;
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.uploadThumbnail > img
+{
+  height: 100%;
+  border: 5px solid #DDD;
+}
+
+.shadow
+{
+  -webkit-box-shadow: -5px -5px 8px #444;
+  box-shadow: -5px 5px 8px #444;
 }
 
 .radioOption input[type=checkbox], .radioOption input[type=radio]
