@@ -353,9 +353,11 @@ debug("update SQL: $sql ", $params);
 
 	public function insert($values)
 	{
+		//non null values only;
+		$values = array_filter($values);
 	    $sql = $this->sqlInsert($values);
 		unset($values["table"]);
-//debug("insert SQL: $sql ", $values);
+debug("insert SQL: $sql ", $values);
 		return $this->selectValue($sql, $values);
 	}
 

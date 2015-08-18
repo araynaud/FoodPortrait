@@ -54,12 +54,21 @@ function saveAnswers($db, $username, $user_answers)
     return $result;
 }
 
-
-function saveUploadData($db, $data, $username = NULL)
+//step 1: insert record based on image EXIF metadata
+//step 2: update record based on form data
+function saveUploadData($db, $metadata)
 {
+    //TODO: use remap between exif data and db row?
     $data["table"] = "user_upload";
-    if(!isset($data["username"]))
-        $data["username"] = $username;
+    $data["username"] = fpCurrentUsername();
+    $data["filename"] = arrayGet($metadata, "FileName");
+    $data["image_date_taken"] =  getExifDateTaken(null, $metadata);
+    $data["image_width"] =  arrayGet($metadata, "ExifImageWidth");
+    $data["image_height"] = arrayGet($metadata,"ExifImageLength");
+    $data["caption"] = arrayGetCoalesce($metadata, "ImageDescription", "IPTC.Caption");
+    $data["meal"] = arrayGet($metadata, "meal");
+    $data["course"] = arrayGet($metadata, "course");
+    $data["mood"] = arrayGet($metadata, "mood");
 
     $result = $db->saveRow($data);
     return $result;

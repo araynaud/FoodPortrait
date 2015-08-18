@@ -90,10 +90,12 @@ writeTextFile("$uploadedFile.exif.js", jsValue($exif));
 //TODO: insert row in upload table
 //when to update?
 $db = new SqlManager($fpConfig);
+$uploadId = saveUploadData($db, $exif);
 $db->disconnect();
 
 $message =  "File uploaded.";
 addVarToArray($response, "message");
+addVarToArray($response, "uploadId");
 addVarToArray($response, "dateTaken");
 addVarToArray($response, "description");
 addVarToArray($response, "exif");

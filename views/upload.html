@@ -12,23 +12,23 @@
         accept="image/*" required ngf-change="uc.upload([uc.file])" style="width: 0px;" />
     </div>
 
-    <div class="col-md-6">
+    <div class="col-md-6 col-xs-6">
       <label for="inputDate">Date:</label> 
       <input type="dateTimeLocal" id="inputDate" name="dateTaken" class="form-control" ng-model="uc.form.dateTaken" placeholder="Date"/>
     </div>
 
-    <div class="col-md-6">
+    <div class="col-md-6 col-xs-6">
       <label for="inputShared">Shared with:</label> 
       <input type="number" id="inputShared" name="shared" class="form-control" ng-model="uc.form.shared" 
       min="1" max="20" placeholder="Shared with" required/>
     </div>
 
-    <div class="col-md-6">
-        <label for="ddMeal">Meal:</label> 
-        <select dd="ddMeal" class="form-control" ng-model="uc.form.meal" ng-options="item for item in uc.fpConfig.dropdown.meal" required/>
+    <div class="col-md-6 col-xs-6">
+        <label for="ddMeal">Meal: {{uc.mealId}} {{uc.form.meal}}</label> 
+        <select dd="ddMeal" class="form-control" ng-model="uc.form.meal" ng-options="item.name for item in uc.fpConfig.dropdown.meal" required/>
     </div>
 
-    <div class="col-md-6">
+    <div class="col-md-6 col-xs-6">
         <label for="ddCourse">Course:</label> 
         <select dd="ddCourse" ng-model="uc.form.course" class="form-control" ng-options="item for item in uc.fpConfig.dropdown.course" />
     </div>

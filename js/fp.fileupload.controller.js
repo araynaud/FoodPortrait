@@ -35,6 +35,18 @@ function ($scope, Upload, $window, $state, ProfileService)
 //        alert(angular.toJson(uc.file));
     }
 
+    //select meal based on photo time
+    uc.selectMeal = function(dt)
+    {
+        var hour = dt.getHours();
+        var mealId = 0;
+        var list = uc.fpConfig.dropdown.meal;
+        for(mealId = 0; mealId < list.length; mealId++)
+            if(!list[mealId].start || hour >= list[mealId].start && hour < list[mealId].end) break;
+        uc.mealId = mealId;
+        return uc.form.meal = uc.fpConfig.dropdown.meal[mealId];
+    }
+
     //post file
     //insert db record
     //return file metadata and upload id to form
@@ -61,8 +73,14 @@ function ($scope, Upload, $window, $state, ProfileService)
             {
                 uc.progressPercentage="";
                 uc.uploadUrl = data.uploadUrl;
-                uc.form.dateTaken = data.dateTaken;
-                uc.form.description = data.description;
+                if(data.dateTaken)
+                {
+                    uc.dateTaken = data.dateTaken;
+                    uc.form.dateTaken = new Date(data.dateTaken);
+                    uc.selectMeal(uc.form.dateTaken);
+                }
+                if(data.description)
+                    uc.form.description = data.description;
                 if(!uc.showDebug) return;
 
                 var dataLog = data;
