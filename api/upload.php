@@ -8,8 +8,6 @@ session_start();
 //do not keep original file
 //insert into upload table.
 //What if user/filename already exists? can user reuse existing image, select from uploads?
-
-$_REQUEST["debug"]=true;
 //response: image metadata from EXIF and url.
 
 //echo jsValue($fpConfig, true, true);
@@ -17,6 +15,8 @@ $_REQUEST["debug"]=true;
 function errorMessage($msg)
 {
 	global $response;
+	$response["post"] = $_POST;
+	$response["meal"] = @$_POST["meal"];
 	$response["message"] = $msg;
 	$response["time"] = getTimer(true);
 	echo jsValue($response, true);
@@ -90,12 +90,12 @@ writeTextFile("$uploadedFile.exif.js", jsValue($exif));
 //TODO: insert row in upload table
 //when to update?
 $db = new SqlManager($fpConfig);
-$uploadId = saveUploadData($db, $exif);
+$upload_id = saveUploadData($db, $exif);
 $db->disconnect();
 
 $message =  "File uploaded.";
 addVarToArray($response, "message");
-addVarToArray($response, "uploadId");
+addVarToArray($response, "upload_id");
 addVarToArray($response, "dateTaken");
 addVarToArray($response, "description");
 addVarToArray($response, "exif");

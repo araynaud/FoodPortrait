@@ -1,7 +1,8 @@
 /* Sticky footer styles
 -------------------------------------------------- */
 
-body {
+body.footer
+{
   /* Margin bottom by footer height */
   margin-bottom: 40px;
 }
@@ -15,6 +16,9 @@ body {
   text-align: center;
 }
 
+.nowrap {
+	white-space: nowrap;
+}
 
 /* Custom page CSS
 -------------------------------------------------- */

@@ -11,9 +11,11 @@ function ($window, $state, ProfileService)
   $window.ProfileController = this;
   //this.scope = $scope;
   this.state = $state;
+
   pc.plural = plural;
   pc.loading = false;
   pc.config = $window.fpConfig;
+  pc.showDebug = valueIfDefined("fpConfig.debug.angular");
   pc.form = {};
 
   pc.init = function()

@@ -18,7 +18,7 @@ app.config(function($stateProvider, $urlRouterProvider)
   	.state('signup',  { url: "/signup",  controller: 'LoginController',  controllerAs: 'lc', templateUrl: "views/signup.html" })
   	.state('profile', { url: "/profile",
   		controller: 'ProfileController', controllerAs: 'pc', 
-  		template: '<object-form actions="pc.actions" questions="pc.questions" form-data="pc.formData"/>'});
+  		template: '<object-form actions="pc.actions" questions="pc.questions" form-data="pc.formData" showDebug="pc.showDebug"/>'});
 });
 
 angular.module('fpControllers', []);

@@ -1,34 +1,31 @@
 <form class="file-uploader" name="uploadForm" novalidate>
-    <!--div class="col-md-6">Basic file:
-       <input type="file" ng-model="file" name="file"/>
-    </div-->
-
-    <div class="col-md-12">
+    {{uc.showDebug && uc.form.upload_id}}
+    <div class="col-md-2 col-xs-7 center-block" style="float:none"> 
         <label for="inputFiles" class="uploadThumbnail">
-          <div ng-show="!uc.uploadUrl"><br/>Click to Select Photo<br/>{{uc.progressPercentage}}</div>
+          <div ng-show="!uc.uploadUrl" class="uploadLabel shadow" >Click to Select Photo<br/>{{uc.progressPercentage}}</div>
           <img id="thumbnail" class="shadow" ng-src="{{uc.uploadUrl}}" ng-show="uc.uploadUrl"/> 
         </label> 
+    </div>
        <input type="file" id="inputFiles" ngf-select ng-model="uc.file" name="file" ngf-multiple="false" 
         accept="image/*" required ngf-change="uc.upload([uc.file])" style="width: 0px;" />
-    </div>
 
-    <div class="col-md-6 col-xs-6">
+    <div class="col-md-6 col-sm-6">
       <label for="inputDate">Date:</label> 
       <input type="dateTimeLocal" id="inputDate" name="dateTaken" class="form-control" ng-model="uc.form.dateTaken" placeholder="Date"/>
     </div>
 
-    <div class="col-md-6 col-xs-6">
+    <div class="col-md-6 col-sm-6">
       <label for="inputShared">Shared with:</label> 
       <input type="number" id="inputShared" name="shared" class="form-control" ng-model="uc.form.shared" 
       min="1" max="20" placeholder="Shared with" required/>
     </div>
 
-    <div class="col-md-6 col-xs-6">
-        <label for="ddMeal">Meal: {{uc.mealId}} {{uc.form.meal}}</label> 
-        <select dd="ddMeal" class="form-control" ng-model="uc.form.meal" ng-options="item.name for item in uc.fpConfig.dropdown.meal" required/>
+    <div class="col-md-6 col-sm-6">
+        <label for="ddMeal">Meal:</label> 
+        <select dd="ddMeal" class="form-control" ng-model="uc.form.meal" ng-options="item for item in uc.meals" required/>
     </div>
 
-    <div class="col-md-6 col-xs-6">
+    <div class="col-md-6 col-sm-6">
         <label for="ddCourse">Course:</label> 
         <select dd="ddCourse" ng-model="uc.form.course" class="form-control" ng-options="item for item in uc.fpConfig.dropdown.course" />
     </div>
@@ -50,11 +47,8 @@
     <div class="col-md-8">
       <br/>
       <button class="btn btn-primary" type="submit" ng-click="uc.saveUpload()" ng-disabled="uc.validate(uploadForm)">Upload</button>
-
       <button class="btn" type="submit" ng-click="uc.cancelUpload()">Cancel</button>
-
     </div>
-
     <div class="col-md-12" ng-if="uc.showDebug">
       Upload Log:
       <pre>{{uc.log}}</pre>

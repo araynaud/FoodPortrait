@@ -1,6 +1,6 @@
 div#main
 {
-  margin-top: 50px;
+  margin-top: 55px;
 }
 
 .navbar-brand
@@ -130,26 +130,29 @@ input[type=date]{
 
 .uploadThumbnail
 {
-    margin-left: auto;
-    margin-right: auto;
-    text-align: center;
-    max-width: 100%;
-    height: 150px;
-    padding: 10px;
-    margin-top: 10px;
-    margin-bottom: 10px;
+  text-align: center;
+  max-width: 100%;
+  height: 25mm;
 }
 
-.uploadThumbnail > img
+.uploadLabel
+{
+  padding-top: 25px;
+  padding-left: 25px;
+  padding-right: 25px;
+  background-color: #DDD;
+  border: 1px solid black;
+}
+
+.uploadThumbnail > img, .uploadThumbnail .uploadLabel
 {
   height: 100%;
-  border: 5px solid #DDD;
+  /*border: 5px solid #FFF; */
 }
 
 .shadow
 {
-  -webkit-box-shadow: -5px -5px 8px #444;
-  box-shadow: -5px 5px 8px #444;
+  box-shadow: -5px 5px 15px #444;
 }
 
 .radioOption input[type=checkbox], .radioOption input[type=radio]

@@ -12,17 +12,18 @@ function ($scope, Upload, $window, $state, ProfileService)
     $window.UploadController = this;
     this.state = $state;
     uc.fpConfig = $window.fpConfig;
-    uc.showDebug = valueIfDefined("fpConfig.debug.angular", uc);
-    uc.showDebug = $window.fpConfig && $window.fpConfig.debug ? $window.fpConfig.debug.angular : false;
+    uc.showDebug = valueIfDefined("fpConfig.debug.angular");
 
     uc.form = {};
     uc.form.shared=1;
     $scope.log = '';
 
+    uc.meals = uc.fpConfig.dropdown.meal.distinct("name");
+
     uc.validate = function(uploadForm)
     {
         return $scope.uploadForm.file.$invalid
-//        || $scope.uploadForm.description.$invalid
+        || $scope.uploadForm.description.$invalid
 //        || $scope.uploadForm.meal.$invalid
 //        || $scope.uploadForm.context.$invalid
 //        || $scope.uploadForm.mood.$invalid
@@ -44,7 +45,7 @@ function ($scope, Upload, $window, $state, ProfileService)
         for(mealId = 0; mealId < list.length; mealId++)
             if(!list[mealId].start || hour >= list[mealId].start && hour < list[mealId].end) break;
         uc.mealId = mealId;
-        return uc.form.meal = uc.fpConfig.dropdown.meal[mealId];
+        return uc.form.meal = uc.fpConfig.dropdown.meal[mealId].name;
     }
 
     //post file
@@ -73,6 +74,8 @@ function ($scope, Upload, $window, $state, ProfileService)
             {
                 uc.progressPercentage="";
                 uc.uploadUrl = data.uploadUrl;
+                uc.form.upload_id = data.upload_id;
+
                 if(data.dateTaken)
                 {
                     uc.dateTaken = data.dateTaken;
@@ -99,12 +102,12 @@ function ($scope, Upload, $window, $state, ProfileService)
         //file is already uploaded: post only form data to upload api
         Upload.upload({ url: 'api/upload.php', fields: uc.form }).success(function (data, status, headers, config) 
         {
-                if(!uc.showDebug) return;
+            if(!uc.showDebug) return;
 
-                var dataLog = data;
-                if(angular.isObject(data))
-                    dataLog = angular.toJson(data, true);
-                uc.log = dataLog;
+            var dataLog = data;
+            if(angular.isObject(data))
+                dataLog = angular.toJson(data, true);
+            uc.log = dataLog;
         });
     }
 

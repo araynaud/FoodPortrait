@@ -8,6 +8,7 @@ function ($window, $state, ProfileService)
     var lc = this;
     $window.LayoutController = this;
     this.state = $state;
+    lc.showDebug = valueIfDefined("fpConfig.debug.angular");
 
     lc.getWindowSize = function()
     {

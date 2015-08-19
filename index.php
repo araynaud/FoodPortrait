@@ -107,7 +107,8 @@ $meta["og:url"] = currentUrlDir();
 
   <div id="main" class="container" ui-view>
   </div>
-  <footer class="footer container">
+  <br/>
+  <footer class="footer container nowrap" ng-if="lc.showDebug">
     <div class="text-muted"> {{lc.currentState()}} {{lc.windowWidth}} x {{lc.windowHeight}} {{lc.userAgent}}</div>
   </footer>
 </body>
