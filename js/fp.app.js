@@ -3,7 +3,7 @@
 /* App Module */
 
 // Define new module for our application
-var app = angular.module('app', ['ui.router', 'ngFileUpload', 'fpControllers', 'fpServices']);
+var app = angular.module('app', ['ui.router', 'ui.bootstrap', 'ngFileUpload', 'fpControllers', 'fpServices']);
 
 app.config(function($stateProvider, $urlRouterProvider)
 {  

@@ -89,6 +89,7 @@ if(!$dateTaken)
 //if(!$dateTaken)
 //$dateTaken = getFileDate($filename);
 $description = arrayGetCoalesce($exif, "ImageDescription", "IPTC.Caption");
+$description = trim($description);
 
 writeCsvFile("$uploadedFile.exif.txt", $exif);
 writeTextFile("$uploadedFile.exif.js", jsValue($exif));

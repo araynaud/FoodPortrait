@@ -47,6 +47,7 @@ $meta["og:url"] = currentUrlDir();
 <script type="text/javascript" src="js/ng14/angular-animate.min.js"></script>
 <script type="text/javascript" src="js/ng14/angular-ui-router.min.js"></script>
 
+<script type="text/javascript" src="js/lib/ui-bootstrap-tpls-0.13.3.min.js"></script>
 <script type="text/javascript" src="js/lib/ng-file-upload.js"></script>
 <script type="text/javascript" src="js/lib/md5.min.js"></script>
 <script type="text/javascript" src="/mt/js/mt.extensions.js"></script>

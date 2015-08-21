@@ -20,15 +20,35 @@ function ($scope, Upload, $window, $state, ProfileService)
     uc.form.shared=1;
     $scope.log = '';
 
+//date picker options
+    uc.datepickerOpen=false;
+    uc.dateFormat = 'MMMM dd, yyyy';
+    uc.openDatepicker = function($event)
+    {
+        uc.log = angular.toJson($event, true);
+        uc.datepickerOpen = true;   
+    }
+
+    uc.today = new Date();
+    uc.setToday = function() { return uc.form.dateTaken = uc.today; };
+    uc.setToday();
+
+    $scope.status = { opened: false };
+    $scope.open = function($event)
+    {
+        $scope.status.opened = true;
+    };
+
+    uc.dateOptions = { formatYear: 'yy', startingDay: 1 };
+// end date picker options
+
     uc.meals = uc.fpConfig.dropdown.meal.distinct("name");
 
     uc.validate = function(uploadForm)
     {
         return $scope.uploadForm.file.$invalid
         || $scope.uploadForm.description.$invalid
-//        || $scope.uploadForm.meal.$invalid
-//        || $scope.uploadForm.context.$invalid
-//        || $scope.uploadForm.mood.$invalid
+        || $scope.uploadForm.meal.$invalid
         || $scope.uploadForm.shared.$invalid;
     }
 
@@ -36,18 +56,6 @@ function ($scope, Upload, $window, $state, ProfileService)
     {
         uc.log = uc.file;
 //        alert(angular.toJson(uc.file));
-    }
-
-    //select meal based on photo time
-    uc.selectMeal = function(dt)
-    {
-        var hour = dt.getHours();
-        var mealId = 0;
-        var list = uc.fpConfig.dropdown.meal;
-        for(mealId = 0; mealId < list.length; mealId++)
-            if(!list[mealId].start || hour >= list[mealId].start && hour < list[mealId].end) break;
-        uc.mealId = mealId;
-        return uc.form.meal = uc.fpConfig.dropdown.meal[mealId].name;
     }
 
     //post file
@@ -77,13 +85,9 @@ function ($scope, Upload, $window, $state, ProfileService)
                 uc.progressPercentage="";
                 uc.uploadUrl = data.uploadUrl;
                 uc.form.upload_id = data.upload_id;
+                uc.parseDate(data.dateTaken);
+                uc.selectMeal(uc.form.dateTaken);
 
-                if(data.dateTaken)
-                {
-                    uc.dateTaken = data.dateTaken;
-                    uc.form.dateTaken = new Date(data.dateTaken);
-                    uc.selectMeal(uc.form.dateTaken);
-                }
                 if(data.description)
                     uc.form.description = data.description;
                 if(!uc.showDebug) return;
@@ -96,6 +100,28 @@ function ($scope, Upload, $window, $state, ProfileService)
             });
         }
     };
+
+    uc.parseDate = function(dt)
+    {
+        if(!dt) return uc.dateTaken = uc.form.dateTaken = null;
+
+        uc.dateTaken = dt.replace(/-/g, '/');
+        uc.form.dateTaken = new Date(uc.dateTaken);
+        uc.selectMeal(uc.form.dateTaken);
+    }
+
+    //select meal based on photo time
+    uc.selectMeal = function(dt)
+    {
+        if(!dt) return;
+        var hour = dt.getHours();
+        var mealId = 0;
+        var list = uc.fpConfig.dropdown.meal;
+        for(mealId = 0; mealId < list.length; mealId++)
+            if(!list[mealId].start || hour >= list[mealId].start && hour < list[mealId].end) break;
+        uc.mealId = mealId;
+        return uc.form.meal = uc.fpConfig.dropdown.meal[mealId].name;
+    }
 
     //post details
     //update db record
