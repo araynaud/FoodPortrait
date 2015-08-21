@@ -125,4 +125,15 @@ debug("IPTC $key.$key2", $arr);
     return $tags;
 }
 
+
+function getIptcDate($exif)
+{
+    $date = arrayGet($exif, "IPTC.CreationDate") . " " . arrayGet($exif, "IPTC.CreationTime");
+//20100907 232516 => 2010-09-07 23:25:16
+    $date = strInsert($date, "-", 4);
+    $date = strInsert($date, "-", 7);
+    $date = strInsert($date, ":", 13);
+    $date = strInsert($date, ":", 16);
+    return $date;
+}
 ?>

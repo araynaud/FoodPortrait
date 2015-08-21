@@ -6,13 +6,15 @@ angular.module('fpControllers')
 .controller('UploadController', ['$scope', 'Upload', '$window', '$state', 'ProfileService',
 function ($scope, Upload, $window, $state, ProfileService)
 {
-    if(!ProfileService.user)    $state.go('home');
     var uc = this;
+    if(!ProfileService.user && !valueIfDefined("fpConfig.debug.offline"))
+        $state.go('home');
+
+    uc.showDebug = valueIfDefined("fpConfig.debug.angular");
     this.scope = $scope;
     $window.UploadController = this;
     this.state = $state;
     uc.fpConfig = $window.fpConfig;
-    uc.showDebug = valueIfDefined("fpConfig.debug.angular");
 
     uc.form = {};
     uc.form.shared=1;

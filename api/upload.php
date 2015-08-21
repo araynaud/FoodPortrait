@@ -82,6 +82,12 @@ if(!$success)
 //save exif data
 $exif = getImageMetadata($uploadedFile);
 $dateTaken = getExifDateTaken($filename, $exif);
+
+if(!$dateTaken)
+	$dateTaken = getIptcDate($exif);
+
+//if(!$dateTaken)
+//$dateTaken = getFileDate($filename);
 $description = arrayGetCoalesce($exif, "ImageDescription", "IPTC.Caption");
 
 writeCsvFile("$uploadedFile.exif.txt", $exif);
@@ -89,9 +95,14 @@ writeTextFile("$uploadedFile.exif.js", jsValue($exif));
 
 //TODO: insert row in upload table
 //when to update?
-$db = new SqlManager($fpConfig);
-$upload_id = saveUploadData($db, $exif);
-$db->disconnect();
+if(getConfig("debug.offline"))
+	$upload_id = -1;
+else
+{
+	$db = new SqlManager($fpConfig);
+	$upload_id = saveUploadData($db, $exif);
+	$db->disconnect();
+}
 
 $message =  "File uploaded.";
 addVarToArray($response, "message");
