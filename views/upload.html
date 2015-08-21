@@ -1,38 +1,40 @@
 <form class="file-uploader" name="uploadForm" novalidate>
     {{uc.showDebug && uc.form.upload_id}}
-    <div class="col-md-2 col-xs-7 center-block" style="float:none"> 
-        <label for="inputFiles" class="uploadThumbnail">
-          <div ng-show="!uc.uploadUrl" class="uploadLabel shadow" >Click to Select Photo<br/>{{uc.progressPercentage}}</div>
-          <img id="thumbnail" class="shadow" ng-src="{{uc.uploadUrl}}" ng-show="uc.uploadUrl"/> 
+    <div class="col-md-4 center-block" style="float:none"> 
+        <label for="inputFiles" class="uploadThumbnail shadow">
+          <div ng-show="!uc.uploadUrl" class="uploadLabel" >Click to Select Photo<br/>{{uc.progressPercentage}}</div>
+          <img id="thumbnail" ng-src="{{uc.uploadUrl}}" ng-show="uc.uploadUrl"/> 
         </label> 
     </div>
        <input type="file" id="inputFiles" ngf-select ng-model="uc.file" name="file" ngf-multiple="false" 
-        accept="image/*" required ngf-change="uc.upload([uc.file])" style="width: 0px;" />
+        accept="image/*" required ngf-change="uc.upload([uc.file])" style="width: 0px; height: 0px; " />
 
     <div class="col-md-6 col-sm-6">
       <label for="inputDate">Date:</label> 
       <div class="input-group">
         <input type="text" id="inputDate" class="form-control" 
-        ng-model="uc.form.dateTaken" 
-        datepicker-popup="{{uc.dateFormat}}" 
-        is-open="uc.datepickerOpen" max-date="uc.today" 
-        datepicker-options="uc.dateOptions" ng-required="true" 
-        close-text="Close" placeholder="Date"/>
+            ng-model="uc.form.dateTaken" 
+            datepicker-popup="{{uc.dateFormat}}" 
+            is-open="uc.datepickerOpen" max-date="uc.today" 
+            datepicker-options="uc.dateOptions" ng-required="true" 
+            close-text="Close" placeholder="Date"/>
+
         <span class="input-group-btn">
-          <button type="button" class="btn btn-default" ng-click="uc.openDatepicker($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+          <button type="button" class="btn btn-default" ng-click="uc.openDatepicker($event)">
+            <i class="glyphicon glyphicon-calendar"></i>
+          </button>
         </span>
       </div>
     </div>
 
     <div class="col-md-6 col-sm-6">
         <label for="ddMeal">Meal:</label> 
-        <select dd="ddMeal"   ng-model="uc.form.meal"   class="form-control" name="meal"   ng-options="item for item in uc.meals" required/>
+        <select id="ddMeal" ng-model="uc.form.meal"   class="form-control" name="meal"   ng-options="item for item in uc.meals" required/>
     </div>
 
     <div class="col-md-6 col-sm-6">
       <label for="inputShared">Shared with:</label> 
-      <input type="number" id="inputShared" name="shared" class="form-control" ng-model="uc.form.shared" 
-      min="1" max="20" placeholder="Shared with" required/>
+      <input type="number" id="inputShared" name="shared" class="form-control" ng-model="uc.form.shared" min="1" max="20" placeholder="Shared with" required/>
     </div>
 
     <div class="col-md-6 col-sm-6">
@@ -47,7 +49,7 @@
 
     <div class="col-md-6">
         <label for="ddMood">Mood:</label> 
-        <select dd="ddMood" ng-model="uc.form.mood" class="form-control" ng-options="item for item in uc.fpConfig.dropdown.mood"/>
+        <select id="ddMood" ng-model="uc.form.mood" class="form-control" ng-options="item for item in uc.fpConfig.dropdown.mood"/>
     </div>
 
     <div class="col-md-6">
@@ -55,6 +57,7 @@
         <input type="text" id="inputContext" name="context" class="form-control" ng-model="uc.form.context" placeholder="Context" required/>
     </div>
     <p class="col-md-6">
+      <br/>
       <button class="btn btn-primary" type="submit" ng-click="uc.saveUpload()" ng-disabled="uc.validate(uploadForm)">Upload</button>
       <button class="btn" type="submit" ng-click="uc.cancelUpload()">Cancel</button>
     </p>

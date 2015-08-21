@@ -69,9 +69,9 @@ $resized = createThumbnail($uploadDir, $filename, '..', 225);
 $response["post"] = $_POST;
 addVarToArray($response, "filename");
 addVarToArray($response, "uploadUrl");
-addVarToArray($response, "resized");
+if(getConfig("debug.output"))
+	addVarToArray($response, "resized");
 
-addVarToArray($response, "success");
 addVarToArray($response, "filesize");
 addVarToArray($response, "mimeType");
 //addVarToArray($response, "maxUploadSize");
@@ -106,11 +106,13 @@ else
 }
 
 $message =  "File uploaded.";
+addVarToArray($response, "success");
 addVarToArray($response, "message");
 addVarToArray($response, "upload_id");
 addVarToArray($response, "dateTaken");
 addVarToArray($response, "description");
-addVarToArray($response, "exif");
+if(getConfig("debug.output"))
+	addVarToArray($response, "exif");
 
 $response["time"] = getTimer(true);
 echo jsValue($response,true, true);
