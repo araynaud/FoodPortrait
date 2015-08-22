@@ -3,8 +3,8 @@
 // =========== File Upload Controller ===========
 // handles query and gallery display
 angular.module('fpControllers')
-.controller('UploadController', ['$scope', 'Upload', '$window', '$state', 'ProfileService',
-function ($scope, Upload, $window, $state, ProfileService)
+.controller('UploadController', ['$scope', 'Upload', '$window', '$state', '$timeout', 'ProfileService',
+function ($scope, Upload, $window, $state, $timeout, ProfileService)
 {
     var uc = this;
     if(!ProfileService.user && !valueIfDefined("fpConfig.debug.offline"))
@@ -23,22 +23,11 @@ function ($scope, Upload, $window, $state, ProfileService)
 //date picker options
     uc.datepickerOpen=false;
     uc.dateFormat = 'MMMM dd, yyyy';
-    uc.pickDate = function()
-    {
-        uc.datepickerOpen = true;   
-    }
-
+    uc.dateOptions = { formatYear: 'yy', startingDay: 1 };
     uc.today = new Date();
+    uc.pickDate = function() { uc.datepickerOpen = true; };
     uc.setToday = function() { return uc.form.image_date_taken = uc.today; };
     uc.setToday();
-
-    $scope.status = { opened: false };
-    $scope.open = function($event)
-    {
-        $scope.status.opened = true;
-    };
-
-    uc.dateOptions = { formatYear: 'yy', startingDay: 1 };
 // end date picker options
 
     uc.meals = uc.fpConfig.dropdown.meal.distinct("name");
@@ -50,13 +39,7 @@ function ($scope, Upload, $window, $state, ProfileService)
         || $scope.uploadForm.caption.$invalid
         || $scope.uploadForm.meal.$invalid
         || $scope.uploadForm.shared_with.$invalid;
-    }
-
-    uc.showFileChanged = function()
-    {
-        uc.log = uc.file;
-//        alert(angular.toJson(uc.file));
-    }
+    };
 
     //post file
     //insert db record
@@ -86,7 +69,8 @@ function ($scope, Upload, $window, $state, ProfileService)
                 uc.uploadUrl = data.uploadUrl;
                 uc.form.upload_id = data.upload_id;
                 uc.parseDate(data.dateTaken);
-
+                uc.message=data.message;
+                //TODO: message ng-class depending on data.success
                 if(data.description)
                     uc.form.caption = data.description;
                 if(!uc.showDebug) return;
@@ -102,7 +86,7 @@ function ($scope, Upload, $window, $state, ProfileService)
 
     uc.parseDate = function(dt)
     {
-        if(!dt) return uc.dateTaken = uc.form.image_date_taken = null;
+        if(!dt) return; // uc.dateTaken = uc.form.image_date_taken = null;
 
         uc.dateTaken = dt.replace(/-/g, '/');
         uc.form.image_date_taken = new Date(uc.dateTaken);
@@ -121,7 +105,7 @@ function ($scope, Upload, $window, $state, ProfileService)
             if(!list[mealId].start || hour >= list[mealId].start && hour < list[mealId].end) break;
         uc.mealId = mealId;
         return uc.form.meal = uc.fpConfig.dropdown.meal[mealId].name;
-    }
+    };
 
     //post details
     //update db record
@@ -130,6 +114,10 @@ function ($scope, Upload, $window, $state, ProfileService)
         //file is already uploaded: post only form data to upload api
         Upload.upload({ url: 'api/upload.php', fields: uc.form }).success(function (data, status, headers, config) 
         {
+            uc.message=data.message;
+            if(data.success)
+                uc.returnToMain(500);
+
             if(!uc.showDebug) return;
 
             var dataLog = data;
@@ -139,12 +127,19 @@ function ($scope, Upload, $window, $state, ProfileService)
         });
     }
 
+    uc.returnToMain = function(delay)
+    {
+        if(!delay)
+            return $state.go('main');
+
+        $timeout(function() { $state.go('main'); }, delay);
+    };
+
     //if upload canceled: delete details
     //delete db record and uploaded file
-    uc.cancelUpload = function () 
+    uc.cancelUpload = function() 
     {
-        $state.go('main');
-    }
-
+        uc.returnToMain();
+    };
 
 }]);

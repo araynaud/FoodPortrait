@@ -61,6 +61,7 @@
       <br/>
       <button class="btn btn-primary" type="submit" ng-click="uc.saveUpload()" ng-disabled="uc.validate(uploadForm)">Upload</button>
       <button class="btn" type="submit" ng-click="uc.cancelUpload()">Cancel</button>
+      <span class="error">{{uc.message}}</span>
     </p>
     <div class="col-md-12" ng-if="uc.showDebug">
       Upload Log:

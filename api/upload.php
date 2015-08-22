@@ -92,6 +92,7 @@ if(!empty($_FILES))
 		return errorMessage("Cannot move file into target dir.");
 
 	//save exif data
+	$message =  "File uploaded.";
 	$exif = getImageMetadata($uploadedFile);
 	$dateTaken = getExifDateTaken($filename, $exif);
 
@@ -118,12 +119,14 @@ if($success)
 	else if(!$upload_id) //step 1
 		$upload_id = $db->offline ? -1 : saveUploadData($db, $exif);
 	else //step 2
+	{
 		$success = saveUploadData($db, $_POST);
+		$message =  "Details saved.";
+	}
 
 	$db->disconnect();
 }
 
-$message =  "File uploaded.";
 addVarToArray($response, "success");
 addVarToArray($response, "message");
 addVarToArray($response, "upload_id");
