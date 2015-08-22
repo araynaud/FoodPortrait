@@ -3,17 +3,21 @@
 // handle 1 global connection. open / close connection if needed
 class SqlManager
 {
+	public $offline = false;
 	private $mysqlConfig = null;
 	private $mysqlConnection = null;
 	private static $MYSQL_PARAM_TYPES = array("string"=>"s", "integer" => "i", "double"=>"d",  "blob"=>"b");
 
 	function __construct($config)
 	{
-		return $this->configure($config);
+		$this->configure($config);
 	}
 
 	private function configure($config)
 	{
+		$this->offline = arrayGet($config, "debug.offline");
+		if($this->offline) return;
+
 	    $this->mysqlConfig = isset($config["_mysql"]) ? $config["_mysql"] : $config;
 	    //debug("config", $this->mysqlConfig);
 	}
@@ -40,6 +44,8 @@ class SqlManager
 
 	private function connect()
 	{
+		if($this->offline) return;
+
 	    // Create connection
 	    if(!$this->mysqlConnection)
 		{
@@ -175,6 +181,7 @@ debug("selectWhere SQL: $sql", $params);
 
 	public function select($query, $params=null, $singleColumn=false, $singleRow=false)
 	{	
+		if($this->offline) return;
 	    $this->connect(); 
 		//create a prepared statement
 	debug("SQL: $query", $params);
@@ -185,6 +192,8 @@ debug("selectWhere SQL: $sql", $params);
 		$this->bindParams($statement, $params);
 		$status = $statement->execute();
 		$result = $statement->get_result();
+debug("statement status", $status);		
+debug("statement result ", $statement->num_rows);		
 		if(!$status)
 		{
 			debug("SQL Error ". $this->mysqlConnection->errno, $this->mysqlConnection->error);
@@ -194,9 +203,14 @@ debug("selectWhere SQL: $sql", $params);
 			$rows = $statement->insert_id;
 		else if($result)
 		    $rows = SqlManager::getResultData($result, $singleColumn, $singleRow);
-		else
+		else if($statement->affected_rows)
 			$rows = $statement->affected_rows;
+		else
+			$rows = $status;
+
+debug("statement affected_rows", $statement->affected_rows);		
 		$statement->close();
+debug("returning", $rows);		
 	    return $rows;
 	}
 
@@ -218,6 +232,8 @@ debug("selectWhere SQL: $sql", $params);
 	//get result of select as array of rows. each row is an associative array
 	private function query($query, $singleColumn=false, $singleRow=false)
 	{
+		if($this->offline) return;
+
 	    $this->connect(); //if connection not already open 
 	debug("query", $query);
 	    $result = $this->mysqlConnection->query($query);
@@ -290,7 +306,8 @@ debug("selectWhere SQL: $sql", $params);
 // check if columns part of table
 	public function update($values, $where)
 	{
-	    $sql = "UPDATE " . $where["table"];
+	    $sql = "UPDATE " . $values["table"];
+		unset($values["table"]);
 	    $valuesSql = $this->sqlUpdateValues($values);
 	    if($valuesSql) 
 	    	$sql .= " SET" . $valuesSql;
@@ -375,9 +392,14 @@ debug("insert SQL: $sql ", $values);
 			$where = arrayCopyMultiple($data, $testColumns);
 		else
 		{
-			$pk = $this->getPrimaryKey($table);
+			$pk = $this->getPrimaryKey($table);			
 			$where = arrayCopyMultiple($data, $pk);
+			//todo arrayUnsetMultiple
+			$pkey=reset($pk);
+			unset($data[$pkey]); //do not update pk value
 		}
+
+debug("saveRow", $data);
 debug("saveRow", $where);	
 		//2: if where or pk provided in data: try to update row
 		if($where)

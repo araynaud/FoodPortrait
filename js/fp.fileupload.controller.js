@@ -17,20 +17,19 @@ function ($scope, Upload, $window, $state, ProfileService)
     uc.fpConfig = $window.fpConfig;
 
     uc.form = {};
-    uc.form.shared=1;
+    uc.form.shared_with=1;
     $scope.log = '';
 
 //date picker options
     uc.datepickerOpen=false;
     uc.dateFormat = 'MMMM dd, yyyy';
-    uc.openDatepicker = function($event)
+    uc.pickDate = function()
     {
-        uc.log = angular.toJson($event, true);
         uc.datepickerOpen = true;   
     }
 
     uc.today = new Date();
-    uc.setToday = function() { return uc.form.dateTaken = uc.today; };
+    uc.setToday = function() { return uc.form.image_date_taken = uc.today; };
     uc.setToday();
 
     $scope.status = { opened: false };
@@ -47,9 +46,10 @@ function ($scope, Upload, $window, $state, ProfileService)
     uc.validate = function(uploadForm)
     {
         return $scope.uploadForm.file.$invalid
-        || $scope.uploadForm.description.$invalid
+        || $scope.uploadForm.image_date_taken.$invalid
+        || $scope.uploadForm.caption.$invalid
         || $scope.uploadForm.meal.$invalid
-        || $scope.uploadForm.shared.$invalid;
+        || $scope.uploadForm.shared_with.$invalid;
     }
 
     uc.showFileChanged = function()
@@ -86,10 +86,9 @@ function ($scope, Upload, $window, $state, ProfileService)
                 uc.uploadUrl = data.uploadUrl;
                 uc.form.upload_id = data.upload_id;
                 uc.parseDate(data.dateTaken);
-                uc.selectMeal(uc.form.dateTaken);
 
                 if(data.description)
-                    uc.form.description = data.description;
+                    uc.form.caption = data.description;
                 if(!uc.showDebug) return;
 
                 var dataLog = data;
@@ -103,11 +102,12 @@ function ($scope, Upload, $window, $state, ProfileService)
 
     uc.parseDate = function(dt)
     {
-        if(!dt) return uc.dateTaken = uc.form.dateTaken = null;
+        if(!dt) return uc.dateTaken = uc.form.image_date_taken = null;
 
         uc.dateTaken = dt.replace(/-/g, '/');
-        uc.form.dateTaken = new Date(uc.dateTaken);
-        uc.selectMeal(uc.form.dateTaken);
+        uc.form.image_date_taken = new Date(uc.dateTaken);
+        uc.selectMeal(uc.form.image_date_taken);
+        return uc.form.image_date_taken;
     }
 
     //select meal based on photo time

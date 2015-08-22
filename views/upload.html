@@ -12,15 +12,16 @@
     <div class="col-md-6 col-sm-6">
       <label for="inputDate">Date:</label> 
       <div class="input-group">
-        <input type="text" id="inputDate" class="form-control" 
-            ng-model="uc.form.dateTaken" 
+        <input type="text" id="inputDate" 
+            name="image_date_taken" class="form-control" 
+            ng-model="uc.form.image_date_taken" 
             datepicker-popup="{{uc.dateFormat}}" 
             is-open="uc.datepickerOpen" max-date="uc.today" 
             datepicker-options="uc.dateOptions" ng-required="true" 
             close-text="Close" placeholder="Date"/>
 
         <span class="input-group-btn">
-          <button type="button" class="btn btn-default" ng-click="uc.openDatepicker($event)">
+          <button type="button" class="btn btn-default" ng-click="uc.pickDate()">
             <i class="glyphicon glyphicon-calendar"></i>
           </button>
         </span>
@@ -34,7 +35,7 @@
 
     <div class="col-md-6 col-sm-6">
       <label for="inputShared">Shared with:</label> 
-      <input type="number" id="inputShared" name="shared" class="form-control" ng-model="uc.form.shared" min="1" max="20" placeholder="Shared with" required/>
+      <input type="number" id="inputShared" name="shared_with" class="form-control" ng-model="uc.form.shared_with" min="1" max="20" placeholder="Shared with" required/>
     </div>
 
     <div class="col-md-6 col-sm-6">
@@ -44,7 +45,7 @@
 
     <div class="col-md-12">
         <label for="inputDescription">Food Description:</label> 
-        <textarea id="inputDescription" name="description" class="form-control" ng-model="uc.form.description" placeholder="Description" required></textarea>
+        <textarea id="inputDescription" name="caption" class="form-control" ng-model="uc.form.caption" placeholder="Description" required></textarea>
     </div>
 
     <div class="col-md-6">
