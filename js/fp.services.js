@@ -4,14 +4,26 @@ angular.module('fpServices', ['ngResource'])
 .service('ProfileService', ['$resource', '$q', function($resource, $q) 
 {
     var service = this;
-    window.ProfileService = this;
+    this.init = function()
+    {
+        window.ProfileService = this;
+        this.config = window.fpConfig;
 
-    this.questions = [];
-    this.configResource = $resource('api/config.php');
-    this.formResource = $resource('api/form_data.php');
-    this.loginResource = $resource('api/login.php');
-//    this.formResource = $resource('api/form_data.json');
-//    this.loginResource = $resource('api/login.json');
+        this.questions = [];
+        this.configResource = $resource('api/config.php');
+        this.formResource = $resource('api/form_data' + this.serviceExt());
+        this.loginResource = $resource('api/login' + this.serviceExt());
+    };
+    
+    this.isOffline = function()
+    {
+        return valueIfDefined('config.debug.offline', service);
+    };
+
+    this.serviceExt = function()
+    {
+        return this.isOffline() ? '.json' : '.php';
+    };
 
     this.loadConfig = function()
     {
@@ -73,4 +85,6 @@ angular.module('fpServices', ['ngResource'])
         });
         return deferred.promise;
     };
+
+    this.init();
 }]);
