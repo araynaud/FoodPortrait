@@ -17,15 +17,12 @@
         <a ng-click="vm.showDebug = !vm.showDebug">debug</a>
     </div>
     <div ng-show="vm.showDebug">       
-        <div class="col-md-4">
-            loaded questions: <pre>{{vm.toJson(vm.questions)}}</pre>
+        <div class="col-md-6">
+            loaded questions: <pre>{{ vm.questions | toJson }}</pre>
         </div>
-        <div class="col-md-4">
-            formData: <pre>{{vm.toJson(vm.formData)}}</pre>
-            loaded user answers: <pre>{{vm.toJson(vm.userAnswers)}}</pre>
-        </div>
-        <div class="col-md-4">
-            postData: <pre>{{vm.toJson(vm.postData)}}</pre>
+        <div class="col-md-6">
+            formData: <pre>{{ vm.formData | toJson:true }}</pre>
+            postData: <pre>{{ vm.postData | toJson:true }}</pre>
         </div>
     </div>
 </div>

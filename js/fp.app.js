@@ -22,3 +22,34 @@ app.config(function($stateProvider, $urlRouterProvider)
 });
 
 angular.module('fpControllers', []);
+
+app.filter('toJson', function() 
+{
+
+  // In the return function, we must pass in a single parameter which will be the data we will work on.
+  // We have the ability to support multiple other parameters that can be passed into the filter optionally
+  return function(data, loop)
+  {
+    if(!data) return data;
+
+    var result = '';
+    if(loop && angular.isArray(data))
+    {
+      data.forEach(function(el)
+      {
+        result += angular.toJson(el) + '\n';
+      });
+      return result;
+    }
+
+    if(loop && angular.isObject(data))
+    {
+      for(key in data)
+        result += key + ": " + angular.toJson(data[key]) + '\n';
+      return result;
+    }
+    
+    return angular.toJson(data, true);
+  }
+
+});

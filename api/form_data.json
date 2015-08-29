@@ -185,7 +185,7 @@
 			"form_id": 1, 
 			"section_id": 2, 
 			"position": 4, 
-			"field_name": "ethnicity ", 
+			"field_name": "ethnicity", 
 			"label": "Ethnicity", 
 			"data_type": "single", 
 			"required": 0, 

@@ -384,6 +384,8 @@ debug("insert SQL: $sql ", $values);
 	//TODO: specify which columns test existence
 	public function saveRow($data, $testColumns="")
 	{
+		if($this->offline) return;
+
 		$table = $data["table"];
 		//1: get table and primary key column name
 

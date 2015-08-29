@@ -7,7 +7,7 @@ angular.module('fpControllers')
 function ($scope, Upload, $window, $state, $timeout, ProfileService)
 {
     var uc = this;
-    if(!ProfileService.user && !valueIfDefined("fpConfig.debug.offline"))
+    if(!ProfileService.user && !ProfileService.isOffline())
         $state.go('home');
 
     uc.showDebug = valueIfDefined("fpConfig.debug.angular");

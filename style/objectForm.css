@@ -71,10 +71,6 @@ input[type=text], textarea
     border-radius: 4px;
 }
 
-input[type=date]{
-    width: 168px;
-}
-
 .doc-attachment{
     font-size: 13px;
 }
@@ -92,9 +88,25 @@ input[type=date]{
     opacity: 0.1;
 }
 
-.fieldLabel {
-    font-weight: bold;
-    width: 400px;
+.filters label 
+{
+  text-align: right;
+  width: 50%;
+}
+
+.filters select
+{
+    width: 48%;
+}
+
+.filters .date-filter
+{
+    width: 40%;  
+}
+
+.filters .btn.small
+{
+    padding: 2px;
 }
 
 .radioOption

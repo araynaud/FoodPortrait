@@ -3,19 +3,30 @@
 // =========== Main Controller ===========
 // handles query and gallery display
 angular.module('fpControllers')
-.controller('MainController', ['$window', '$state', 'ProfileService', 
-function ($window, $state, ProfileService)
+.controller('MainController', ['$window', '$state', 'ProfileService', function ($window, $state, ProfileService)
 {
     //TODO:
     //post filters to album.php service
     //query user table where username = user and password = md5
     //return array of uploads to display
-    if(!ProfileService.user)
-      $state.go('home');
-
+    if(!ProfileService.user && !ProfileService.isOffline())
+        $state.go('home');
+    
     var mc = this;
     $window.MainController = this;
     this.state = $state;
+    mc.filters = {};
+    mc.fpConfig = $window.fpConfig; 
+//date picker options
+    //mc.datepickerOpen=false;
+    mc.dateFormat = 'MM/dd/yyyy';
+    mc.dateOptions = { formatYear: 'yy', startingDay: 1 };
+    mc.today = new Date();
+    mc.pickDate = function(id) { mc['datepickerOpen' + id] = true; };
+    mc.setMinToday = function() { return mc.filters.date_min = mc.today; };
+    mc.setMaxToday = function() { return mc.filters.date_max = mc.today; };
+//    mc.setToday();
+// end date picker options
 
 	mc.getFilters = function()
 	{
@@ -23,9 +34,13 @@ function ($window, $state, ProfileService)
 		ProfileService.loadForm().then(function(response) 
 		{
 			mc.loading = false;    
-		    mc.filters = response.questions;
-		    if(mc.filters)
-		      mc.filters.byId = mc.filters.indexBy("id");
+		    mc.questions = response.questions;
+		    if(mc.questions)
+		      mc.questions.byId = mc.questions.indexBy("id");
+		  	mc.questions.forEach(function (q) 
+		  	{
+		  		q.title = q.field_name.makeTitle();
+		  	});
 		});
 	};
 

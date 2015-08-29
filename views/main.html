@@ -9,18 +9,81 @@ My Meals: view latest for this user
 1 grid by meal
 1 grid with 1 column / meal, 1 row / day
 -->
+<div class="row">
 
-<div class="col-md-3">
-	Filters<br/>
+  <form name="filterForm" class="col-sm-4 col-md-3 sidebar" novalidate>
 
-<div ng-repeat="f in mc.filters">
-{{f.id}} {{f.field_name}}
+    <div class="input-group">
+      <input type="text" class="form-control" id="inputDescription" ng-model="mc.filters.search" placeholder="Search" />
+      <span class="input-group-btn">
+        <button type="button" class="btn btn-default" ng-click="mc.search()">
+          <i class="glyphicon glyphicon-search"></i>
+        </button> 
+      </span>
+    </div>
+    <br/>
+    <div class="input-group">
+      <input type="text" id="inputDate" 
+      name="date_min" class="form-control"
+      ng-model="mc.filters.date_min" 
+      datepicker-popup="{{mc.dateFormat}}" ng-click="mc.pickDate(1)"
+      is-open="mc.datepickerOpen1" max-date="mc.today" 
+      datepicker-options="mc.dateOptions"
+      close-text="Close" placeholder="From date"/>
+      <span class="input-group-btn">
+        <button type="button" class="btn btn-default small" ng-click="mc.pickDate(1)">
+          <i class="glyphicon glyphicon-calendar"></i>
+        </button>
+      </span>
+    </div>
+    <div class="input-group">
+      <input type="text" id="inputDateMax" 
+      name="date_max" class="form-control"
+      ng-model="mc.filters.date_max" 
+      datepicker-popup="{{mc.dateFormat}}" ng-click="mc.pickDate(2)"
+      is-open="mc.datepickerOpen2" max-date="mc.today" 
+      datepicker-options="mc.dateOptions"
+      close-text="Close" placeholder="To date"/>
+      <span class="input-group-btn">
+        <button type="button" class="btn btn-default small" ng-click="mc.pickDate(2)">
+          <i class="glyphicon glyphicon-calendar"></i>
+        </button>
+      </span>
+    </div>
+    <br/>
+
+    <!--h3>Profile Filters</h3-->
+    <ul class="nav nav-sidebar filters">
+    <li>
+        <label for="ddMeal">Meal:</label> 
+        <select id="ddMeal" ng-model="mc.filters.meal" name="meal"   ng-options="item.name for item in mc.fpConfig.dropdown.meal">
+          <option value="">-</option>
+        </select>
+    </li>
+    <li>
+        <label for="ddCourse">Course:</label> 
+        <select id="ddCourse" ng-model="mc.filters.course" name="course" ng-options="item for item in mc.fpConfig.dropdown.course">
+          <option value="">-</option>
+        </select>
+    </li>
+    </ul>
+
+    <!--h3>Profile Filters</h3-->
+    <ul class="nav nav-sidebar filters">
+      <li ng-repeat="q in mc.questions" ng-if="q.data_type=='single' || q.data_type=='multiple'">
+        <label for="dd_{{q.field_name}}">{{q.title}}</label>
+        <select id="dd_{{q.field_name}}" ng-model="mc.filters[q.field_name]" ng-options="a.label for a in q.form_answers">
+          <option value="">-</option>
+        </select>
+      </li>
+    </ul>
+
+  </form>
+
+  <div class="col-md-9">
+   Main zone<br/>
+   <pre>{{mc.filters | toJson:true}}</pre>
+ </div>
 
 </div>
 
-
-</div>
-
-<div class="col-md-6">
-    	Main zone<br/>
-</div>

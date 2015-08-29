@@ -72,7 +72,7 @@ $meta["og:url"] = currentUrlDir();
     <!-- Static navbar -->
     <nav class="navbar navbar-default navbar-fixed-top">
       <div class="container">
-          <a class="navbar-brand textOutline" ng-class="{active: lc.stateIs('main')}" style="font-size: 34px; color: #F44;" href="#/main">
+          <a class="navbar-brand textOutline" ng-class="{active: lc.stateIs('main')}" style="font-size: 34px; color: white;" href="#/main">
             FOOD
             <div style="font-size: 19px; color: #FE0;">PORTRAIT</div>
           </a>

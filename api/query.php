@@ -5,6 +5,9 @@ require_once("../include/includes.php");
 //query database: upload, user and user_answer tables
 //return list of uploads with image urls.
 setContentType("text","plain");
-echo jsValue($fpConfig, true);
-getTimer(true);
+
+$postJson = getJsonPostData();
+
+echo jsValue($postJson, true);
+//getTimer(true);
 ?>

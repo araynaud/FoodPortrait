@@ -11,14 +11,7 @@ angular.module('app').directive('objectForm', function ()
             window.objectForm = this;
 
             vm.title="Your Profile";
-            vm.showDebug = false;
-
-            vm.toJson = function(data)
-            {
-                if(!data) return data;
-                return angular.toJson(data, true);
-            }
-
+            vm.showDebug = valueIfDefined("fpConfig.debug.angular");
             //transform user_answer array into formdata object.
             vm.loadUserAnswers = function() 
             {

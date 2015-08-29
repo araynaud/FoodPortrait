@@ -13,6 +13,8 @@ angular.module('fpServices', ['ngResource'])
         this.configResource = $resource('api/config.php');
         this.formResource = $resource('api/form_data' + this.serviceExt());
         this.loginResource = $resource('api/login' + this.serviceExt());
+
+        this.queryResource = $resource('api/query' + this.serviceExt());
     };
     
     this.isOffline = function()

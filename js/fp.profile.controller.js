@@ -7,6 +7,9 @@ angular.module('fpControllers')
 .controller('ProfileController', ['$window', '$state', 'ProfileService',  
 function ($window, $state, ProfileService)
 {
+  if(!ProfileService.user && !ProfileService.isOffline())
+      $state.go('home');
+
   var pc = this;
   $window.ProfileController = this;
   //this.scope = $scope;
@@ -20,9 +23,6 @@ function ($window, $state, ProfileService)
 
   pc.init = function()
   {
-    if(!ProfileService.user)
-      $state.go('signin');
-
     if(!pc.config)
       pc.actions.getConfig();
     pc.actions.getForm();
