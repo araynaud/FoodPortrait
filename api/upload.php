@@ -68,7 +68,7 @@ if(!empty($_FILES))
 	$filename = cleanupFilename($filename);
 	//move file to destination dir
 	$dataRoot = getConfig("upload._diskPath");
-	$dataRootUrl = getConfig("upload.url");
+	$dataRootUrl = getConfig("upload.baseUrl");
 
 	createDir($dataRoot, "$username/original"); //depending on user permissions? // username/subdir
 	$uploadDir  = combine($dataRoot, $username, "original");
