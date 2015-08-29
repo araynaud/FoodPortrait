@@ -33,6 +33,12 @@ function ($window, $state, ProfileService, QueryService)
 //    mc.setToday();
 // end date picker options
 
+    mc.init = function()
+    {
+        mc.getFilters();
+        mc.search();
+    }
+
 	mc.getFilters = function()
 	{
 		mc.loading = true;
@@ -79,18 +85,17 @@ function ($window, $state, ProfileService, QueryService)
         mc.errorMessage);
     };
 
-      mc.errorMessage =  function (result)
-      {
-        mc.loading = false;
-        mc.status = "Error: No data returned";
-      };
+  mc.errorMessage =  function (result)
+  {
+    mc.loading = false;
+    mc.status = "Error: No data returned";
+  };
 
-      mc.successMessage =  function (result)
-      {
-        mc.loading = false;
-        mc.status = result;
-      };
+  mc.successMessage =  function (result)
+  {
+    mc.loading = false;
+    mc.status = result;
+  };
 
-	mc.getFilters();
-
+    mc.init();
 }]);
