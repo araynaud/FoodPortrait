@@ -15,27 +15,13 @@ $db = new SqlManager($fpConfig);
 $uploads = $db->selectWhere(array("table" => "user_upload", "username" => $username));
 $db->disconnect();
 
-function getImagePath($u)
-{
-	$basePath = getConfig("upload._diskPath");
-	return combine($basePath, $u["username"], $u["filename"]);
-}
-
-
-function uploadedFileExists($u)
-{
-	$imagePath = getImagePath($u);
-	return file_exists($imagePath);
-}
-
 //echo jsValue($postJson, true);
 
-if(!$uploads)
-	echo file_get_contents("query.json");
-else
-{
-	$uploads = array_filter($uploads, "uploadedFileExists");
-	echo jsValue($uploads, true);
+if($db->offline)
+{	echo file_get_contents("query.json");
+	return;
 }
-//getTimer(true);
+
+$uploads = array_filter($uploads, "uploadedFileExists");
+echo jsValue($uploads, true, true);
 ?>

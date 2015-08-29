@@ -79,6 +79,26 @@ function saveUploadData($db, $metadata)
     return $result;
 }
 
+//uploaded
+function getImagePath($u)
+{
+    $basePath = getConfig("upload._diskPath");
+    return combine($basePath, $u["username"], $u["filename"]);
+}
+
+function getImageUrl($u)
+{
+    $basePath = getConfig("upload.baseUrl");
+    return combine($basePath, $u["username"], $u["filename"]);
+}
+
+function uploadedFileExists($u)
+{
+    $imagePath = getImagePath($u);
+    return file_exists($imagePath);
+}
+
+
 // Extract metadata from uploaded image
 function getImageMetadata($filename)
 {
@@ -94,7 +114,6 @@ debug("getImageMetadata getExifData", $exif);
     $exif['IPTC'] = parseIptcTags($iptc);
     return $exif;
 }
-
 
 /*
 

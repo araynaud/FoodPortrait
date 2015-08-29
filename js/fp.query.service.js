@@ -10,7 +10,7 @@ angular.module('fpServices')
     {
         $window.QueryService = this;
         this.config = $window.fpConfig;
-        this.queryResource = $resource('api/query.php'); // + ProfileService.serviceExt());
+        this.queryResource = $resource('api/query' + ProfileService.serviceExt());
     };
     
     this.loadQuery = function(filters)
