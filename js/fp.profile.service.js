@@ -13,8 +13,11 @@ angular.module('fpServices', ['ngResource'])
         this.configResource = $resource('api/config.php');
         this.formResource = $resource('api/form_data' + this.serviceExt());
         this.loginResource = $resource('api/login' + this.serviceExt());
+    };
 
-        this.queryResource = $resource('api/query' + this.serviceExt());
+    this.isDebug = function()
+    {
+        return valueIfDefined('config.debug.angular', service);
     };
     
     this.isOffline = function()
@@ -62,7 +65,7 @@ angular.module('fpServices', ['ngResource'])
     {
         if(!this.user) return "nobody";
         return this.user.first_name + " " + this.user.last_name 
-    }
+    };
 
 //Profile form
 	this.loadForm = function()

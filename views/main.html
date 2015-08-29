@@ -1,5 +1,3 @@
-<h3 class="form-signin-heading">User home page</h3>
-
 <!---
 My Meals: view latest for this user
 * view User’s Individual Portrait - Meal Type grid with four grids 
@@ -55,14 +53,14 @@ My Meals: view latest for this user
     <!--h3>Profile Filters</h3-->
     <ul class="nav nav-sidebar filters">
     <li>
-        <label for="ddMeal">Meal:</label> 
-        <select id="ddMeal" ng-model="mc.filters.meal" name="meal"   ng-options="item.name for item in mc.fpConfig.dropdown.meal">
+        <label for="dd_meal">Meal:</label> 
+        <select id="dd_meal" ng-model="mc.filters.meal" name="meal"   ng-options="item.name for item in mc.fpConfig.dropdown.meal">
           <option value="">-</option>
         </select>
     </li>
     <li>
-        <label for="ddCourse">Course:</label> 
-        <select id="ddCourse" ng-model="mc.filters.course" name="course" ng-options="item for item in mc.fpConfig.dropdown.course">
+        <label for="dd_course">Course:</label> 
+        <select id="dd_course" ng-model="mc.filters.course" name="course" ng-options="item for item in mc.fpConfig.dropdown.course">
           <option value="">-</option>
         </select>
     </li>
@@ -81,9 +79,11 @@ My Meals: view latest for this user
   </form>
 
   <div class="col-md-9">
-   Main zone<br/>
-   <pre>{{mc.filters | toJson:true}}</pre>
+    <h3 class="form-signin-heading">{{mc.getGridTitle()}}</h3>
+    <image-grid images="mc.searchResults"/>
  </div>
+
+ <pre ng-if="mc.showDebug">{{mc.filters | toJson:true}}</pre>
 
 </div>
 

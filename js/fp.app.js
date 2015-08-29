@@ -21,6 +21,7 @@ app.config(function($stateProvider, $urlRouterProvider)
   		template: '<object-form actions="pc.actions" questions="pc.questions" form-data="pc.formData" showDebug="pc.showDebug"/>'});
 });
 
+angular.module('fpServices', ['ngResource']);
 angular.module('fpControllers', []);
 
 app.filter('toJson', function() 

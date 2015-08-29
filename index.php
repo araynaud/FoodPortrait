@@ -31,6 +31,7 @@ $meta["og:url"] = currentUrlDir();
 <link rel="stylesheet" href="style/objectForm.css">
 <link rel="stylesheet" href="style/sticky-footer.css">
 <link rel="stylesheet" href="style/fileUpload.css">
+<link rel="stylesheet" href="style/imageGrid.css">
 
 <link rel="icon" href="images/FoodPortrait128.png">
 <link rel="icon" sizes="192x192" href="images/FoodPortrait192.png">
@@ -53,14 +54,17 @@ $meta["og:url"] = currentUrlDir();
 <script type="text/javascript" src="/mt/js/mt.extensions.js"></script>
 
 <script type="text/javascript" src="js/fp.app.js"></script>
-<script type="text/javascript" src="js/fp.services.js"></script>
+<script type="text/javascript" src="js/fp.profile.service.js"></script>
+<script type="text/javascript" src="js/fp.query.service.js"></script>
+
 <script type="text/javascript" src="js/fp.layout.controller.js"></script>
 <script type="text/javascript" src="js/fp.login.controller.js"></script>
 <script type="text/javascript" src="js/fp.profile.controller.js"></script>
 <script type="text/javascript" src="js/fp.main.controller.js"></script>
 <script type="text/javascript" src="js/fp.fileupload.controller.js"></script>
+
+<script type="text/javascript" src="js/imageGrid.js"></script>
 <script type="text/javascript" src="js/objectForm/objectForm.js"></script>
-<script type="text/javascript" src="js/objectForm/question.js"></script>
 
 <script type="text/javascript">
 <?php echoJsVar("fpConfig"); echoJsVar("fpUser"); ?>

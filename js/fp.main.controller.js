@@ -3,7 +3,8 @@
 // =========== Main Controller ===========
 // handles query and gallery display
 angular.module('fpControllers')
-.controller('MainController', ['$window', '$state', 'ProfileService', function ($window, $state, ProfileService)
+.controller('MainController', ['$window', '$state', 'ProfileService', 'QueryService', 
+function ($window, $state, ProfileService, QueryService)
 {
     //TODO:
     //post filters to album.php service
@@ -16,7 +17,11 @@ angular.module('fpControllers')
     $window.MainController = this;
     this.state = $state;
     mc.filters = {};
+    mc.searchResults=[];
     mc.fpConfig = $window.fpConfig; 
+    mc.showDebug = ProfileService.isDebug();
+//    valueIfDefined("fpConfig.debug.angular");
+
 //date picker options
     //mc.datepickerOpen=false;
     mc.dateFormat = 'MM/dd/yyyy';
@@ -43,6 +48,48 @@ angular.module('fpControllers')
 		  	});
 		});
 	};
+
+    mc.getGridTitle = function()
+    {
+        var params = [];
+        for(var f in mc.filters)
+        {
+            if(!mc.filters[f]) continue;
+            params.push(mc.filters[f].label || mc.filters[f].name|| mc.filters[f]);
+        }
+        return mc.title=params.join(", ");
+    }
+
+    mc.getSearchParams = function()
+    {
+        var params = {};
+        for(var f in mc.filters)
+            params[f] = mc.filters[f].id;
+        return params;
+    }
+
+    mc.search = function()
+    {
+        mc.loading = true;
+        var params = mc.getSearchParams();
+        QueryService.loadQuery(params).then(function(response) 
+        {
+            mc.searchResults = response; 
+        }, 
+        mc.errorMessage);
+    };
+
+      mc.errorMessage =  function (result)
+      {
+        mc.loading = false;
+        mc.status = "Error: No data returned";
+      };
+
+      mc.successMessage =  function (result)
+      {
+        mc.loading = false;
+        mc.status = result;
+      };
 
 	mc.getFilters();
 

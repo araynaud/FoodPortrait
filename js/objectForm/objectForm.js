@@ -81,4 +81,12 @@ angular.module('app').directive('objectForm', function ()
             }
         }         
     };
+})
+.directive('question', function () 
+{
+    return {
+        scope: { vm: '=', q: '='},
+        templateUrl: 'views/question.html'
+    };
 });
+

@@ -1,0 +1,10 @@
+<!--p class="form-signin-heading">{{vm.title}}</p-->
+
+<div class="imageGrid row">            
+    <div class="col-md-3 col-xs-3" ng-repeat="im in vm.images">
+		<!--img class="thumbnail" ng-src="{{vm.imageUrl(im)}}" alt="{{im.caption}}" title="{{im.caption}}"/-->
+		<div class="square bgCenterCover thumbnail shadow" ng-if="im" style="background-image: url('{{vm.imageUrl(im)}}')" title="{{im.caption}}">
+		</div>
+
+	</div>
+</div>

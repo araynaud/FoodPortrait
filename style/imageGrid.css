@@ -1,0 +1,18 @@
+.square 
+{
+    height: 160px;
+    width: 100%;
+/*    border: 5px solid #BBB; */
+}
+
+.shrinkW
+{
+    max-width: 100%;
+}
+
+.bgCenterCover
+{
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
