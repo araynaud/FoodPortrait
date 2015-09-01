@@ -44,6 +44,7 @@ if($upload_id)
 }
 
 $response["post"] = $_POST;
+$nbFiles=count($_FILES);
 
 if(!empty($_FILES))
 {
@@ -127,6 +128,7 @@ if($success)
 	$db->disconnect();
 }
 
+addVarToArray($response, "nbFiles");
 addVarToArray($response, "success");
 addVarToArray($response, "message");
 addVarToArray($response, "upload_id");

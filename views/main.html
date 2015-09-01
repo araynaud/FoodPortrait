@@ -9,7 +9,7 @@ My Meals: view latest for this user
 -->
 <div class="row">
 
-  <form name="filterForm" class="col-sm-4 col-md-3 sidebar" novalidate>
+  <form name="filterForm" class="col-md-3 sidebar" novalidate>
 
     <div class="input-group">
       <input type="text" class="form-control" id="inputDescription" ng-model="mc.filters.search" placeholder="Search" />
@@ -68,7 +68,7 @@ My Meals: view latest for this user
 
     <!--h3>Profile Filters</h3-->
     <ul class="nav nav-sidebar filters">
-      <li ng-repeat="q in mc.questions" ng-if="q.data_type=='single' || q.data_type=='multiple'">
+      <li ng-repeat="q in mc.questions" ng-if="false && q.data_type=='single' || q.data_type=='multiple'">
         <label for="dd_{{q.field_name}}">{{q.title}}</label>
         <select id="dd_{{q.field_name}}" ng-model="mc.filters[q.field_name]" ng-options="a.label for a in q.form_answers">
           <option value="">-</option>
@@ -80,7 +80,7 @@ My Meals: view latest for this user
 
   <div class="col-md-9">
     <h3 class="form-signin-heading">{{mc.getGridTitle()}}</h3>
-    <image-grid images="mc.searchResults"/>
+    <image-grid images="mc.searchResults" columns="4" rows="4" margin="5" border="1" border-color="black"/>
  </div>
 
  <pre ng-if="mc.showDebug">{{mc.filters | toJson:true}}</pre>

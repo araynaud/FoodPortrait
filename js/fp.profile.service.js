@@ -91,5 +91,14 @@ angular.module('fpServices', ['ngResource'])
         return deferred.promise;
     };
 
+
+    this.isMobile = function() 
+    { 
+        if(navigator.userAgent.match(/Android|webOS|iPhone|iPad|iPod|BlackBerry|Phone|mobile/i))
+            return true;
+
+        return false;
+    }
+
     this.init();
 }]);

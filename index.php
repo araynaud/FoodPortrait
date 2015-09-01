@@ -110,7 +110,7 @@ $meta["og:url"] = currentUrlDir();
     <img class="logo" src="images/FoodPortrait192.png" alt="logo" ng-hide="true || lc.stateIs('home')" />
   </a>
 
-  <div id="main" class="container" ui-view>
+  <div id="main" ui-view>
   </div>
   <br/>
   <footer class="footer container nowrap" ng-if="lc.showDebug">

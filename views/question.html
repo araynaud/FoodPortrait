@@ -1,9 +1,9 @@
 <div>
-    <label class="fieldLabel" for="{{q.field_name}}">{{q.label}} 
-      <span class="glyphicon glyphicon-info-sign" ng-if="q.help_text" title="{{q.help_text}}"></span>
-    </label>
+    <label class="fieldLabel" for="{{q.field_name}}">{{q.label}}</label>
+    <div ng-if="q.help_text && vm.isMobile">{{q.help_text}}</div>
+    <span class="glyphicon glyphicon-info-sign" ng-if="q.help_text && !vm.isMobile" title="{{q.help_text}}"></span>
     <br/>
-    <input id="{{q.field_name}}" type="text" ng-if="q.data_type=='text'" maxlength="{{q.max_value}}" ng-model="vm.formData[q.id]"/>
+    <input id="{{q.field_name}}" type="text"   ng-if="q.data_type=='text'"   maxlength="{{q.max_value}}" ng-model="vm.formData[q.id]"/>
     <input id="{{q.field_name}}" type="number" ng-if="q.data_type=='number'" min="{{q.min_value}}" max="{{q.max_value}}" ng-model="vm.formData[q.id]"/>
 
     <span ng-show="vm.showDebug"> {{q.id}} ({{q.data_type}}) {{q.field_name}}: {{vm.formData[q.id]}}</span>

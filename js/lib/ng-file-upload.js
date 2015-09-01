@@ -337,19 +337,16 @@ ngFileUpload.service('Upload', ['$http', '$q', '$timeout', function ($http, $q, 
       var fileElem = angular.element('<input type="file">');
       bindAttrToFileInput(fileElem);
 
-      if (isInputTypeFile())
-      {
+      if (isInputTypeFile()) {
         elem.replaceWith(fileElem);
         elem = fileElem;
         fileElem.attr('__ngf_gen__', true);
         $compile(elem)(scope);
-      } else 
-      {
+      } else {
         fileElem.css('visibility', 'hidden').css('position', 'absolute').css('overflow', 'hidden')
           .css('width', '0px').css('height', '0px').css('z-index', '-100000').css('border', 'none')
           .css('margin', '0px').css('padding', '0px').attr('tabindex', '-1');
-        if (elem.$$ngfRefElem) 
-        {
+        if (elem.$$ngfRefElem) {
           elem.$$ngfRefElem.remove();
         }
         elem.$$ngfRefElem = fileElem;

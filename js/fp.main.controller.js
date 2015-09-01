@@ -81,6 +81,8 @@ function ($window, $state, ProfileService, QueryService)
         QueryService.loadQuery(params).then(function(response) 
         {
             mc.searchResults = response; 
+            if(window.imageGrid)
+                imageGrid.resizeThumbnails();
         }, 
         mc.errorMessage);
     };

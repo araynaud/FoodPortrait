@@ -2,8 +2,8 @@
 
 // =========== LayoutController ===========
 angular.module('fpControllers')
-.controller('LayoutController', ['$window', '$state', 'ProfileService', 
-function ($window, $state, ProfileService)
+.controller('LayoutController', ['$scope', '$window', '$state', 'ProfileService', 
+function ($scope, $window, $state, ProfileService)
 {
     var lc = this;
     $window.LayoutController = this;
@@ -14,6 +14,7 @@ function ($window, $state, ProfileService)
     {
         lc.windowWidth  = $window.innerWidth;
         lc.windowHeight = $window.innerHeight;
+        $scope.$apply();
     };
 
     $window.addEventListener("load",   lc.getWindowSize);

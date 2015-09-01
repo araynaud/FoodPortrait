@@ -417,6 +417,7 @@ debug("saveRow", $where);
 	//attach each group to corresponding parent record
 	public static function groupJoinResults(&$parentData, $childData, $childField, $pkColumn, $fkColumn)
 	{
+		if(!$parentData || !$childData) return $parentData;
 		$childData = arrayGroupBy($childData, $fkColumn);
 		foreach ($parentData as $key => &$parent)
 		{

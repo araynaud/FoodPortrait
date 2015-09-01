@@ -25,6 +25,7 @@ function ($window, $state, ProfileService)
   {
     if(!pc.config)
       pc.actions.getConfig();
+    pc.config.isMobile = ProfileService.isMobile();
     pc.actions.getForm();
   } 
 

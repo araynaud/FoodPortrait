@@ -1,4 +1,4 @@
-<form class="file-uploader" name="uploadForm" novalidate>
+<form class="file-uploader container" name="uploadForm" novalidate>
     {{uc.showDebug && uc.form.upload_id}}
     <div class="col-md-4 center-block" style="float:none"> 
         <label for="inputFiles" class="uploadThumbnail shadow">
@@ -14,7 +14,7 @@
       <div class="input-group">
         <input type="text" id="inputDate" 
             name="image_date_taken" class="form-control" 
-            ng-model="uc.form.image_date_taken" 
+            ng-model="uc.form.image_date_taken" ng-click="uc.pickDate()"
             datepicker-popup="{{uc.dateFormat}}" 
             is-open="uc.datepickerOpen" max-date="uc.today" 
             datepicker-options="uc.dateOptions" ng-required="true" 
@@ -34,8 +34,8 @@
     </div>
 
     <div class="col-md-6 col-sm-6">
-      <label for="inputShared">Shared with:</label> 
-      <input type="number" id="inputShared" name="shared_with" class="form-control" ng-model="uc.form.shared_with" min="1" max="20" placeholder="Shared with" required/>
+      <label for="inputShared">Persons sharing this meal:</label> (including yourself): 
+      <input type="number" id="inputShared" name="shared_with" class="form-control" ng-model="uc.form.shared_with" min="1" max="20" placeholder="Shared with" required autofocus/>
     </div>
 
     <div class="col-md-6 col-sm-6">
@@ -45,7 +45,7 @@
 
     <div class="col-md-12">
         <label for="inputDescription">Food Description:</label> 
-        <textarea id="inputDescription" name="caption" class="form-control" ng-model="uc.form.caption" placeholder="Description" required></textarea>
+        <textarea id="inputDescription" name="caption" class="form-control" ng-model="uc.form.caption" placeholder="Description"></textarea>
     </div>
 
     <div class="col-md-6">

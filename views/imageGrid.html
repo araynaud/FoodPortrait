@@ -1,10 +1,9 @@
-<!--p class="form-signin-heading">{{vm.title}}</p-->
+<style id="addedCSS" type="text/css">{{vm.addedCss}}</style>
 
-<div class="imageGrid row">            
-    <div class="col-md-3 col-xs-3" ng-repeat="im in vm.images">
-		<!--img class="thumbnail" ng-src="{{vm.imageUrl(im)}}" alt="{{im.caption}}" title="{{im.caption}}"/-->
-		<div class="square bgCenterCover thumbnail shadow" ng-if="im" style="background-image: url('{{vm.imageUrl(im)}}')" title="{{im.caption}}">
-		</div>
+<p class="form-signin-heading">{{vm.title}}</p>
+<div ng-if="vm.showDebug">{{vm.columns}}x{{vm.rows}} {{vm.width}} {{vm.addedCss}}</div>
 
-	</div>
+<div class="imageGrid">          
+    <div ng-repeat="im in vm.images" class="square bgCenterCover cell shadow textOutline" ng-if="im" style="background-image: url('{{vm.imageUrl(im)}}')" ng-click="vm.imageDetails(im)"
+    title="{{(im.caption || '') + ' ' + im.upload_id}}"></div>
 </div>
