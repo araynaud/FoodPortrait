@@ -4,6 +4,6 @@
 <div ng-if="vm.showDebug">{{vm.columns}}x{{vm.rows}} {{vm.width}} {{vm.addedCss}}</div>
 
 <div class="imageGrid">          
-    <div ng-repeat="im in vm.images" class="square bgCenterCover cell shadow textOutline" ng-if="im" style="background-image: url('{{vm.imageUrl(im)}}')" ng-click="vm.imageDetails(im)"
+    <div ng-repeat="im in vm.images" class="bgCenterCover cell" ng-class="{shadow: vm.shadow}" ng-if="im" style="background-image: url('{{vm.imageUrl(im)}}')" ng-click="vm.imageDetails(im)"
     title="{{vm.imageTitle(im)}}"></div>
 </div>

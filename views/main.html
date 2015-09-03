@@ -80,7 +80,7 @@ My Meals: view latest for this user
 
   <div class="col-md-9">
     <h3 class="form-signin-heading">{{mc.getGridTitle()}}</h3>
-    <image-grid images="mc.searchResults" columns="4" rows="4" margin="5" border="1" border-color="black"/>
+    <image-grid images="mc.searchResults" columns="4" rows="4" margin=".5" border="0" border-color="black" shadow0="true"/>
  </div>
 
  <pre ng-if="mc.showDebug">{{mc.filters | toJson:true}}</pre>

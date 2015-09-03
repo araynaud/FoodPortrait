@@ -1,6 +1,6 @@
 angular.module('app').directive('imageGrid', function () 
 { return {
-    scope: { images: '=', title: '=', options: '=', showDebug: '=', columns: '@', rows: '@', ratio: '@', border: '@',  borderColor: '@' , margin: '@'},
+    scope: { images: '=', title: '=', options: '=', showDebug: '=', columns: '@', rows: '@', ratio: '@', border: '@',  borderColor: '@' , margin: '@', shadow: '@'},
     templateUrl: 'views/imageGrid.html',
     controllerAs: 'vm',
     bindToController: true,
