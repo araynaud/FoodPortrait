@@ -5,5 +5,5 @@
 
 <div class="imageGrid">          
     <div ng-repeat="im in vm.images" class="square bgCenterCover cell shadow textOutline" ng-if="im" style="background-image: url('{{vm.imageUrl(im)}}')" ng-click="vm.imageDetails(im)"
-    title="{{(im.caption || '') + ' ' + im.upload_id}}"></div>
+    title="{{vm.imageTitle(im)}}"></div>
 </div>

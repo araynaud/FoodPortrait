@@ -74,6 +74,8 @@ angular.module('app').directive('objectForm', function ()
                         answer = {question_id: q.id, answer_id: ans.id};
                         if(angular.isString(ans))
                             answer.answer_text = ans;
+                        else if(q.data_type=="country")
+                            answer.answer_text = ans.country_code;
                         else
                             answer.answer_value = ans;
                         postData.push(answer);

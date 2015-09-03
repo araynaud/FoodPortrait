@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('fpServices', ['ngResource'])
-.service('ProfileService', ['$resource', '$q', function($resource, $q) 
+.service('ProfileService', ['$http', '$resource', '$q', function($http, $resource, $q) 
 {
     var service = this;
     this.init = function()
@@ -13,6 +13,7 @@ angular.module('fpServices', ['ngResource'])
         this.configResource = $resource('api/config.php');
         this.formResource = $resource('api/form_data' + this.serviceExt());
         this.loginResource = $resource('api/login' + this.serviceExt());
+        this.loadCountries();
     };
 
     this.isDebug = function()
@@ -28,6 +29,19 @@ angular.module('fpServices', ['ngResource'])
     this.serviceExt = function()
     {
         return this.isOffline() ? '.json' : '.php';
+    };
+
+    this.loadCountries = function()
+    {
+        var deferred = $q.defer();
+
+        $http.get("api/countries.csv").then(function(response) 
+        {
+            service.countries = String.parseCsv(response.data, true);
+            service.countries.byCode = service.countries.indexBy("country_code");
+            deferred.resolve(service.countries);
+        });
+        return deferred.promise;
     };
 
     this.loadConfig = function()

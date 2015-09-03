@@ -48,7 +48,10 @@ function ($window, $state, ProfileService)
         pc.form = response;
         pc.questions = response.questions;
         if(pc.questions)
+        {
           pc.questions.byId = pc.questions.indexBy("id");
+          pc.questions.countries = ProfileService.countries;
+        }
         pc.user_answers = response.user_answers; 
         pc.formData = pc.actions.loadUserAnswers();
         pc.successMessage();
@@ -74,6 +77,8 @@ function ($window, $state, ProfileService)
           }
           else if(q.data_type=="single")
               formData[q.id] = {id: ans.answer_id, text: ans.answer_text, value: ans.answer_value};
+          else if(q.data_type=="country")
+              formData[q.id] = pc.questions.countries.byCode[ans.answer_text];
           else
               formData[q.id] = ans.answer_text || ans.answer_value;
       }

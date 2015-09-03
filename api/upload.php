@@ -72,13 +72,16 @@ if(!empty($_FILES))
 	$dataRootUrl = getConfig("upload.baseUrl");
 
 	createDir($dataRoot, "$username/original"); //depending on user permissions? // username/subdir
+	createDir($dataRoot, "$username/.tn"); //depending on user permissions? // username/subdir
 	$uploadDir  = combine($dataRoot, $username, "original");
 	$uploadedFile = combine($dataRoot, $username, "original", $filename);
 	$uploadUrl = combine($dataRootUrl, $username, $filename);
 	$filesize = filesize($tmpFile);
 	$success = move_uploaded_file($tmpFile, $uploadedFile);
 	$maxUploadSize = ini_get("upload_max_filesize");
-	$resized = createThumbnail($uploadDir, $filename, '..', 225);
+	$resized = createThumbnail($uploadDir, $filename, '..', 1000);
+	$resizedDir = combine($dataRoot, $username);
+	$resized = createThumbnail($resizedDir, $filename, '.tn', 225);
 
 	addVarToArray($response, "filename");
 	addVarToArray($response, "uploadUrl");
@@ -107,6 +110,8 @@ if(!empty($_FILES))
 
 	writeCsvFile("$uploadedFile.exif.txt", $exif);
 	writeTextFile("$uploadedFile.exif.js", jsValue($exif));
+
+	unlink($uploadedFile);
 }
 
 //TODO: insert row in upload table

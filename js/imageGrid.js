@@ -27,6 +27,15 @@ angular.module('app').directive('imageGrid', function ()
             return String.combine(vm.baseUrl, im.username, subdir, im.filename);
         };
 
+        vm.imageTitle = function(im)
+        {
+            var title = im.caption || '';
+            if(title && im.context) title += ' ';
+            if(im.context) title += im.context;
+            if(vm.showDebug) title = im.upload_id + ' ' + title;
+            return title;
+        };
+
         vm.imageDetails = function(im)
         {
             vm.title = im.caption;

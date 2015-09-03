@@ -6,6 +6,10 @@
     <input id="{{q.field_name}}" type="text"   ng-if="q.data_type=='text'"   maxlength="{{q.max_value}}" ng-model="vm.formData[q.id]"/>
     <input id="{{q.field_name}}" type="number" ng-if="q.data_type=='number'" min="{{q.min_value}}" max="{{q.max_value}}" ng-model="vm.formData[q.id]"/>
 
+    <select ng-if="q.data_type=='country'" id="{{q.field_name}}" ng-model="vm.formData[q.id]" ng-options="c.common_name for c in vm.questions.countries">
+      <option value="">-</option>
+    </select>
+
     <span ng-show="vm.showDebug"> {{q.id}} ({{q.data_type}}) {{q.field_name}}: {{vm.formData[q.id]}}</span>
 
     <div ng-if="q.data_type=='single'">
