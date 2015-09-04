@@ -3,8 +3,8 @@
     <div ng-if="q.help_text && vm.isMobile">{{q.help_text}}</div>
     <span class="glyphicon glyphicon-info-sign" ng-if="q.help_text && !vm.isMobile" title="{{q.help_text}}"></span>
     <br/>
-    <input id="{{q.field_name}}" type="text"   ng-if="q.data_type=='text'"   maxlength="{{q.max_value}}" ng-model="vm.formData[q.id]"/>
-    <input id="{{q.field_name}}" type="number" ng-if="q.data_type=='number'" min="{{q.min_value}}" max="{{q.max_value}}" ng-model="vm.formData[q.id]"/>
+    <input id="{{q.field_name}}" class="form-control" type="text"   ng-if="q.data_type=='text'"   maxlength="{{q.max_value}}" ng-model="vm.formData[q.id]"/>
+    <input id="{{q.field_name}}" class="form-control" type="number" ng-if="q.data_type=='number'" min="{{q.min_value}}" max="{{q.max_value}}" ng-model="vm.formData[q.id]"/>
 
     <select ng-if="q.data_type=='country'" class="form-control" id="{{q.field_name}}" ng-model="vm.formData[q.id]" ng-options="c.common_name for c in vm.questions.countries">
       <option value="">-</option>
@@ -18,7 +18,7 @@
           <label for="rd_{{q.id}}_{{opt.id}}"></label>
           {{opt.label}} 
 
-          <input id="{{q.field_name}}" type="text" ng-if="opt.data_type=='text'" ng-disabled="vm.formData[q.id].id!=opt.id" maxlength="{{q.max_value}}" 
+          <input id="txt_{{q.id}}_{{opt.id}}" type="text" ng-if="opt.data_type=='text'" ng-disabled="vm.formData[q.id].id!=opt.id" maxlength="{{q.max_value}}" 
           ng-model="vm.formData[q.id].text"/>
 
           <span ng-show="vm.showDebug && opt.value!=null"> ({{opt.value}})</span> 
@@ -31,7 +31,7 @@
           <label for="cb_{{q.id}}_{{opt.id}}"></label>
           {{opt.label}} 
 
-          <input id="{{q.id}}" type="text" ng-if="opt.data_type=='text'" ng-disabled="!vm.formData[q.id] || !vm.formData[q.id][opt.id] || !vm.formData[q.id][opt.id].id" maxlength="{{q.max_value}}" 
+          <input id="txt_{{q.id}}_{{opt.id}}" type="text" ng-if="opt.data_type=='text'" ng-disabled="!vm.formData[q.id] || !vm.formData[q.id][opt.id] || !vm.formData[q.id][opt.id].id" maxlength="{{q.max_value}}" 
             ng-model="vm.formData[q.id][opt.id].text" ng-value="opt.id"/>
 
           <span ng-show="vm.showDebug  && opt.value!=null"> ({{opt.value}}) enabled:{{vm.formData[q.id][opt.id].id}}</span> 

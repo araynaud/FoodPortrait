@@ -97,7 +97,7 @@ $meta["og:url"] = currentUrlDir();
             <li ng-show="lc.loggedIn()" ng-class="{active: lc.stateIs('upload')}"><a href="#/upload">Upload</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li ng-hide="lc.loggedIn()" ng-class="{active: lc.stateIs('signin')}"><a href="#/signin">Log in</span></a></li>
+            <li ng-hide="lc.loggedIn()" ng-class="{active: lc.stateIs('signin')}"><a href="#/signin">Log in</a></li>
             <li ng-hide="lc.loggedIn()" ng-class="{active: lc.stateIs('signup')}"><a href="#/signup">Sign up</a></li>
             <li ng-show="lc.loggedIn()" ng-class="{active: lc.stateIs('user')}"><a href="#/main">{{lc.userFullName()}}</a></li>
             <li ng-show="lc.loggedIn()"><a href="#/login" ng-click="lc.logout()">Sign out</a></li>

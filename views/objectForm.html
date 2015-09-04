@@ -1,7 +1,7 @@
-<div class="container object-form">
+<form class="container object-form form-inline" role="form">
     <h2 class="form-signin-heading">{{vm.title}}</h2>
 
-	<p class="" ng-if="vm.intro">{{vm.intro}} intro</p>
+	<p class="" ng-if="vm.intro">{{vm.intro}}</p>
 	<span ng-show="vm.showDebug">questions: {{vm.questions.length}}</span>
 
     <div ng-repeat="q in vm.questions">
@@ -25,4 +25,4 @@
             postData: <pre>{{ vm.postData | toJson:true }}</pre>
         </div>
     </div>
-</div>
+</form>
