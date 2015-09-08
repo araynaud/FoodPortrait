@@ -7,6 +7,7 @@ angular.module('app').directive('imageGrid', function ()
     controller: function ($scope, $timeout)
     {
         var vm = this; 
+        Object.merge(vm, vm.options);
         window.imageGrid = this;
         vm.win = angular.element(window);
         vm.grid = angular.element(".imageGrid");
@@ -15,12 +16,31 @@ angular.module('app').directive('imageGrid', function ()
         vm.title="Image Grid";
         vm.showDebug = valueIfDefined("fpConfig.debug.angular");
         vm.baseUrl = valueIfDefined("fpConfig.upload.baseUrl");
-
+        if(!vm.borderColor) vm.borderColor = 'black';
+        
         vm.init = function()
         {
             vm.win.bind("resize", vm.resizeThumbnails);
             vm.resizeThumbnails();
+        };
+
+        vm.imageClasses = function(im)
+        {
+            var classes= {shadow: vm.shadow};
+            if(im.colspan>=vm.columns) classes['colspan'+ vm.columns] = true;
+            else if(im.colspan>1) classes['colspan'+ im.colspan] = true;
+            
+            if(im.rowspan>=vm.rows) classes['colspan'+ vm.rows] = true;
+            else if(im.rowspan) classes['rowspan'+ im.rowspan] = true;
+            
+            return classes;
         }
+
+        vm.imageStyle = function(im, subdir)
+        {
+            var bgImage = "url('{0}')".format(vm.imageUrl(im,subdir));
+            return { "background-image": bgImage};
+        };
 
         vm.imageUrl = function(im, subdir)
         {
@@ -41,24 +61,59 @@ angular.module('app').directive('imageGrid', function ()
             vm.title = im.caption;
         };
 
+        vm.imageWidth = function(n)
+        {
+            n = n || 1;
+            var width = vm.totalWidth = vm.grid.width();
+            if(vm.columns > n)
+            {
+                width *= n;
+                width /= vm.columns;
+            }
+
+           // if(vm.border)  width -= vm.border;
+            if(vm.margin)  width -= 2 * vm.margin;
+
+            return Math.floor(width);
+        };
+
+        vm.colspanCss = function(n)
+        {
+            var width = vm.imageWidth(n);
+            return "{0}.colspan{1} { width: {2}px; }\n".format(selector, n, width);
+        }
+
+        vm.rowspanCss = function(n)
+        {
+            var height = vm.imageWidth(n); 
+            return "{0}.rowspan{1} { height: {2}px; }\n".format(selector, n, height);
+        }
+
         //keep aspect ratio
         vm.resizeThumbnails = function()
         {
-            $timeout(function() {
-                vm.width = vm.grid.width();
-                if(vm.columns > 1)   
-                    vm.width /= vm.columns;
-                if(vm.border)   vm.width -= 2 * vm.border;
-                if(vm.margin)   vm.width -= 2 * vm.margin;
-                vm.width = Math.floor(vm.width);
+            $timeout(function() 
+            {
+                vm.totalWidth = vm.width = vm.grid.width();
+                vm.width = vm.imageWidth();
                 vm.height = vm.ratio ? vm.width / vm.ratio : vm.width;
+                vm.width = Math.floor(vm.width);
                 vm.height = Math.floor(vm.height);
-                if(vm.border && vm.borderColor)
+                if(!vm.borderColor) 
+                    vm.borderColor = 'black';
+                if(vm.border)
                     vm.borderStyle = "{0}px solid {1}".format(vm.border, vm.borderColor);
                 else 
                     vm.borderStyle = "none";
-                vm.addedCss = "{0} { width: {1}px; height: {2}px; border: {3}; margin: {4}px; }".format(selector, vm.width, vm.height, vm.borderStyle, vm.margin);
-            }, 10);
+
+                vm.addedCss = "{0} { width:{1}px; height:{2}px; border:{3}; margin:{4}px; }\n".format(selector, vm.width, vm.height, vm.borderStyle, vm.margin);
+
+                for(var i=2; i<=vm.columns; i++)
+                    vm.addedCss += vm.colspanCss(i);
+                for(var i=2; i<=vm.rows; i++)
+                    vm.addedCss += vm.rowspanCss(i);
+
+            }, 50);
         };
 
         vm.init();

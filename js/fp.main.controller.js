@@ -16,6 +16,7 @@ function ($window, $state, ProfileService, QueryService)
     var mc = this;
     $window.MainController = this;
     this.state = $state;
+    mc.options = { columns: 4, rows: 5, margin: 10, border: 1, shadow: false};
     mc.filters = {};
     mc.searchResults=[];
     mc.fpConfig = $window.fpConfig; 

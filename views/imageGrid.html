@@ -1,9 +1,15 @@
 <style id="addedCSS" type="text/css">{{vm.addedCss}}</style>
 
 <p class="form-signin-heading">{{vm.title}}</p>
-<div ng-if="vm.showDebug">{{vm.columns}}x{{vm.rows}} {{vm.width}} {{vm.addedCss}}</div>
+<div ng-if="vm.showDebug">{{vm.columns}}x{{vm.rows}} {{vm.totalWidth}}</div>
+<pre ng-if="vm.showDebug">{{vm.addedCss}}</pre>
 
-<div class="imageGrid">          
-    <div ng-repeat="im in vm.images" class="bgCenterCover cell" ng-class="{shadow: vm.shadow}" ng-if="im" style="background-image: url('{{vm.imageUrl(im)}}')" ng-click="vm.imageDetails(im)"
-    title="{{vm.imageTitle(im)}}"></div>
+<div class="imageGrid">
+	<div ng-repeat="im in vm.images" ng-if="im.filename" 
+	    class="bgCenterCover cell textOutline" ng-class="vm.imageClasses(im)" ng-style="vm.imageStyle(im)"
+	    ng-click="vm.imageDetails(im)" title="{{vm.imageTitle(im)}}">
+	    <div ng-if="vm.showDebug">{{$index}} {{im.colspan}}x{{im.rowspan}} {{vm.imageWidth(im.colspan)}} 
+	    <br/>{{vm.imageTitle(im)}}
+		</div>
+	</div>
 </div>
