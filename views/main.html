@@ -80,7 +80,7 @@ My Meals: view latest for this user
   <div id="page-content-wrapper">
     <a class="btn btn-default menu-toggle glyphicon glyphicon-search" title="toggle filters" ng-click="mc.toggleSidebar()"></a>
     <a class="btn btn-default glyphicon glyphicon-resize-horizontal" title="resize grid" ng-click="mc.resizeGrid()"></a>
-    <span class="form-signin-heading0">{{mc.getGridTitle()}}</span>
+    <span class="form-signin-heading">{{mc.getGridTitle()}}</span>
 
     <form ng-if="mc.showDebug">
         columns: <input type="number"   ng-model="mc.options.columns"  min="1" max="10" /> 
