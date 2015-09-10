@@ -37,6 +37,11 @@
     background: #eee;
 }
 
+#sidebar-wrapper > form 
+{
+    padding: 10px;
+}
+
 #wrapper.toggled #sidebar-wrapper {
     width: 250px;
 }

@@ -1,6 +1,14 @@
 <style id="addedCSS" type="text/css">{{vm.addedCss}}</style>
 
-<span class="form-signin-heading"><span ng-if="vm.showDebug">{{vm.columns}}x{{vm.rows}} {{vm.totalWidth}} </span>{{vm.title}}</span>
+<span class="form-signin-heading">{{vm.title}}</span>
+
+<span ng-if="vm.showDebug">
+	{{vm.columns}}x{{vm.rows}}
+	<span ng-if="vm.delta() > 0" class="glyphicon glyphicon-arrow-up"   style="color:green"></span>
+	<span ng-if="vm.delta() < 0" class="glyphicon glyphicon-arrow-down" style="color:red"></span>
+	{{vm.delta()}} = {{vm.totalWidth}} - {{vm.prevWidth}}
+</span>
+
 <div class="imageGrid">
 	<div ng-repeat="im in vm.images" ng-if="im.filename" 
 	    class="bgCenterCover cell textOutline" ng-class="vm.imageClasses(im)" ng-style="vm.imageStyle(im)"

@@ -59,25 +59,14 @@ function ($window, $state, ProfileService, QueryService)
     mc.toggleSidebar = function()
     {
         angular.element("#wrapper").toggleClass("toggled");
-        mc.resizeGrid(100, 700);
-    }
+        mc.resizeGrid(0, 600);
+    };
 
     mc.resizeGrid = function(delay, last)
     {
-        if(!window.imageGrid) return;
-        
-        if(!last)
-            return imageGrid.resizeAfter(delay);        
-
-        if(!delay)
-        {
-            imageGrid.resizeAfter(0);        
-            delay=100;
-        }
-
-        for(var t = delay; t <= last ; t += delay)
-            imageGrid.resizeAfter(t);        
-    }
+        if(window.imageGrid)
+            imageGrid.resizeInterval(delay, last);       
+    };
 
     mc.getGridTitle = function()
     {

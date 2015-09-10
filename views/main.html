@@ -9,8 +9,8 @@ My Meals: view latest for this user
 -->
 <div id="wrapper" class="ease05">
 
-  <form name="filterForm" id="sidebar-wrapper" class="ease05">
-
+<div id="sidebar-wrapper" class="ease05">
+<form name="filterForm">
     <div class="input-group">
       <input type="text" class="form-control" id="inputDescription" ng-model="mc.filters.search" placeholder="Search" />
       <span class="input-group-btn">
@@ -29,11 +29,12 @@ My Meals: view latest for this user
       datepicker-options="mc.dateOptions"
       close-text="Close" placeholder="From date"/>
       <span class="input-group-btn">
-        <button type="button" class="btn btn-default small" ng-click="mc.pickDate(1)">
-          <i class="glyphicon glyphicon-calendar"></i>
+        <button type="button" class="btn btn-default" ng-click="mc.pickDate(1)">
+          <i class="glyphicon glyphicon-calendar"></i>          
         </button>
       </span>
     </div>
+    <br/>
     <div class="input-group">
       <input type="text" id="inputDateMax" 
       name="date_max" class="form-control"
@@ -43,7 +44,7 @@ My Meals: view latest for this user
       datepicker-options="mc.dateOptions"
       close-text="Close" placeholder="To date"/>
       <span class="input-group-btn">
-        <button type="button" class="btn btn-default small" ng-click="mc.pickDate(2)">
+        <button type="button" class="btn btn-default" ng-click="mc.pickDate(2)">
           <i class="glyphicon glyphicon-calendar"></i>
         </button>
       </span>
@@ -75,7 +76,8 @@ My Meals: view latest for this user
     </ul>
 
    <pre ng-if="mc.showDebug">{{mc.filters | toJson}}</pre>
-  </form>
+</form>
+</div>
 
   <div id="page-content-wrapper">
     <a class="btn btn-default menu-toggle glyphicon glyphicon-search" title="toggle filters" ng-click="mc.toggleSidebar()"></a>

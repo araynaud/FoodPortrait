@@ -20,9 +20,14 @@ angular.module('app').directive('imageGrid', function ()
         
         vm.init = function()
         {
-            vm.win.bind("resize", function() { vm.resizeGrid(); vm.resizeAfter(200); });
             vm.resizeGrid();
             vm.resizeAfter(400);
+
+            vm.win.bind("resize", function() 
+            {
+                vm.resizeGrid(); 
+                vm.resizeAfter(200);
+            });
         };
 
         vm.imageClasses = function(im)
@@ -89,7 +94,22 @@ angular.module('app').directive('imageGrid', function ()
             return "{0}.rowspan{1} { height: {2}px; }\n".format(selector, n, height);
         };
 
-        //keep aspect ratio
+        vm.resizeInterval = function(delay, last)
+        {
+            if(!last)
+                return vm.resizeAfter(delay);        
+
+            if(!delay)
+            {
+                vm.resizeGrid(); 
+                delay=100;
+            }
+
+            for(var t=delay; t<=last ; t+=delay)
+                vm.resizeAfter(t);        
+        };
+
+
         vm.resizeAfter = function(delay)
         {
             if(isNumber(delay) && delay>0)
@@ -98,12 +118,22 @@ angular.module('app').directive('imageGrid', function ()
                 vm.resizeGrid();
         };
 
+
+        vm.delta = function()
+        {
+            if(!vm.prevWidth) return 0;
+            return vm.grid.width() - vm.prevWidth;
+        }
+
+        //fit grid in containing element, keep aspect ratio
         vm.resizeGrid = function()
         {
-            vm.width = vm.grid.width();
-            vm.delta = vm.width - vm.totalWidth;
-            vm.totalWidth = vm.width;
+            vm.prevWidth = vm.totalWidth;
+            vm.totalWidth = vm.grid.width();
+            var delta = vm.delta(); 
             vm.width = vm.imageWidth();
+
+            if(delta<0) vm.width += delta;
             vm.height = vm.ratio ? vm.width / vm.ratio : vm.width;
             vm.width = Math.floor(vm.width);
             vm.height = Math.floor(vm.height);
@@ -120,8 +150,6 @@ angular.module('app').directive('imageGrid', function ()
                 vm.addedCss += vm.colspanCss(i);
             for(var i=2; i<=vm.rows; i++)
                 vm.addedCss += vm.rowspanCss(i);
-
-            //$scope.$apply();
         }
 
         vm.init();

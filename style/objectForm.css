@@ -88,28 +88,11 @@ input[type=text], textarea
     opacity: 0.1;
 }
 
-/*
-.filters label 
-{
-  text-align: right;
-  width: 50%;
-}
-
-.filters select
-{
-    width: 48%;
-}
-
-.filters .date-filter
-{
-    width: 40%;  
-}
-
 .filters .btn.small
 {
     padding: 2px;
 }
-*/
+
 
 .radioOption
 {
