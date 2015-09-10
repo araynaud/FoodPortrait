@@ -13,6 +13,8 @@
 		"caption": null, 
 		"context": null, 
 		"mood": null, 
+		"colspan": 3,
+		"rowspan": 2,
 		"shared_with": 1
 	}, 
 	{
@@ -28,6 +30,7 @@
 		"caption": null, 
 		"context": null, 
 		"mood": null, 
+		"rowspan": 2,
 		"shared_with": 2
 	}, 
 	{
@@ -43,6 +46,7 @@
 		"caption": "Easterizer", 
 		"context": null, 
 		"mood": null, 
+		"colspan": 2,
 		"shared_with": 1
 	}, 
 	{
@@ -58,6 +62,7 @@
 		"caption": "Spring veggie Pasta", 
 		"context": null, 
 		"mood": null, 
+		"colspan": 2,
 		"shared_with": 1
 	},
 
@@ -74,6 +79,8 @@
 		"caption": null, 
 		"context": null, 
 		"mood": null, 
+		"rowspan": 3,
+		"colspan": 3,
 		"shared_with": 2
 	}, 
 	{
@@ -89,6 +96,7 @@
 		"caption": "Easterizer", 
 		"context": null, 
 		"mood": null, 
+		"rowspan": 3,
 		"shared_with": 1
 	}, 
 	{

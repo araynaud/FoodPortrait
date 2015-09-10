@@ -1,7 +1,13 @@
+
+image-grid > .imageGrid
+{
+	font-size: 0px;
+}
+
 .imageGrid
 {
-	text-align: center;
-	background-color: #ccc;
+	text-align: left;
+/*	background-color: white; */
 }
 
 .bgCenterCover
@@ -13,8 +19,9 @@
 
 .imageGrid .cell
 {
-/*	display: inline-block; */
-    float: left;
+/*    float: left; */
+	display: inline-block; 
     overflow: hidden; 
     font-weight: bold;
+    font-size: 14px;
 }

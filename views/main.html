@@ -7,9 +7,9 @@ My Meals: view latest for this user
 1 grid by meal
 1 grid with 1 column / meal, 1 row / day
 -->
-<div class="row">
+<div id="wrapper" class="ease05">
 
-  <form name="filterForm" class="col-md-3 sidebar" novalidate>
+  <form name="filterForm" id="sidebar-wrapper" class="ease05">
 
     <div class="input-group">
       <input type="text" class="form-control" id="inputDescription" ng-model="mc.filters.search" placeholder="Search" />
@@ -50,40 +50,48 @@ My Meals: view latest for this user
     </div>
     <br/>
 
-    <!--h3>Profile Filters</h3-->
     <ul class="nav nav-sidebar filters">
     <li>
         <label for="dd_meal">Meal:</label> 
-        <select id="dd_meal" ng-model="mc.filters.meal" name="meal"   ng-options="item.name for item in mc.fpConfig.dropdown.meal">
+        <select id="dd_meal" ng-model="mc.filters.meal" name="meal" class="form-control" ng-options="item.name for item in mc.fpConfig.dropdown.meal">
           <option value="">-</option>
         </select>
     </li>
     <li>
         <label for="dd_course">Course:</label> 
-        <select id="dd_course" ng-model="mc.filters.course" name="course" ng-options="item for item in mc.fpConfig.dropdown.course">
+        <select id="dd_course" ng-model="mc.filters.course" name="course" class="form-control" ng-options="item for item in mc.fpConfig.dropdown.course">
           <option value="">-</option>
         </select>
     </li>
     </ul>
 
-    <!--h3>Profile Filters</h3-->
     <ul class="nav nav-sidebar filters">
       <li ng-repeat="q in mc.questions" ng-if="false && q.data_type=='single' || q.data_type=='multiple'">
         <label for="dd_{{q.field_name}}">{{q.title}}</label>
-        <select id="dd_{{q.field_name}}" ng-model="mc.filters[q.field_name]" ng-options="a.label for a in q.form_answers">
+        <select id="dd_{{q.field_name}}" name="{{q.field_name}}" class="form-control" ng-model="mc.filters[q.field_name]" ng-options="a.label for a in q.form_answers">
           <option value="">-</option>
         </select>
       </li>
     </ul>
 
+   <pre ng-if="mc.showDebug">{{mc.filters | toJson}}</pre>
   </form>
 
-  <div class="col-md-9">
-    <h3 class="form-signin-heading">{{mc.getGridTitle()}}</h3>
-    <image-grid images="mc.searchResults" columns="4" rows="4" margin="5" border="1" border-color="black" shadow="true"/>
- </div>
+  <div id="page-content-wrapper">
+    <a class="btn btn-default menu-toggle glyphicon glyphicon-search" title="toggle filters" ng-click="mc.toggleSidebar()"></a>
+    <a class="btn btn-default glyphicon glyphicon-resize-horizontal" title="resize grid" ng-click="mc.resizeGrid()"></a>
+    <span class="form-signin-heading0">{{mc.getGridTitle()}}</span>
 
- <pre ng-if="mc.showDebug">{{mc.filters | toJson:true}}</pre>
+    <form ng-if="mc.showDebug">
+        columns: <input type="number"   ng-model="mc.options.columns"  min="1" max="10" /> 
+        rows:    <input type="number"   ng-model="mc.options.rows"     min="1" max="10" /> 
+        margin:  <input type="number"   ng-model="mc.options.margin"   min="-1" max="50"/> 
+        border:  <input type="number"   ng-model="mc.options.border"   min="0" max="50"/> 
+        shadow:  <input type="checkbox" ng-model="mc.options.shadow" /> 
+    </form>
+    <pre ng-if="mc.showDebug">{{mc.options | toJson:true}}</pre>
+
+    <image-grid images="mc.searchResults" options="mc.options" columns="4" rows="4" margin="1" border="1"/>
+  </div>
 
 </div>
-

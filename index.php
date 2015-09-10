@@ -27,6 +27,7 @@ $meta["og:url"] = currentUrlDir();
 <?php echo metaTagArray($meta); ?>
 
 <link rel="stylesheet" href="../bootstrap/css/bootstrap.css">
+<link rel="stylesheet" href="style/sidebar.css">
 <link rel="stylesheet" href="style/signin.css">
 <link rel="stylesheet" href="style/objectForm.css">
 <link rel="stylesheet" href="style/sticky-footer.css">
@@ -71,7 +72,7 @@ $meta["og:url"] = currentUrlDir();
 </script>
 
 </head>
-<body class="container-fluid" ng-controller="LayoutController as lc">
+<body ng-controller="LayoutController as lc">
 
     <!-- Static navbar -->
     <nav class="navbar navbar-default navbar-fixed-top">
@@ -83,7 +84,6 @@ $meta["og:url"] = currentUrlDir();
 
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
@@ -92,15 +92,15 @@ $meta["og:url"] = currentUrlDir();
 
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li ng-class="{active: lc.stateIs('about')}" data-toggle="collapse" data-target=".nav-collapse.in"><a href="#/about">About</a></li>
-            <li ng-show="lc.loggedIn()" ng-class="{active: lc.stateIs('profile')}" data-toggle="collapse" data-target=".nav-collapse.in"><a href="#/profile">Profile</a></li>
-            <li ng-show="lc.loggedIn()" ng-class="{active: lc.stateIs('upload')}"  data-toggle="collapse" data-target=".nav-collapse.in"><a href="#/upload">Upload</a></li>
+            <li ng-class="{active: lc.stateIs('about')}" data-toggle="collapse" data-target="#navbar"><a href="#/about">About</a></li>
+            <li ng-show="lc.loggedIn()" ng-class="{active: lc.stateIs('profile')}" data-toggle="collapse" data-target="#navbar"><a href="#/profile">Profile</a></li>
+            <li ng-show="lc.loggedIn()" ng-class="{active: lc.stateIs('upload')}"  data-toggle="collapse" data-target="#navbar"><a href="#/upload">Upload</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li ng-hide="lc.loggedIn()" ng-class="{active: lc.stateIs('signin')}" data-toggle="collapse" data-target=".nav-collapse.in"><a href="#/signin">Log in</a></li>
-            <li ng-hide="lc.loggedIn()" ng-class="{active: lc.stateIs('signup')}" data-toggle="collapse" data-target=".nav-collapse.in"><a href="#/signup">Sign up</a></li>
-            <li ng-show="lc.loggedIn()" ng-class="{active: lc.stateIs('user')}"   data-toggle="collapse" data-target=".nav-collapse.in"><a href="#/main">{{lc.userFullName()}}</a></li>
-            <li ng-show="lc.loggedIn()" data-toggle="collapse" data-target=".nav-collapse.in"><a href="#/login" ng-click="lc.logout()">Sign out</a></li>
+            <li ng-hide="lc.loggedIn()" ng-class="{active: lc.stateIs('signin')}" data-toggle="collapse" data-target="#navbar"><a href="#/signin">Log in</a></li>
+            <li ng-hide="lc.loggedIn()" ng-class="{active: lc.stateIs('signup')}" data-toggle="collapse" data-target="#navbar"><a href="#/signup">Sign up</a></li>
+            <li ng-show="lc.loggedIn()" ng-class="{active: lc.stateIs('user')}"   data-toggle="collapse" data-target="#navbar"><a href="#/main">{{lc.userFullName()}}</a></li>
+            <li ng-show="lc.loggedIn()" data-toggle="collapse" data-target="#navbar"><a href="#/login" ng-click="lc.logout()">Sign out</a></li>
           </ul>
         </div>
       </div>

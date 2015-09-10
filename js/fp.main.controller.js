@@ -56,6 +56,29 @@ function ($window, $state, ProfileService, QueryService)
 		});
 	};
 
+    mc.toggleSidebar = function()
+    {
+        angular.element("#wrapper").toggleClass("toggled");
+        mc.resizeGrid(100, 700);
+    }
+
+    mc.resizeGrid = function(delay, last)
+    {
+        if(!window.imageGrid) return;
+        
+        if(!last)
+            return imageGrid.resizeAfter(delay);        
+
+        if(!delay)
+        {
+            imageGrid.resizeAfter(0);        
+            delay=100;
+        }
+
+        for(var t = delay; t <= last ; t += delay)
+            imageGrid.resizeAfter(t);        
+    }
+
     mc.getGridTitle = function()
     {
         var params = [];
@@ -64,7 +87,7 @@ function ($window, $state, ProfileService, QueryService)
             if(!mc.filters[f]) continue;
             params.push(mc.filters[f].label || mc.filters[f].name|| mc.filters[f]);
         }
-        return mc.title=params.join(", ");
+        return mc.title = params.join(", ");
     }
 
     mc.getSearchParams = function()
@@ -82,8 +105,6 @@ function ($window, $state, ProfileService, QueryService)
         QueryService.loadQuery(params).then(function(response) 
         {
             mc.searchResults = response; 
-            if(window.imageGrid)
-                imageGrid.resizeThumbnails();
         }, 
         mc.errorMessage);
     };

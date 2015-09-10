@@ -1,9 +1,6 @@
 <style id="addedCSS" type="text/css">{{vm.addedCss}}</style>
 
-<p class="form-signin-heading">{{vm.title}}</p>
-<div ng-if="vm.showDebug">{{vm.columns}}x{{vm.rows}} {{vm.totalWidth}}</div>
-<pre ng-if="vm.showDebug">{{vm.addedCss}}</pre>
-
+<p class="form-signin-heading"><span ng-if="vm.showDebug">{{vm.columns}}x{{vm.rows}} {{vm.totalWidth}} </span>{{vm.title}}</p>
 <div class="imageGrid">
 	<div ng-repeat="im in vm.images" ng-if="im.filename" 
 	    class="bgCenterCover cell textOutline" ng-class="vm.imageClasses(im)" ng-style="vm.imageStyle(im)"
@@ -13,3 +10,4 @@
 		</div>
 	</div>
 </div>
+<pre ng-if="vm.showDebug">{{vm.addedCss}}</pre>

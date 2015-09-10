@@ -4,7 +4,7 @@ angular.module('app').directive('imageGrid', function ()
     templateUrl: 'views/imageGrid.html',
     controllerAs: 'vm',
     bindToController: true,
-    controller: function ($scope, $timeout)
+    controller: function ($timeout)
     {
         var vm = this; 
         Object.merge(vm, vm.options);
@@ -20,8 +20,9 @@ angular.module('app').directive('imageGrid', function ()
         
         vm.init = function()
         {
-            vm.win.bind("resize", vm.resizeThumbnails);
-            vm.resizeThumbnails();
+            vm.win.bind("resize", function() { vm.resizeGrid(); vm.resizeAfter(200); });
+            vm.resizeGrid();
+            vm.resizeAfter(400);
         };
 
         vm.imageClasses = function(im)
@@ -30,7 +31,7 @@ angular.module('app').directive('imageGrid', function ()
             if(im.colspan>=vm.columns) classes['colspan'+ vm.columns] = true;
             else if(im.colspan>1) classes['colspan'+ im.colspan] = true;
             
-            if(im.rowspan>=vm.rows) classes['colspan'+ vm.rows] = true;
+            if(im.rowspan>=vm.rows) classes['rowspan'+ vm.rows] = true;
             else if(im.rowspan) classes['rowspan'+ im.rowspan] = true;
             
             return classes;
@@ -71,7 +72,6 @@ angular.module('app').directive('imageGrid', function ()
                 width /= vm.columns;
             }
 
-           // if(vm.border)  width -= vm.border;
             if(vm.margin)  width -= 2 * vm.margin;
 
             return Math.floor(width);
@@ -81,40 +81,48 @@ angular.module('app').directive('imageGrid', function ()
         {
             var width = vm.imageWidth(n);
             return "{0}.colspan{1} { width: {2}px; }\n".format(selector, n, width);
-        }
+        };
 
         vm.rowspanCss = function(n)
         {
             var height = vm.imageWidth(n); 
             return "{0}.rowspan{1} { height: {2}px; }\n".format(selector, n, height);
-        }
+        };
 
         //keep aspect ratio
-        vm.resizeThumbnails = function()
+        vm.resizeAfter = function(delay)
         {
-            $timeout(function() 
-            {
-                vm.totalWidth = vm.width = vm.grid.width();
-                vm.width = vm.imageWidth();
-                vm.height = vm.ratio ? vm.width / vm.ratio : vm.width;
-                vm.width = Math.floor(vm.width);
-                vm.height = Math.floor(vm.height);
-                if(!vm.borderColor) 
-                    vm.borderColor = 'black';
-                if(vm.border)
-                    vm.borderStyle = "{0}px solid {1}".format(vm.border, vm.borderColor);
-                else 
-                    vm.borderStyle = "none";
-
-                vm.addedCss = "{0} { width:{1}px; height:{2}px; border:{3}; margin:{4}px; }\n".format(selector, vm.width, vm.height, vm.borderStyle, vm.margin);
-
-                for(var i=2; i<=vm.columns; i++)
-                    vm.addedCss += vm.colspanCss(i);
-                for(var i=2; i<=vm.rows; i++)
-                    vm.addedCss += vm.rowspanCss(i);
-
-            }, 50);
+            if(isNumber(delay) && delay>0)
+                $timeout(vm.resizeGrid, delay);
+            else
+                vm.resizeGrid();
         };
+
+        vm.resizeGrid = function()
+        {
+            vm.width = vm.grid.width();
+            vm.delta = vm.width - vm.totalWidth;
+            vm.totalWidth = vm.width;
+            vm.width = vm.imageWidth();
+            vm.height = vm.ratio ? vm.width / vm.ratio : vm.width;
+            vm.width = Math.floor(vm.width);
+            vm.height = Math.floor(vm.height);
+            if(!vm.borderColor) 
+                vm.borderColor = 'black';
+            if(vm.border)
+                vm.borderStyle = "{0}px solid {1}".format(vm.border, vm.borderColor);
+            else 
+                vm.borderStyle = "none";
+
+            vm.addedCss = "{0} { width:{1}px; height:{2}px; border:{3}; margin:{4}px; }\n".format(selector, vm.width, vm.height, vm.borderStyle, vm.margin);
+
+            for(var i=2; i<=vm.columns; i++)
+                vm.addedCss += vm.colspanCss(i);
+            for(var i=2; i<=vm.rows; i++)
+                vm.addedCss += vm.rowspanCss(i);
+
+            //$scope.$apply();
+        }
 
         vm.init();
     }         
