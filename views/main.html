@@ -82,7 +82,7 @@ My Meals: view latest for this user
   <div id="page-content-wrapper">
     <a class="btn btn-default menu-toggle glyphicon glyphicon-search" title="toggle filters" ng-click="mc.toggleSidebar()"></a>
     <a class="btn btn-default glyphicon glyphicon-resize-horizontal" title="resize grid" ng-click="mc.resizeGrid()"></a>
-    <a class="btn btn-default glyphicon glyphicon-menu-hamburger" title="resize grid" ng-click="mc.showOptions=!mc.showOptions"></a>
+    <a class="btn btn-default glyphicon glyphicon-menu-hamburger" title="grid options" ng-click="mc.showOptions=!mc.showOptions"></a>
     <span ng-if="mc.showOptions">
         columns: <input type="number"   ng-model="mc.options.columns"  min="1" max="10" /> 
         rows:    <input type="number"   ng-model="mc.options.rows"     min="1" max="10" /> 
