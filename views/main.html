@@ -82,18 +82,20 @@ My Meals: view latest for this user
   <div id="page-content-wrapper">
     <a class="btn btn-default menu-toggle glyphicon glyphicon-search" title="toggle filters" ng-click="mc.toggleSidebar()"></a>
     <a class="btn btn-default glyphicon glyphicon-resize-horizontal" title="resize grid" ng-click="mc.resizeGrid()"></a>
-    <span class="form-signin-heading">{{mc.getGridTitle()}}</span>
-
-    <form ng-if="mc.showDebug">
+    <a class="btn btn-default glyphicon glyphicon-menu-hamburger" title="resize grid" ng-click="mc.showOptions=!mc.showOptions"></a>
+    <span ng-if="mc.showOptions">
         columns: <input type="number"   ng-model="mc.options.columns"  min="1" max="10" /> 
         rows:    <input type="number"   ng-model="mc.options.rows"     min="1" max="10" /> 
+        ratio:   <input type="number"   ng-model="mc.options.ratio"    min="0.5" max="4" /> 
         margin:  <input type="number"   ng-model="mc.options.margin"   min="-1" max="50"/> 
-        border:  <input type="number"   ng-model="mc.options.border"   min="0" max="50"/> 
+        border:  <input type="number"   ng-model="mc.options.border"   min="0"  max="50"/> 
         shadow:  <input type="checkbox" ng-model="mc.options.shadow" /> 
-    </form>
+        <br/>
+    </span>
     <pre ng-if="mc.showDebug">{{mc.options | toJson:true}}</pre>
 
-    <image-grid images="mc.searchResults" options="mc.options" columns="4" rows="4" margin="1" border="1"/>
+    <span class="form-signin-heading">{{mc.getGridTitle()}}</span>
+    <image-grid images="mc.searchResults" options="mc.options"/>
   </div>
 
 </div>

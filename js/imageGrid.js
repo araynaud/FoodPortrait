@@ -1,42 +1,54 @@
 angular.module('app').directive('imageGrid', function () 
 { return {
-    scope: { images: '=', title: '=', options: '=', showDebug: '=', columns: '@', rows: '@', ratio: '@', border: '@',  borderColor: '@' , margin: '@', shadow: '@'},
+    scope: { images: '=', title: '=', options: '=', showDebug: '=', 
+    columns: '@', rows: '@', ratio: '@', border: '@',  borderColor: '@' , margin: '@', shadow: '@'},
     templateUrl: 'views/imageGrid.html',
     controllerAs: 'vm',
     bindToController: true,
     controller: function ($timeout)
     {
         var vm = this; 
-        Object.merge(vm, vm.options);
         window.imageGrid = this;
-        vm.win = angular.element(window);
-        vm.grid = angular.element(".imageGrid");
-        var selector = ".imageGrid .cell";
 
-        vm.title="Image Grid";
-        vm.showDebug = valueIfDefined("fpConfig.debug.angular");
-        vm.baseUrl = valueIfDefined("fpConfig.upload.baseUrl");
-        if(!vm.borderColor) vm.borderColor = 'black';
-        
+        vm.initOptions = function(opts)
+        {
+            if(!vm.options) vm.options = {};
+            opts.forEach(vm.initOption);
+            return vm.options;
+        }
+
+        vm.initOption = function(name)
+        {            
+            if(vm[name]) vm.options[name] = vm[name];
+            return vm.options[name];
+        }
+
         vm.init = function()
         {
-            vm.resizeGrid();
-            vm.resizeAfter(400);
+            vm.win = angular.element(window);
+            vm.opts="title,columns,rows,ratio,border,borderColor,margin,shadow".split(",");
+            vm.initOptions(vm.opts);
+            vm.grid = angular.element(".imageGrid");
+            vm.selector = ".imageGrid .cell";
+            vm.showDebug = valueIfDefined("fpConfig.debug.angular");
+            vm.baseUrl = valueIfDefined("fpConfig.upload.baseUrl");
+            if(!vm.options.borderColor) vm.options.borderColor = 'black';
+        
+            vm.resizeInterval(0, 600);
 
             vm.win.bind("resize", function() 
             {
-                vm.resizeGrid(); 
-                vm.resizeAfter(200);
+                imageGrid.resizeInterval(0, 600);
             });
         };
 
         vm.imageClasses = function(im)
         {
-            var classes= {shadow: vm.shadow};
-            if(im.colspan>=vm.columns) classes['colspan'+ vm.columns] = true;
+            var classes= {shadow: vm.options.shadow};
+            if(im.colspan>=vm.options.columns) classes['colspan'+ vm.options.columns] = true;
             else if(im.colspan>1) classes['colspan'+ im.colspan] = true;
             
-            if(im.rowspan>=vm.rows) classes['rowspan'+ vm.rows] = true;
+            if(im.rowspan>=vm.options.rows) classes['rowspan'+ vm.options.rows] = true;
             else if(im.rowspan) classes['rowspan'+ im.rowspan] = true;
             
             return classes;
@@ -71,13 +83,13 @@ angular.module('app').directive('imageGrid', function ()
         {
             n = n || 1;
             var width = vm.totalWidth = vm.grid.width();
-            if(vm.columns > n)
+            if(vm.options.columns > n)
             {
                 width *= n;
-                width /= vm.columns;
+                width /= vm.options.columns;
             }
 
-            if(vm.margin)  width -= 2 * vm.margin;
+            if(vm.options.margin)  width -= 2 * vm.options.margin;
 
             return Math.floor(width);
         };
@@ -85,13 +97,13 @@ angular.module('app').directive('imageGrid', function ()
         vm.colspanCss = function(n)
         {
             var width = vm.imageWidth(n);
-            return "{0}.colspan{1} { width: {2}px; }\n".format(selector, n, width);
+            return "{0}.colspan{1} { width: {2}px; }\n".format(vm.selector, n, width);
         };
 
         vm.rowspanCss = function(n)
         {
             var height = vm.imageWidth(n); 
-            return "{0}.rowspan{1} { height: {2}px; }\n".format(selector, n, height);
+            return "{0}.rowspan{1} { height: {2}px; }\n".format(vm.selector, n, height);
         };
 
         vm.resizeInterval = function(delay, last)
@@ -112,7 +124,7 @@ angular.module('app').directive('imageGrid', function ()
 
         vm.resizeAfter = function(delay)
         {
-            if(isNumber(delay) && delay>0)
+            if(angular.isNumber(delay) && delay>0)
                 $timeout(vm.resizeGrid, delay);
             else
                 vm.resizeGrid();
@@ -134,22 +146,29 @@ angular.module('app').directive('imageGrid', function ()
             vm.width = vm.imageWidth();
 
             if(delta<0) vm.width += delta;
-            vm.height = vm.ratio ? vm.width / vm.ratio : vm.width;
+            vm.height = vm.options.ratio ? vm.width / vm.options.ratio : vm.width;
             vm.width = Math.floor(vm.width);
             vm.height = Math.floor(vm.height);
-            if(!vm.borderColor) 
-                vm.borderColor = 'black';
-            if(vm.border)
-                vm.borderStyle = "{0}px solid {1}".format(vm.border, vm.borderColor);
+            if(!vm.options.borderColor) 
+                vm.options.borderColor = 'black';
+            if(vm.options.border)
+                vm.options.borderStyle = "{0}px solid {1}".format(vm.options.border, vm.options.borderColor);
             else 
-                vm.borderStyle = "none";
+                vm.options.borderStyle = "none";
 
-            vm.addedCss = "{0} { width:{1}px; height:{2}px; border:{3}; margin:{4}px; }\n".format(selector, vm.width, vm.height, vm.borderStyle, vm.margin);
+            vm.addedCss = "{0} { width:{1}px; height:{2}px; border:{3}; margin:{4}px; }\n".format(vm.selector, vm.width, vm.height, vm.options.borderStyle, vm.options.margin);
 
-            for(var i=2; i<=vm.columns; i++)
+            for(var i=2; i<=vm.options.columns; i++)
                 vm.addedCss += vm.colspanCss(i);
-            for(var i=2; i<=vm.rows; i++)
+            for(var i=2; i<=vm.options.rows; i++)
                 vm.addedCss += vm.rowspanCss(i);
+
+            return vm.addedCss;
+        }
+
+        vm.dynamicCss = function()
+        {
+            return vm.resizeGrid();
         }
 
         vm.init();

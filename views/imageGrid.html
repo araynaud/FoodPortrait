@@ -1,9 +1,9 @@
-<style id="addedCSS" type="text/css">{{vm.addedCss}}</style>
+<style id="addedCSS" type="text/css">{{vm.dynamicCss()}}</style>
 
-<span class="form-signin-heading">{{vm.title}}</span>
+<span class="form-signin-heading">{{vm.options.title}}</span>
 
 <span ng-if="vm.showDebug">
-	{{vm.columns}}x{{vm.rows}}
+	{{vm.options.columns}}x{{vm.options.rows}}
 	<span ng-if="vm.delta() > 0" class="glyphicon glyphicon-arrow-up"   style="color:green"></span>
 	<span ng-if="vm.delta() < 0" class="glyphicon glyphicon-arrow-down" style="color:red"></span>
 	{{vm.delta()}} = {{vm.totalWidth}} - {{vm.prevWidth}}
@@ -18,4 +18,4 @@
 		</div>
 	</div>
 </div>
-<pre ng-if="vm.showDebug">{{vm.addedCss}}</pre>
+<pre ng-if="vm.showDebug">{{vm.dynamicCss()}}</pre>

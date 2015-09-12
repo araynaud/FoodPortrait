@@ -16,26 +16,29 @@ function ($window, $state, ProfileService, QueryService)
     var mc = this;
     $window.MainController = this;
     this.state = $state;
-    mc.options = { columns: 4, rows: 5, margin: 10, border: 1, shadow: false};
-    mc.filters = {};
-    mc.searchResults=[];
-    mc.fpConfig = $window.fpConfig; 
-    mc.showDebug = ProfileService.isDebug();
-//    valueIfDefined("fpConfig.debug.angular");
-
-//date picker options
-    //mc.datepickerOpen=false;
-    mc.dateFormat = 'MM/dd/yyyy';
-    mc.dateOptions = { formatYear: 'yy', startingDay: 1 };
-    mc.today = new Date();
-    mc.pickDate = function(id) { mc['datepickerOpen' + id] = true; };
-    mc.setMinToday = function() { return mc.filters.date_min = mc.today; };
-    mc.setMaxToday = function() { return mc.filters.date_max = mc.today; };
-//    mc.setToday();
-// end date picker options
 
     mc.init = function()
     {
+        mc.filters = {};
+        mc.searchResults=[];
+        mc.fpConfig = $window.fpConfig; 
+        
+        mc.showOptions = mc.fpConfig.grid.showOptions;
+        mc.options = mc.fpConfig.grid.options;
+        if(!mc.options)
+            mc.options = { columns: 4, rows: 4, margin: 10, border: 1, ratio: 1, shadow: false};
+
+        mc.showDebug = ProfileService.isDebug();
+
+//date picker options
+        mc.dateFormat = 'MM/dd/yyyy';
+        mc.dateOptions = { formatYear: 'yy', startingDay: 1 };
+        mc.today = new Date();
+        mc.pickDate = function(id) { mc['datepickerOpen' + id] = true; };
+        mc.setMinToday = function() { return mc.filters.date_min = mc.today; };
+        mc.setMaxToday = function() { return mc.filters.date_max = mc.today; };
+// end date picker options
+
         mc.getFilters();
         mc.search();
     }
