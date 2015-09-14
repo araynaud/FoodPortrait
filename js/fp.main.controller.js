@@ -62,7 +62,7 @@ function ($window, $state, ProfileService, QueryService)
     mc.toggleSidebar = function()
     {
         angular.element("#wrapper").toggleClass("toggled");
-        mc.resizeGrid(0, 600);
+        mc.resizeGrid(0, 800);
     };
 
     mc.resizeGrid = function(delay, last)

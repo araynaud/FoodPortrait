@@ -7,7 +7,7 @@ My Meals: view latest for this user
 1 grid by meal
 1 grid with 1 column / meal, 1 row / day
 -->
-<div id="wrapper" class="ease05">
+<div id="wrapper" class="main ease05">
 
 <div id="sidebar-wrapper" class="ease05">
 <form name="filterForm">
@@ -83,14 +83,13 @@ My Meals: view latest for this user
     <a class="btn btn-default menu-toggle glyphicon glyphicon-search" title="toggle filters" ng-click="mc.toggleSidebar()"></a>
     <a class="btn btn-default glyphicon glyphicon-resize-horizontal" title="resize grid" ng-click="mc.resizeGrid()"></a>
     <a class="btn btn-default glyphicon glyphicon-menu-hamburger" title="grid options" ng-click="mc.showOptions=!mc.showOptions"></a>
-    <span ng-if="mc.showOptions">
-        columns: <input type="number"   ng-model="mc.options.columns"  min="1" max="10" /> 
-        rows:    <input type="number"   ng-model="mc.options.rows"     min="1" max="10" /> 
-        ratio:   <input type="number"   ng-model="mc.options.ratio"    min="0.5" max="4" /> 
-        margin:  <input type="number"   ng-model="mc.options.margin"   min="-1" max="50"/> 
-        border:  <input type="number"   ng-model="mc.options.border"   min="0"  max="50"/> 
+    <span ng-if="mc.showOptions" class="row form-inline">
+        columns: <input class="form-control" type="number"   ng-model="mc.options.columns"  min="1" max="10" /> 
+        rows:    <input class="form-control" type="number"   ng-model="mc.options.rows"     min="1" max="10" /> 
+        ratio:   <input class="form-control" type="number"   ng-model="mc.options.ratio"    min="0.5" max="4" /> 
+        margin:  <input class="form-control" type="number"   ng-model="mc.options.margin"   min="-1" max="50"/> 
+        border:  <input class="form-control" type="number"   ng-model="mc.options.border"   min="0"  max="50"/> 
         shadow:  <input type="checkbox" ng-model="mc.options.shadow" /> 
-        <br/>
     </span>
     <pre ng-if="mc.showDebug">{{mc.options | toJson:true}}</pre>
 

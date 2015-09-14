@@ -71,6 +71,11 @@ input[type=text], textarea
     border-radius: 4px;
 }
 
+.main input[type=number]
+{
+    width: 20mm;
+}
+
 .doc-attachment{
     font-size: 13px;
 }

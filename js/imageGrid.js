@@ -10,19 +10,6 @@ angular.module('app').directive('imageGrid', function ()
         var vm = this; 
         window.imageGrid = this;
 
-        vm.initOptions = function(opts)
-        {
-            if(!vm.options) vm.options = {};
-            opts.forEach(vm.initOption);
-            return vm.options;
-        }
-
-        vm.initOption = function(name)
-        {            
-            if(vm[name]) vm.options[name] = vm[name];
-            return vm.options[name];
-        }
-
         vm.init = function()
         {
             vm.win = angular.element(window);
@@ -40,6 +27,19 @@ angular.module('app').directive('imageGrid', function ()
             {
                 imageGrid.resizeInterval(0, 600);
             });
+        };
+
+        vm.initOptions = function(opts)
+        {
+            if(!vm.options) vm.options = {};
+            opts.forEach(vm.initOption);
+            return vm.options;
+        };
+
+        vm.initOption = function(name)
+        {            
+            if(vm[name]) vm.options[name] = vm[name];
+            return vm.options[name];
         };
 
         vm.imageClasses = function(im)
@@ -76,7 +76,7 @@ angular.module('app').directive('imageGrid', function ()
 
         vm.imageDetails = function(im)
         {
-            vm.title = im.caption;
+            vm.options.title = im.caption;
         };
 
         vm.imageWidth = function(n)
@@ -121,7 +121,6 @@ angular.module('app').directive('imageGrid', function ()
                 vm.resizeAfter(t);        
         };
 
-
         vm.resizeAfter = function(delay)
         {
             if(angular.isNumber(delay) && delay>0)
@@ -129,7 +128,6 @@ angular.module('app').directive('imageGrid', function ()
             else
                 vm.resizeGrid();
         };
-
 
         vm.delta = function()
         {
