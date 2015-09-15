@@ -33,7 +33,8 @@ function ($scope, $window, $state, ProfileService)
 
     lc.bodyClasses = function()
     {
-        var classes = { mobile: lc.isMobile, desktop: !lc.isMobile };        
+        var isSmall = lc.isMobile || $window.innerWidth < 768 ;
+        var classes = { mobile: isSmall, desktop: !isSmall  };        
         return classes;
     }
 
