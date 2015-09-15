@@ -2,7 +2,7 @@ angular.module('app').directive('objectForm', function ()
 {
     return {
         scope: { actions: '=', questions: '=', formData: '=', showDebug: '='},
-        templateUrl: 'views/objectForm.html',
+        templateUrl: 'directives/objectForm.html',
         controllerAs: 'vm',
         bindToController: true,
         controller: function ()

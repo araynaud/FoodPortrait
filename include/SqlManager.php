@@ -79,7 +79,13 @@ class SqlManager
 
 	public function selectWhere($params)
 	{	
-	    $sql = "SELECT * FROM " . $params["table"] . $this->sqlWhere($params);
+		$table = $params["table"];
+		$orderBy = @$params["order_by"];
+		$groupBy = @$params["group_by"];
+
+		$sql = "SELECT * FROM $table" . $this->sqlWhere($params);
+		if($groupBy)	$sql .= " group by " . $groupBy;
+		if($orderBy)	$sql .= " order by " . $orderBy;
 debug("selectWhere SQL: $sql", $params);
 	    return $this->select($sql, $params);
 	}
@@ -210,7 +216,7 @@ debug("statement result ", $statement->num_rows);
 
 debug("statement affected_rows", $statement->affected_rows);		
 		$statement->close();
-debug("returning", $rows);		
+//debug("returning", $rows);
 	    return $rows;
 	}
 
@@ -332,6 +338,8 @@ debug("update SQL: $sql ", $params);
 		setIfNull($params, $_REQUEST);
 	 	//TODO: list of reserved keywords. check if params are valid columm names
 		unset($params["table"]);
+		unset($params["group_by"]);
+		unset($params["order_by"]);
 	 	foreach($params as $key => $param)
 		{
 			$sql .= " $sep $key = ?";

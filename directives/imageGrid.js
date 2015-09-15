@@ -2,7 +2,7 @@ angular.module('app').directive('imageGrid', function ()
 { return {
     scope: { images: '=', title: '=', options: '=', showDebug: '=', 
     columns: '@', rows: '@', ratio: '@', border: '@',  borderColor: '@' , margin: '@', shadow: '@'},
-    templateUrl: 'views/imageGrid.html',
+    templateUrl: 'directives/imageGrid.html',
     controllerAs: 'vm',
     bindToController: true,
     controller: function ($timeout)
@@ -19,6 +19,7 @@ angular.module('app').directive('imageGrid', function ()
             vm.selector = ".imageGrid .cell";
             vm.showDebug = valueIfDefined("fpConfig.debug.angular");
             vm.baseUrl = valueIfDefined("fpConfig.upload.baseUrl");
+            vm.baseServer = valueIfDefined("fpConfig.upload.server");
             if(!vm.options.borderColor) vm.options.borderColor = 'black';
         
             vm.resizeInterval(0, 600);
@@ -62,21 +63,35 @@ angular.module('app').directive('imageGrid', function ()
 
         vm.imageUrl = function(im, subdir)
         {
-            return String.combine(vm.baseUrl, im.username, subdir, im.filename);
+            var url = String.combine(vm.baseUrl, im.username, subdir, im.filename);
+            if(!im.exists && vm.baseServer) url = vm.baseServer + url;
+            return url;
         };
 
         vm.imageTitle = function(im)
         {
-            var title = im.caption || '';
-            if(title && im.context) title += ' ';
-            if(im.context) title += im.context;
-            if(vm.showDebug) title = im.upload_id + ' ' + title;
+            var title = "";
+            if(vm.showDebug)
+                title = title.append(im.upload_id);
+            var dt = im.image_date_taken.replace(/-/g,"/");
+            dt=new Date(dt).toLocaleDateString();
+            title = title.append(" ", dt);
+            title = title.append(" ", im.meal);
+            title = title.append(" ", im.course);
+            return title;
+        };
+
+        vm.imageDescription = function(im)
+        {
+            var title = "";
+            title = title.append(im.caption);
+            title = title.append("<br/>", im.context);
             return title;
         };
 
         vm.imageDetails = function(im)
         {
-            vm.options.title = im.caption;
+        //    vm.options.title = im.caption;
         };
 
         vm.imageWidth = function(n)
@@ -140,7 +155,8 @@ angular.module('app').directive('imageGrid', function ()
         {
             vm.prevWidth = vm.totalWidth;
             vm.totalWidth = vm.grid.width();
-            var delta = vm.delta(); 
+            var delta = vm.delta();
+            //if(!delta && vm.addedCss) return vm.addedCss;
             vm.width = vm.imageWidth();
 
             if(delta<0) vm.width += delta;
@@ -172,3 +188,23 @@ angular.module('app').directive('imageGrid', function ()
         vm.init();
     }         
 }});
+
+String.append = function(str1, sep, str2)
+{
+    str1 = valueOrDefault(str1, "");
+    return str1.toString().append(sep,str2).toString();
+}
+
+String.prototype.append = function(sep, str)
+{
+    if(!str)
+    {   str=sep;
+        sep="";
+    }
+    
+    if(this.length && str)
+        return this + sep + str;
+    if(str)
+        return str.toString();
+    return this;
+}

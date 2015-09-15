@@ -8,7 +8,21 @@ function ($scope, $window, $state, ProfileService)
     var lc = this;
     $window.LayoutController = this;
     this.state = $state;
-    lc.showDebug = valueIfDefined("fpConfig.debug.angular");
+
+    lc.init = function()
+    {
+        $window.addEventListener("load",   lc.getWindowSize);
+        $window.addEventListener("resize", lc.getWindowSize);
+        
+        lc.showDebug = valueIfDefined("fpConfig.debug.angular");
+        lc.userAgent = navigator.userAgent.substringAfter(")", true);
+        lc.isMobile = ProfileService.isMobile();
+
+        ProfileService.user = $window.fpUser;
+        if(!ProfileService.user)
+            $state.go('signin');
+
+    }
 
     lc.getWindowSize = function()
     {
@@ -17,8 +31,11 @@ function ($scope, $window, $state, ProfileService)
         $scope.$apply();
     };
 
-    $window.addEventListener("load",   lc.getWindowSize);
-    $window.addEventListener("resize", lc.getWindowSize);
+    lc.bodyClasses = function()
+    {
+        var classes = { mobile: lc.isMobile, desktop: !lc.isMobile };        
+        return classes;
+    }
 
     lc.width = function()
     {
@@ -71,10 +88,5 @@ function ($scope, $window, $state, ProfileService)
       return ProfileService.title || lc.config.defaultTitle;
     };
 
-    lc.userAgent = navigator.userAgent.substringAfter(")", true);
-    ProfileService.user = $window.fpUser;
-
-    if(!ProfileService.user)
-      $state.go('signin');
-
+    lc.init();
 }]);
