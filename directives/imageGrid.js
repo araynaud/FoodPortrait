@@ -73,8 +73,12 @@ angular.module('app').directive('imageGrid', function ()
             var title = "";
             if(vm.showDebug)
                 title = title.append(im.upload_id);
-            var dt = im.image_date_taken.replace(/-/g,"/");
-            dt=new Date(dt).toLocaleDateString();
+            var dt = im.image_date_taken;
+            if(dt)
+            {
+                dt = dt.replace(/-/g,"/");
+                dt = new Date(dt).toLocaleDateString();
+            }
             title = title.append(" ", dt);
             title = title.append(" ", im.meal);
             title = title.append(" ", im.course);

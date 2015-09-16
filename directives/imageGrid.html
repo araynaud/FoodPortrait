@@ -12,11 +12,11 @@
 <div class="imageGrid">
 	<div ng-repeat="im in vm.images" ng-if="im.filename" 
 	    class="bgCenterCover cell" ng-class="vm.imageClasses(im)" ng-style="vm.imageStyle(im)"
-	    ng-click="vm.imageDetails(im)" title="{{vm.imageTitle(im)}}">
+	    ng-click="vm.imageDetails(im)" icon0="info-sign" size0="16pt"
+	    fp-popover placement="bottom" pop-title="{{vm.imageTitle(im)}}" pop-content="{{vm.imageDescription(im)}}">
 	    <div ng-if="vm.showDebug">{{$index}} {{im.colspan}}x{{im.rowspan}} {{vm.imageWidth(im.colspan)}} 
 	    <br/>{{vm.imageTitle(im)}}
 		</div>
-	    <fp-popover placement="bottom" icon="info-sign" size="16pt" pop-title="{{vm.imageTitle(im)}}" content="{{vm.imageDescription(im)}}"/>
 	</div>
 </div>
 <pre ng-if="vm.showDebug">{{vm.dynamicCss()}}</pre>
