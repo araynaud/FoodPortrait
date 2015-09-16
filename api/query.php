@@ -11,9 +11,7 @@ session_start();
 //filters = meal, date
 function userLatestUploads($db, $username, $filters = null)
 {
-	//$sql = "SELECT * FROM user_upload order by image_date_taken desc";
 	$uploads = $db->selectWhere(array("table" => "user_upload", "order_by" => "image_date_taken desc", "username" => $username));
-//	$uploads = array_filter($uploads, "uploadedFileExists");	
 	return $uploads;
 }
 
@@ -33,7 +31,12 @@ function filterUsers($db, $filters)
 {
 }
 
-$postJson = getJsonPostData();
+// end functions
+
+$params = getJsonPostData();
+debugVar("params");
+if(!$params) $params = $_REQUEST;
+
 $username = fpCurrentUsername();
 
 $db = new SqlManager($fpConfig);
@@ -43,13 +46,15 @@ if($db->offline)
 	return;
 }
 
-
-$uploads = userLatestUploads($db, $username);
-
-setExists($uploads);
-
+$results = userLatestUploads($db, $username);
+$results = array_filter($results, "uploadedFileExists");	
+setExists($results);
 $db->disconnect();
 
-//echo jsValue($postJson, true);
-echo jsValue($uploads, true, true);
+$response=array();
+addVarToArray($response, "username");
+addVarToArray($response, "params");
+addVarToArray($response, "results");
+
+echo jsValue($response, true);
 ?>

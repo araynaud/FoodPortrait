@@ -67,7 +67,7 @@ My Meals: view latest for this user
     </ul>
 
     <ul class="nav nav-sidebar filters">
-      <li ng-repeat="q in mc.questions" ng-if="false && q.data_type=='single' || q.data_type=='multiple'">
+      <li ng-repeat="q in mc.questions" ng-if="q.data_type=='single' || q.data_type=='multiple'">
         <label for="dd_{{q.field_name}}">{{q.title}}</label>
         <select id="dd_{{q.field_name}}" name="{{q.field_name}}" class="form-control" ng-model="mc.filters[q.field_name]" ng-options="a.label for a in q.form_answers">
           <option value="">-</option>
@@ -75,6 +75,7 @@ My Meals: view latest for this user
       </li>
     </ul>
 
+   <pre ng-if="mc.showDebug">{{mc.params  | toJson}}</pre>
    <pre ng-if="mc.showDebug">{{mc.filters | toJson}}</pre>
 </form>
 </div>

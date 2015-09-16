@@ -62,7 +62,7 @@ function ($window, $state, ProfileService, QueryService)
     mc.toggleSidebar = function()
     {
         angular.element("#wrapper").toggleClass("toggled");
-        mc.resizeGrid(0, 800);
+        mc.resizeGrid(200, 800);
     };
 
     mc.resizeGrid = function(delay, last)
@@ -86,15 +86,22 @@ function ($window, $state, ProfileService, QueryService)
     {
         var params = {};
         for(var f in mc.filters)
-            params[f] = mc.filters[f].id;
+        {
+            var filter = mc.filters[f]; 
+            if(f && filter)
+            {
+                var key = isMissing(filter.question_id) ? f : 'Q_'+filter.question_id;
+                params[key] = filter.id || filter.name || filter;
+            }
+        }
         return params;
     }
 
     mc.search = function()
     {
         mc.loading = true;
-        var params = mc.getSearchParams();
-        QueryService.loadQuery(params).then(function(response) 
+        mc.params = mc.getSearchParams();
+        QueryService.loadQuery(mc.params).then(function(response) 
         {
             mc.searchResults = response; 
         }, 

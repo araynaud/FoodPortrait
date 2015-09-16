@@ -10,16 +10,17 @@ angular.module('fpServices')
     {
         $window.QueryService = this;
         this.config = $window.fpConfig;
-        this.queryResource = $resource('api/query' + ProfileService.serviceExt());
+        this.serviceUrl = 'api/query' + ProfileService.serviceExt();
+        this.queryResource = $resource(this.serviceUrl);
     };
     
     this.loadQuery = function(filters)
     {
         var deferred = $q.defer();
-        this.queryResource.query(filters, function(response)
+        this.queryResource.get(filters, function(response)
         {
-            service.results = response;
-            deferred.resolve(response);
+            service.results = response.results;
+            deferred.resolve(service.results);
         });
         return deferred.promise;
     };
