@@ -134,7 +134,7 @@
 			"form_id": 1, 
 			"section_id": 2, 
 			"position": 3, 
-			"field_name": "live_with", 
+			"field_name": "living_with", 
 			"label": "Who do you live with ?", 
 			"help_text": "Mark all that apply", 
 			"data_type": "multiple", 

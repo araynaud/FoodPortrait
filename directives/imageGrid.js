@@ -95,6 +95,9 @@ angular.module('app').directive('imageGrid', function ()
             return title;
         };
 
+        {
+            return index < vm.options.columns ? "bottom" : "top";
+
         vm.imageDetails = function(im)
         {
         //    vm.options.title = im.caption;
