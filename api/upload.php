@@ -123,13 +123,12 @@ if($success)
 	if($db->offline)
 		$upload_id = -1;
 	else if(!$upload_id) //step 1
-		$upload_id = $db->offline ? -1 : saveUploadData($db, $exif);
+		$upload_id = saveUploadData($db, $exif);
 	else //step 2
 	{
 		$success = saveUploadData($db, $_POST);
 		$message =  "Details saved.";
 	}
-
 	$db->disconnect();
 }
 
