@@ -95,8 +95,10 @@ angular.module('app').directive('imageGrid', function ()
             return title;
         };
 
+        vm.popoverPlacement = function(index)
         {
             return index < vm.options.columns ? "bottom" : "top";
+        };
 
         vm.imageDetails = function(im)
         {
