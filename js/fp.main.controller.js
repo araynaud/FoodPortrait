@@ -54,7 +54,7 @@ function ($window, $state, ProfileService, QueryService)
 		      mc.questions.byId = mc.questions.indexBy("id");
 		  	mc.questions.forEach(function (q) 
 		  	{
-		  		q.title = q.field_name.makeTitle();
+		  		q.title = q.field_name.makeTitle(true);
 		  	});
 		});
 	};
@@ -79,7 +79,7 @@ function ($window, $state, ProfileService, QueryService)
             if(!mc.filters[f]) continue;
             params.push(mc.filters[f].label || mc.filters[f].name|| mc.filters[f]);
         }
-        return mc.title = params.join(", ");
+        return params.join(", ");
     }
 
     mc.getSearchParams = function()
@@ -94,6 +94,9 @@ function ($window, $state, ProfileService, QueryService)
                 params[key] = filter.id || filter.name || filter;
             }
         }
+        
+        if(mc.options.rows && mc.options.columns)
+            params.limit = mc.options.rows * mc.options.columns;
         return params;
     }
 
@@ -101,6 +104,7 @@ function ($window, $state, ProfileService, QueryService)
     {
         mc.loading = true;
         mc.params = mc.getSearchParams();
+        mc.title = mc.getGridTitle();
         QueryService.loadQuery(mc.params).then(function(response) 
         {
             mc.searchResults = response; 

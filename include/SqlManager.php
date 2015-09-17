@@ -82,10 +82,11 @@ class SqlManager
 		$table = $params["table"];
 		$orderBy = @$params["order_by"];
 		$groupBy = @$params["group_by"];
-
+		$limit = @$params["limit"];
 		$sql = "SELECT * FROM $table" . $this->sqlWhere($params);
-		if($groupBy)	$sql .= " group by " . $groupBy;
-		if($orderBy)	$sql .= " order by " . $orderBy;
+		if($groupBy)	$sql .= " group by $groupBy";
+		if($orderBy)	$sql .= " order by $orderBy";
+		if($limit)		$sql .= " limit $limit";
 debug("selectWhere SQL: $sql", $params);
 	    return $this->select($sql, $params);
 	}
@@ -340,6 +341,7 @@ debug("update SQL: $sql ", $params);
 		unset($params["table"]);
 		unset($params["group_by"]);
 		unset($params["order_by"]);
+		unset($params["limit"]);
 	 	foreach($params as $key => $param)
 		{
 			$sql .= " $sep " . SqlManager::sqlCondition($params, $key, true);

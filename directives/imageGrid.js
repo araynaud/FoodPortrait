@@ -71,18 +71,17 @@ angular.module('app').directive('imageGrid', function ()
         vm.imageTitle = function(im)
         {
             var title = "";
-            if(vm.showDebug)
-                title = title.append(im.upload_id);
             var dt = im.image_date_taken;
             if(dt)
             {
                 dt = dt.replace(/-/g,"/");
-                dt = new Date(dt).toLocaleDateString();
+                title = new Date(dt).toLocaleDateString();
             }
-            title = title.append(" ", dt);
             title = title.append(" ", im.meal);
             title = title.append(" ", im.course);
-            return title;
+            if(vm.showDebug)
+                title = title.append(" ", im.upload_id);
+            return title.toString();
         };
 
         vm.imageDescription = function(im)
@@ -90,7 +89,7 @@ angular.module('app').directive('imageGrid', function ()
             var title = "";
             title = title.append(im.caption);
             title = title.append("<br/>", im.context);
-            if(vm.showDebug)
+            //if(vm.showDebug)
                 title = title.append("<br/>", "by @" + im.username);
 
             return title;
@@ -204,11 +203,12 @@ String.append = function(str1, sep, str2)
 
 String.prototype.append = function(sep, str)
 {
-    if(!str)
-    {   str=sep;
+    if(arguments.length==1)
+    {
+        str=sep;
         sep="";
     }
-    
+
     if(this.length && str)
         return this + sep + str;
     if(str)

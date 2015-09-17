@@ -11,7 +11,15 @@ session_start();
 //filters = meal, date
 function userLatestUploads($db, $username, $filters = null)
 {
-	$uploads = $db->selectWhere(array("table" => "user_upload", "order_by" => "image_date_taken desc", "username" => $username));
+	$sqlParams = array("table" => "user_upload", "order_by" => "image_date_taken desc", "username" => $username);
+	if($filters)
+		foreach ($filters as $key => $value)
+		{
+			if(startsWith($key,"Q_")) continue;
+			$sqlParams[$key] = $value;	
+		}
+
+	$uploads = $db->selectWhere($sqlParams);
 	return $uploads;
 }
 
@@ -25,7 +33,19 @@ function setExists(&$uploads)
 function demographicPortrait($db, $filters)
 {
 	$users = filterUsers($db, $filters);
-	$uploads = $db->selectWhere(array("table" => "user_upload", "order_by" => "image_date_taken desc", "username" => $users));
+	$sqlParams = array("table" => "user_upload", "order_by" => "image_date_taken desc");
+	if($filters)
+		foreach ($filters as $key => $value)
+		{
+			if(startsWith($key,"Q_")) continue;
+			$sqlParams[$key] = $value;	
+		}
+
+	if($users!=null)
+		$sqlParams["username"] = $users;
+	else if(count($users)==0)
+		return array();
+	$uploads = $db->selectWhere($sqlParams);
 	return $uploads;
 }
 
@@ -72,10 +92,10 @@ if($db->offline)
 //if profile filters( Q_ ) : demographic
 //otherwise: personal
 $users = filterUsers($db, $params);
-if($users)
-	$results = demographicPortrait($db, $params);
-else
+if($users==null)
 	$results = userLatestUploads($db, $username);
+else
+	$results = demographicPortrait($db, $params);
 
 //$results = array_filter($results, "uploadedFileExists");	
 setExists($results);

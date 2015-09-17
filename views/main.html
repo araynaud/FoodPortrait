@@ -65,10 +65,10 @@ My Meals: view latest for this user
         </select>
     </li>
     </ul>
-
+    <hr/>
     <ul class="nav nav-sidebar filters">
       <li ng-repeat="q in mc.questions" ng-if="q.data_type=='single' || q.data_type=='multiple'">
-        <label for="dd_{{q.field_name}}">{{q.title}}</label>
+        <label for="dd_{{q.field_name}}">{{q.title}}:</label>
         <select id="dd_{{q.field_name}}" name="{{q.field_name}}" class="form-control" ng-model="mc.filters[q.field_name]" ng-options="a.label for a in q.form_answers">
           <option value="">-</option>
         </select>
@@ -87,14 +87,14 @@ My Meals: view latest for this user
     <span ng-if="mc.showOptions">
         columns: <input type="number"   ng-model="mc.options.columns"  min="1" max="10" /> 
         rows:    <input type="number"   ng-model="mc.options.rows"     min="1" max="10" /> 
-        ratio:   <input type="number"   ng-model="mc.options.ratio"    min="0.5" max="4" /> 
+        ratio:   <input type="number"   ng-model="mc.options.ratio"    min="0.5" max="4" step="0.05" /> 
         margin:  <input type="number"   ng-model="mc.options.margin"   min="-1" max="50"/> 
         border:  <input type="number"   ng-model="mc.options.border"   min="0"  max="50"/> 
         shadow:  <input type="checkbox" ng-model="mc.options.shadow" /> 
     </span>
     <pre ng-if="mc.showDebug">{{mc.options | toJson:true}}</pre>
 
-    <span class="form-signin-heading">{{mc.getGridTitle()}}</span>
+    <h2 class="form-signin-heading">{{mc.title}}</h2>
     <image-grid images="mc.searchResults" options="mc.options"/>
   </div>
 
