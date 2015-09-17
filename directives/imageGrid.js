@@ -90,6 +90,9 @@ angular.module('app').directive('imageGrid', function ()
             var title = "";
             title = title.append(im.caption);
             title = title.append("<br/>", im.context);
+            if(vm.showDebug)
+                title = title.append("<br/>", "by @" + im.username);
+
             return title;
         };
 

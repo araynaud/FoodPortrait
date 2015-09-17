@@ -342,10 +342,36 @@ debug("update SQL: $sql ", $params);
 		unset($params["order_by"]);
 	 	foreach($params as $key => $param)
 		{
-			$sql .= " $sep $key = ?";
+			$sql .= " $sep " . SqlManager::sqlCondition($params, $key, true);
 			$sep = "AND";
 		}
 		return $sql;
+	}
+
+	private static function sqlCondition(&$params, $key, $statement)
+	{	
+		$value = $params[$key];
+		if($value == NULL)	
+		{
+			unset($params[$key]);
+			return "$key is NULL";
+		}
+		if(is_array($value)) 
+		{
+			unset($params[$key]);
+			$sqlValue = $sep = "";
+			foreach ($value as $el)
+			{
+				$sqlValue .= "$sep'$el'";
+				$sep = ",";
+			}
+			return "$key in ($sqlValue)";
+		}
+		
+		if($statement)
+			return "$key = ?";
+		
+		return "$key = '$value'";
 	}
 
 	private static function sqlUpdateValues($params)
