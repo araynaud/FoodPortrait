@@ -22,11 +22,11 @@ angular.module('app').directive('imageGrid', function ()
             vm.baseServer = valueIfDefined("fpConfig.upload.server");
             if(!vm.options.borderColor) vm.options.borderColor = 'black';
         
-            vm.resizeInterval(200, 800);
+            vm.resizeInterval(400, 800);
 
             vm.win.bind("resize", function() 
             {
-                imageGrid.resizeInterval(200, 800);
+                imageGrid.resizeInterval(400, 800);
             });
         };
 

@@ -34,11 +34,11 @@ $meta["og:url"] = currentUrlDir();
 <link rel="stylesheet" href="directives/objectForm.css">
 <link rel="stylesheet" href="directives/imageGrid.css">
 
-<link rel="icon" href="images/FoodPortrait128.png">
-<link rel="icon" sizes="192x192" href="images/FoodPortrait192.png">
-<link rel="icon" sizes="128x128" href="images/FoodPortrait128.png">
-<link rel="apple-touch-icon" sizes="128x128" href="images/FoodPortrait128.png">
-<link rel="apple-touch-icon-precomposed" sizes="128x128" href="images/FoodPortrait128.png">
+<link rel="icon" href="images/icon128.png">
+<link rel="icon" sizes="192x192" href="images/icon192.png">
+<link rel="icon" sizes="128x128" href="images/icon128.png">
+<link rel="apple-touch-icon" sizes="128x128" href="images/icon128.png">
+<link rel="apple-touch-icon-precomposed" sizes="128x128" href="images/icon128.png">
 
 <script type="text/javascript" src="js/lib/jquery.min.js"></script>
 <script type="text/javascript" src="../bootstrap/js/bootstrap.min.js"></script>
@@ -78,9 +78,8 @@ $meta["og:url"] = currentUrlDir();
     <!-- Static navbar -->
     <nav class="navbar navbar-default navbar-fixed-top">
       <div class="container">
-          <a class="navbar-brand textOutline" ng-class="{active: lc.stateIs('main')}" style="font-size: 34px; color: white;" href="#/main">
-            FOOD
-            <div style="font-size: 19px; color: #FE0;">PORTRAIT</div>
+          <a class="navbar-brand textOutline" ng-class="{active: lc.stateIs('main')}" href="#/main">
+            <img src="images/logo40.png" alt="FOOD PORTRAIT"/>
           </a>
 
         <div class="navbar-header">

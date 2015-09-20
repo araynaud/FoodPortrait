@@ -1,10 +1,24 @@
 <div class="container">
-<h2 class="form-signin-heading">About Food Portrait</h2>
+
+<h3 class="form-signin-heading">Welcome to</h3>
+<img alt="FOOD PORTRAIT" src="images/logo1.png">
 
 <h3 class="form-signin-heading">How to participate</h3>
 <p>Upload a photo of one meal, or every meal for a week, a month, or more.  If you do a month’s worth then you will get a food diary portrait print.</p>
 <p>Complete the grid to create a portrait of yourself as you are now, at this particular time in your life. Keep uploading, and watch how your portrait evolves over time based on your lifestyle.</p>
-<p>To Participate in the Food Diary project: Complete the user profile questionnaire</p>
+<p>To Participate in the Food Diary project:</p>
+
+<ul>
+<li ng-hide="lc.loggedIn()">
+	<a  class="btn btn-default" href="#/signin">Log in</a>
+or
+	<a  class="btn btn-default" ng-hide="lc.loggedIn()" href="#/signup">Sign up</a>
+</li>
+<li>Complete the user profile questionnaire</li>
+<li>Upload your meal photos</li>
+</ul>
+
 <p>The first 100 participants to compete a month will receive a free print of
 their first month’s Food Diary.</p>
+
 </div>

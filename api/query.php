@@ -91,11 +91,14 @@ if($db->offline)
 
 //if profile filters( Q_ ) : demographic
 //otherwise: personal
+
+$portraitType = arrayExtract($params, "portrait");
+
 $users = filterUsers($db, $params);
-if($users==null)
-	$results = userLatestUploads($db, $username);
-else
+if($portraitType == "demographic")
 	$results = demographicPortrait($db, $params);
+else
+	$results = userLatestUploads($db, $username);
 
 //$results = array_filter($results, "uploadedFileExists");	
 setExists($results);

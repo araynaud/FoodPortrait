@@ -19,7 +19,7 @@ function ($window, $state, ProfileService, QueryService)
 
     mc.init = function()
     {
-        mc.filters = {};
+        mc.filters = { portrait: 'personal' };
         mc.searchResults=[];
         mc.fpConfig = $window.fpConfig; 
         
@@ -43,6 +43,11 @@ function ($window, $state, ProfileService, QueryService)
         mc.search();
     }
 
+    mc.isFilter = function(q)
+    {
+        return q.searchable && (q.data_type=='single' || q.data_type=='multiple');
+    }
+
 	mc.getFilters = function()
 	{
 		mc.loading = true;
@@ -62,7 +67,7 @@ function ($window, $state, ProfileService, QueryService)
     mc.toggleSidebar = function()
     {
         angular.element("#wrapper").toggleClass("toggled");
-        mc.resizeGrid(200, 800);
+        mc.resizeGrid(400, 800);
     };
 
     mc.resizeGrid = function(delay, last)
