@@ -65,7 +65,7 @@ My Meals: view latest for this user
     </li>
     <li>
         <label for="dd_course">Course:</label> 
-        <select id="dd_course" ng-model="mc.filters.course" name="course" class="form-control" ng-options="item for item in mc.fpConfig.dropdown.course">
+        <select id="dd_course" ng-model="mc.filters.course" name="course" class="form-control" ng-options="item for item in mc.getCourses()">
           <option value="">-</option>
         </select>
     </li>

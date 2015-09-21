@@ -70,6 +70,12 @@ function ($window, $state, ProfileService, QueryService)
         mc.resizeGrid(400, 800);
     };
 
+    mc.getCourses = function()
+    {
+        if(!mc.filters.meal) return [];
+        return mc.fpConfig.dropdown.course[mc.filters.meal.name];
+    }
+
     mc.resizeGrid = function(delay, last)
     {
         if(window.imageGrid)

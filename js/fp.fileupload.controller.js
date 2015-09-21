@@ -107,6 +107,12 @@ function ($scope, Upload, $window, $state, $timeout, ProfileService)
         return uc.form.meal = uc.fpConfig.dropdown.meal[mealId].name;
     };
 
+    uc.getCourses = function()
+    {
+        if(!uc.form.meal) return [];
+        return uc.fpConfig.dropdown.course[uc.form.meal];
+    }
+
     //post details
     //update db record
     uc.saveUpload = function () 
