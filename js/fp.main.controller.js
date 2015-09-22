@@ -19,7 +19,8 @@ function ($window, $state, ProfileService, QueryService)
 
     mc.init = function()
     {
-        mc.filters = { portrait: 'personal' };
+        mc.filters = { };
+//        mc.filters.portrait='personal';
         mc.searchResults=[];
         mc.fpConfig = $window.fpConfig; 
         

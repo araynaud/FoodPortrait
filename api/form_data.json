@@ -11,6 +11,7 @@
 			"label": "Gender", 
 			"data_type": "single", 
 			"required": 1, 
+			"searchable": 1, 
 			"form_answers": 
 			[
 				{
@@ -51,6 +52,7 @@
 			"field_name": "country", 
 			"label": "Country where you live now", 
 			"data_type": "country", 
+			"searchable": 1, 
 			"required": 1
 		}, 
 		{
@@ -63,6 +65,7 @@
 			"data_type": "text", 
 			"min_value": 1, 
 			"max_value": 5, 
+			"searchable": 1, 
 			"required": 1
 		}, 
 		{
@@ -74,6 +77,7 @@
 			"label": "Country where you are from / where you grew up", 
 			"help_text": "(approximately age 3-18) ", 
 			"data_type": "country", 
+			"searchable": 1, 
 			"required": 1
 		}, 
 		{
@@ -87,6 +91,7 @@
 			"data_type": "text", 
 			"min_value": 1, 
 			"max_value": 5, 
+			"searchable": 1, 
 			"required": 1
 		}, 
 		{
@@ -98,6 +103,7 @@
 			"label": "What is your marital status ?", 
 			"data_type": "single", 
 			"required": 0, 
+			"searchable": 1, 
 			"form_answers": 
 			[
 				{
@@ -127,6 +133,7 @@
 			"data_type": "number", 
 			"min_value": 1, 
 			"max_value": 20, 
+			"searchable": 0, 
 			"required": 0
 		}, 
 		{
@@ -139,6 +146,7 @@
 			"help_text": "Mark all that apply", 
 			"data_type": "multiple", 
 			"required": 0, 
+			"searchable": 1, 
 			"form_answers": 
 			[
 				{
@@ -189,6 +197,7 @@
 			"label": "Ethnicity", 
 			"data_type": "single", 
 			"required": 0, 
+			"searchable": 1, 
 			"form_answers": 
 			[
 				{
@@ -239,6 +248,7 @@
 			"help_text": "Highest level completed", 
 			"data_type": "single", 
 			"required": 0, 
+			"searchable": 1, 
 			"form_answers": 
 			[
 				{
@@ -298,6 +308,7 @@
 			"help_text": "Household income if living with partner/spouse or family / Individual income if single or living with other non family members", 
 			"data_type": "single", 
 			"required": 0, 
+			"searchable": 1, 
 			"form_answers": 
 			[
 				{
@@ -401,6 +412,7 @@
 			"label": "Diet", 
 			"data_type": "single", 
 			"required": 0, 
+			"searchable": 1, 
 			"form_answers": 
 			[
 				{
@@ -484,6 +496,7 @@
 			"label": "How often to you get exercise", 
 			"data_type": "single", 
 			"required": 0, 
+			"searchable": 0, 
 			"form_answers": 
 			[
 				{
@@ -528,6 +541,7 @@
 			"help_text": "Mark all that apply", 
 			"data_type": "multiple", 
 			"required": 0, 
+			"searchable": 0, 
 			"form_answers": 
 			[
 				{

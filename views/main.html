@@ -52,11 +52,11 @@ My Meals: view latest for this user
     <br/>
 
     <ul class="nav nav-sidebar filters">
-    <li>
+    <!--li>
         <label for="dd_portrait">Portrait:</label> 
         <select id="dd_portrait" ng-model="mc.filters.portrait" name="portrait" class="form-control" ng-options="item for item in mc.fpConfig.dropdown.portrait">
         </select>
-    </li>
+    </li-->
     <li>
         <label for="dd_meal">Meal:</label> 
         <select id="dd_meal" ng-model="mc.filters.meal" name="meal" class="form-control" ng-options="item.name for item in mc.fpConfig.dropdown.meal">
@@ -70,11 +70,10 @@ My Meals: view latest for this user
         </select>
     </li>
     </ul>
-    <hr/>
-    <ul class="nav nav-sidebar filters" ng-if="mc.filters.portrait=='demographic'">
+    <ul class="nav nav-sidebar filters">
       <li ng-repeat="q in mc.questions" ng-if="mc.isFilter(q)">
-        <label for="dd_{{q.field_name}}">{{q.title}}:</label>
-        <select id="dd_{{q.field_name}}" name="{{q.field_name}}" class="form-control" ng-model="mc.filters[q.field_name]" ng-options="a.label for a in q.form_answers">
+Q        <label for="dd_{{q.field_name}}">{{q.title}}:</label>
+        <select id="dd_{{q.field_name}}" name="{{q.field_name}}" class="form-control" ng-model="mc.filters[q.field_name]" ng-options="a.label for a in q.form_answers" ng-change="mc.search()">
           <option value="">-</option>
         </select>
       </li>

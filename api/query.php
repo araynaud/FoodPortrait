@@ -49,6 +49,30 @@ function demographicPortrait($db, $filters)
 	return $uploads;
 }
 
+function splitFilters($filters, &$imageFilters, &$demoFilters)
+{
+	$imageFilters = array();
+	$demoFilters = array();
+	foreach ($filters as $key => $value) 
+	{
+		$questionId = substringAfter($key,"Q_");
+		if($questionId==="")
+			$imageFilters[$key] = $value;
+		else
+			$demoFilters["questionId"] =  $value;
+	}
+}
+
+function hasDemographicFilters($filters)
+{
+	foreach ($filters as $key => $answerId) 
+	{
+		$questionId = substringAfter($key,"Q_");
+		if($questionId!=="") return true;
+	}
+	return false;
+}
+
 //get username list from profile filters
 function filterUsers($db, $filters)
 {
@@ -92,11 +116,14 @@ if($db->offline)
 //if profile filters( Q_ ) : demographic
 //otherwise: personal
 
-$portraitType = arrayExtract($params, "portrait");
+//$portraitType = arrayExtract($params, "portrait");
 
-$users = filterUsers($db, $params);
-if($portraitType == "demographic")
+splitFilters($params, &$imageFilters, &$demoFilters);
+if(count($demoFilters))
+{
+	$users = filterUsers($db, $params);
 	$results = demographicPortrait($db, $params);
+}
 else
 	$results = userLatestUploads($db, $username);
 
