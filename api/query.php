@@ -118,7 +118,7 @@ if($db->offline)
 
 //$portraitType = arrayExtract($params, "portrait");
 
-splitFilters($params, &$imageFilters, &$demoFilters);
+splitFilters($params, $imageFilters, $demoFilters);
 if(count($demoFilters))
 {
 	$users = filterUsers($db, $params);
