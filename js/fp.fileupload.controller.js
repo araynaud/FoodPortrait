@@ -110,7 +110,7 @@ function ($scope, Upload, $window, $state, $timeout, ProfileService)
     uc.getCourses = function()
     {
         if(!uc.form.meal) return [];
-        return uc.fpConfig.dropdown.course[uc.form.meal];
+        return uc.fpConfig.dropdown.course[uc.form.meal] || [];
     }
 
     //post details

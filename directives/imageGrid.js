@@ -78,7 +78,7 @@ angular.module('app').directive('imageGrid', function ()
                 title = new Date(dt).toLocaleDateString();
             }
             if(im.meal) title = title.append(" ", im.meal);
-            if(im.course) title = title.append(" ", im.course);
+            if(im.course) title = title.append(", ", im.course);
             if(vm.showDebug)
                 title = title.append(" ", im.upload_id);
             return title.toString();
@@ -89,8 +89,8 @@ angular.module('app').directive('imageGrid', function ()
             var title = "";
             title = title.append(im.caption);
             title = title.append("<br/>", im.context);
-            if(vm.showDebug)
-                title = title.append("<br/>", "by @" + im.username);
+            //if(vm.showDebug)
+            title = title.append("<br/>", "by @" + im.username);
 
             return title;
         };
