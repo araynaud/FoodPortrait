@@ -74,8 +74,8 @@ function ($window, $state, ProfileService, QueryService)
     mc.getCourses = function()
     {
         if(!mc.filters.meal) 
-            return mc.fpConfig.dropdown.course.Dinner;
-        return mc.fpConfig.dropdown.course[mc.filters.meal.name] ||  [];
+            return mc.fpConfig.dropdown.meal[1].courses;
+        return mc.filters.meal.courses;
     }
 
     mc.resizeGrid = function(delay, last)

@@ -31,6 +31,7 @@ function ($scope, Upload, $window, $state, $timeout, ProfileService)
 // end date picker options
 
     uc.meals = uc.fpConfig.dropdown.meal.distinct("name");
+    uc.meals.byName = uc.fpConfig.dropdown.meal.indexBy("name");
 
     uc.validate = function(uploadForm)
     {
@@ -109,8 +110,9 @@ function ($scope, Upload, $window, $state, $timeout, ProfileService)
 
     uc.getCourses = function()
     {
-        if(!uc.form.meal) return [];
-        return uc.fpConfig.dropdown.course[uc.form.meal] || [];
+        var mealId = uc.form.meal; 
+        if(!mealId) return [];
+        return uc.meals.byName[mealId].courses || [];
     }
 
     //post details
