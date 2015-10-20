@@ -20,6 +20,7 @@ angular.module('fpServices')
         this.queryResource.get(filters, function(response)
         {
             service.results = response.results;
+            service.users = response.users;
             deferred.resolve(service.results);
         });
         return deferred.promise;

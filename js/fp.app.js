@@ -24,33 +24,31 @@ app.config(function($stateProvider, $urlRouterProvider)
 angular.module('fpServices', ['ngResource']);
 angular.module('fpControllers', []);
 
-app.filter('toJson', function() 
+app.toJson = function(data, loop)
 {
+  if(!data || angular.isString(data)) return data;
+  var result = '';
+  if(angular.isString(data)) return result + data;
 
-  // In the return function, we must pass in a single parameter which will be the data we will work on.
-  // We have the ability to support multiple other parameters that can be passed into the filter optionally
-  return function(data, loop)
+  if(loop && angular.isArray(data))
   {
-    if(!data) return data;
-
-    var result = '';
-    if(loop && angular.isArray(data))
+    data.forEach(function(el)
     {
-      data.forEach(function(el)
-      {
-        result += angular.toJson(el) + '\n';
-      });
-      return result;
-    }
-
-    if(loop && angular.isObject(data))
-    {
-      for(key in data)
-        result += key + ": " + angular.toJson(data[key]) + '\n';
-      return result;
-    }
-    
-    return angular.toJson(data, true);
+      result += app.toJson(el, loop) + '\n';
+    });
+    return result;
   }
 
-});
+  if(loop && angular.isObject(data))
+  {
+    for(key in data)
+      result += key + ": " + app.toJson(data[key]) + '\n';
+    return result;
+  }
+  
+  return angular.toJson(data, !loop);
+};
+
+// In the return function, we must pass in a single parameter which will be the data we will work on.
+// We have the ability to support multiple other parameters that can be passed into the filter optionally
+app.filter('toJson', function() { return app.toJson; });

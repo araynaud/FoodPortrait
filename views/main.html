@@ -74,8 +74,8 @@ My Meals: view latest for this user
       </li>
     </ul>
 
-   <pre ng-if="mc.showDebug">{{mc.params  | toJson}}</pre>
-   <pre ng-if="mc.showDebug">{{mc.filters | toJson}}</pre>
+   <pre ng-if="mc.showDebug">{{mc.params  | toJson:true}}</pre>
+   <pre ng-if="mc.showDebug">{{mc.filters | toJson:true}}</pre>
 </form>
 </div>
 
@@ -94,7 +94,8 @@ My Meals: view latest for this user
     <pre ng-if="mc.showDebug">{{mc.options | toJson:true}}</pre>
 
     <h2 class="form-signin-heading">{{mc.title}}</h2>
-    <image-grid images="mc.searchResults" options="mc.options"/>
+   <div ng-if="mc.showDebug">{{mc.users | toJson:true }}</div>
+   <image-grid images="mc.searchResults" options="mc.options"/>
   </div>
 
 </div>

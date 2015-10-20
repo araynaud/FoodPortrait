@@ -121,6 +121,7 @@ function ($window, $state, ProfileService, QueryService)
         QueryService.loadQuery(mc.params).then(function(response) 
         {
             mc.searchResults = response; 
+            mc.users = QueryService.users;
         }, 
         mc.errorMessage);
     };

@@ -9,6 +9,10 @@
 	{{vm.delta()}} = {{vm.totalWidth}} - {{vm.prevWidth}}
 </span>
 
+<div class="alert alert-danger" role="alert" ng-if="!vm.images">
+	<span class="glyphicon glyphicon-exclamation-sign"></span> No results found.
+</div>
+
 <div class="imageGrid">
 	<div ng-repeat="im in vm.images" ng-if="im.filename" 
 	    class="bgCenterCover cell" ng-class="vm.imageClasses(im)" ng-style="vm.imageStyle(im)"

@@ -32,19 +32,21 @@ function setExists(&$uploads)
 //filter uploads from selected user
 function demographicPortrait($db, $filters)
 {
-	$users = filterUsers($db, $filters);
-	$sqlParams = array("table" => "user_upload", "order_by" => "image_date_taken desc");
-	if($filters)
-		foreach ($filters as $key => $value)
-		{
-			if(startsWith($key,"Q_")) continue;
-			$sqlParams[$key] = $value;	
-		}
+	global $users;
+	splitFilters($filters, $imageFilters, $demoFilters);
+	$users = filterUsers($db, $demoFilters);
+debug("demographicPortrait users", $users);
 
-	if($users!=null)
-		$sqlParams["username"] = $users;
-	else if(count($users)==0)
+	if($users === null)
+		$users = fpCurrentUsername();
+	else if(count($users) == 0)
 		return array();
+
+	$sqlParams = array("table" => "user_upload", "order_by" => "image_date_taken desc");
+	foreach ($imageFilters as $key => $value)
+		$sqlParams[$key] = $value;	
+
+	$sqlParams["username"] = $users;
 	$uploads = $db->selectWhere($sqlParams);
 	return $uploads;
 }
@@ -59,8 +61,11 @@ function splitFilters($filters, &$imageFilters, &$demoFilters)
 		if($questionId==="")
 			$imageFilters[$key] = $value;
 		else
-			$demoFilters["questionId"] =  $value;
+			$demoFilters[$questionId] =  $value;
 	}
+
+debug("splitFilters I", $imageFilters);
+debug("splitFilters D", $demoFilters);
 }
 
 function hasDemographicFilters($filters)
@@ -76,6 +81,8 @@ function hasDemographicFilters($filters)
 //get username list from profile filters
 function filterUsers($db, $filters)
 {
+debug("filterUsers", $filters, "print_r");
+
 	if(!$filters) return null; //all users
 
 	$query = "SELECT username FROM user";
@@ -83,11 +90,8 @@ function filterUsers($db, $filters)
 //and username in (select username from user_answer where question_id = 16 and answer_id = 65)
 
 	$and = "WHERE";
-	foreach ($filters as $key => $answerId) 
+	foreach ($filters as $questionId => $answerId) 
 	{
-		$questionId = substringAfter($key,"Q_");
-debug("filterUsers", "$key = $questionId");
-		if($questionId=="") continue;
 		$query .= " $and username in (select username from user_answer where question_id = $questionId and answer_id = $answerId)";
 		$and="AND";
 	}
@@ -115,24 +119,12 @@ if($db->offline)
 
 //if profile filters( Q_ ) : demographic
 //otherwise: personal
-
-//$portraitType = arrayExtract($params, "portrait");
-
-splitFilters($params, $imageFilters, $demoFilters);
-if(count($demoFilters))
-{
-	$users = filterUsers($db, $params);
-	$results = demographicPortrait($db, $params);
-}
-else
-	$results = userLatestUploads($db, $username);
-
+$results = demographicPortrait($db, $params);
 //$results = array_filter($results, "uploadedFileExists");	
 setExists($results);
 $db->disconnect();
 
 $response=array();
-addVarToArray($response, "username");
 addVarToArray($response, "params");
 addVarToArray($response, "users");
 addVarToArray($response, "results");

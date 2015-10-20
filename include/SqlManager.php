@@ -338,6 +338,7 @@ debug("update SQL: $sql ", $params);
 		$sep="WHERE";
 		setIfNull($params, $_REQUEST);
 	 	//TODO: list of reserved keywords. check if params are valid columm names
+		unset($params["debug"]);
 		unset($params["table"]);
 		unset($params["group_by"]);
 		unset($params["order_by"]);
