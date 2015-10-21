@@ -12,7 +12,7 @@ My Meals: view latest for this user
 <div id="sidebar-wrapper" class="ease05">
 <form name="filterForm">
     <div class="input-group">
-      <input type="text" class="form-control" id="inputDescription" ng-model="mc.filters.search" placeholder="Search" />
+      <input type="text" class="form-control" id="inputDescription" ng-model="mc.filters.searchText" placeholder="Search" />
       <span class="input-group-btn">
         <button type="button" class="btn btn-default" ng-click="mc.search()">
           <i class="glyphicon glyphicon-search"></i>
@@ -21,13 +21,9 @@ My Meals: view latest for this user
     </div>
     <br/>
     <div class="input-group">
-      <input type="text" id="inputDate" 
-      name="date_min" class="form-control"
-      ng-model="mc.filters.date_min" 
-      datepicker-popup="{{mc.dateFormat}}" ng-click="mc.pickDate(1)"
-      is-open="mc.datepickerOpen1" max-date="mc.today" 
-      datepicker-options="mc.dateOptions"
-      close-text="Close" placeholder="From date"/>
+      <input type="text" id="inputDate" name="date_min" class="form-control"
+      ng-model="mc.filters.date_min" datepicker-popup="{{mc.dateFormat}}" ng-click="mc.pickDate(1)"
+      is-open="mc.datepickerOpen1" max-date="mc.today" datepicker-options="mc.dateOptions" close-text="Close" placeholder="From date"/>
       <span class="input-group-btn">
         <button type="button" class="btn btn-default" ng-click="mc.pickDate(1)">
           <i class="glyphicon glyphicon-calendar"></i>          
@@ -36,13 +32,9 @@ My Meals: view latest for this user
     </div>
     <br/>
     <div class="input-group">
-      <input type="text" id="inputDateMax" 
-      name="date_max" class="form-control"
-      ng-model="mc.filters.date_max" 
-      datepicker-popup="{{mc.dateFormat}}" ng-click="mc.pickDate(2)"
-      is-open="mc.datepickerOpen2" max-date="mc.today" 
-      datepicker-options="mc.dateOptions"
-      close-text="Close" placeholder="To date"/>
+      <input type="text" id="inputDateMax" name="date_max" class="form-control"
+      ng-model="mc.filters.date_max" datepicker-popup="{{mc.dateFormat}}" ng-click="mc.pickDate(2)"
+      is-open="mc.datepickerOpen2" max-date="mc.today" datepicker-options="mc.dateOptions" close-text="Close" placeholder="To date"/>
       <span class="input-group-btn">
         <button type="button" class="btn btn-default" ng-click="mc.pickDate(2)">
           <i class="glyphicon glyphicon-calendar"></i>
@@ -64,7 +56,14 @@ My Meals: view latest for this user
           <option value="">-</option>
         </select>
     </li>
+    <li>
+        <label for="dd_mood">Mood:</label> 
+        <select id="dd_mood" ng-model="mc.filters.mood" name="mood" class="form-control" ng-options="item for item in mc.fpConfig.dropdown.mood" ng-change="mc.search()">
+          <option value="">-</option>
+        </select>
+    </li>
     </ul>
+    <hr/>
     <ul class="nav nav-sidebar filters">
       <li ng-repeat="q in mc.questions" ng-if="mc.isFilter(q)">
         <label for="dd_{{q.field_name}}">{{q.title}}:</label>
@@ -81,8 +80,9 @@ My Meals: view latest for this user
 
   <div id="page-content-wrapper">
     <a class="btn btn-default menu-toggle glyphicon glyphicon-search" title="toggle filters" ng-click="mc.toggleSidebar()"></a>
-    <a class="btn btn-default glyphicon glyphicon-resize-horizontal" title="resize grid" ng-click="mc.resizeGrid()"></a>
+    <!--a class="btn btn-default glyphicon glyphicon-resize-horizontal" title="resize grid" ng-click="mc.resizeGrid()"></a-->
     <a class="btn btn-default glyphicon glyphicon-menu-hamburger" title="grid options" ng-click="mc.showOptions=!mc.showOptions"></a>
+    <span class="form-signin-heading">{{mc.title}}</span>
     <span ng-if="mc.showOptions">
         columns: <input type="number"   ng-model="mc.options.columns"  min="1" max="10" /> 
         rows:    <input type="number"   ng-model="mc.options.rows"     min="1" max="10" /> 
@@ -90,12 +90,11 @@ My Meals: view latest for this user
         margin:  <input type="number"   ng-model="mc.options.margin"   min="-1" max="50"/> 
         border:  <input type="number"   ng-model="mc.options.border"   min="0"  max="50"/> 
         shadow:  <input type="checkbox" ng-model="mc.options.shadow" /> 
+        debug:  <input type="checkbox" ng-model="mc.showDebug" /> 
     </span>
-    <pre ng-if="mc.showDebug">{{mc.options | toJson:true}}</pre>
-
-    <h2 class="form-signin-heading">{{mc.title}}</h2>
+   <pre ng-if="mc.showDebug">{{mc.options | toJson:true}}</pre>
    <div ng-if="mc.showDebug">{{mc.users | toJson:true }}</div>
-   <image-grid images="mc.searchResults" options="mc.options"/>
+   <image-grid images="mc.searchResults" options="mc.options" show-debug="mc.showDebug"/>
   </div>
 
 </div>

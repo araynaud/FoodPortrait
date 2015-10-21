@@ -16,7 +16,8 @@ angular.module('app').directive('imageGrid', function ()
             vm.opts="title,columns,rows,ratio,border,borderColor,margin,shadow".split(",");
             vm.initOptions(vm.opts);
             vm.grid = angular.element(".imageGrid");
-            vm.selector = ".imageGrid .cell";
+            vm.gridSelector = ".imageGrid";
+            vm.selector = vm.gridSelector  + " .cell";
             vm.showDebug = valueIfDefined("fpConfig.debug.angular");
             vm.baseUrl = valueIfDefined("fpConfig.upload.baseUrl");
             vm.baseServer = valueIfDefined("fpConfig.upload.server");
@@ -108,7 +109,7 @@ angular.module('app').directive('imageGrid', function ()
         vm.imageWidth = function(n)
         {
             n = n || 1;
-            var width = vm.totalWidth = vm.grid.width();
+            var width = vm.totalWidth; // = vm.grid.width();
             if(vm.options.columns > n)
             {
                 width *= n;
@@ -166,6 +167,8 @@ angular.module('app').directive('imageGrid', function ()
         {
             vm.prevWidth = vm.totalWidth;
             vm.totalWidth = vm.grid.width();
+            vm.parentHeight = vm.win.height() - vm.grid.offset().top;
+            vm.totalWidth = Math.min(vm.totalWidth, vm.parentHeight);
             var delta = vm.delta();
             //if(!delta && vm.addedCss) return vm.addedCss;
             vm.width = vm.imageWidth();
@@ -181,6 +184,7 @@ angular.module('app').directive('imageGrid', function ()
             else 
                 vm.options.borderStyle = "none";
 
+            //vm.addedCss = "{0} { height:{1}px; }\n".format(vm.gridSelector, vm.totalWidth);
             vm.addedCss = "{0} { width:{1}px; height:{2}px; border:{3}; margin:{4}px; }\n".format(vm.selector, vm.width, vm.height, vm.options.borderStyle, vm.options.margin);
 
             for(var i=2; i<=vm.options.columns; i++)

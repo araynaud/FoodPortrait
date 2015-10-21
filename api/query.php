@@ -11,7 +11,7 @@ session_start();
 //filters = meal, date
 function userLatestUploads($db, $username, $filters = null)
 {
-	$sqlParams = array("table" => "user_upload", "order_by" => "image_date_taken desc", "username" => $username);
+	$sqlParams = array("table" => "user_upload_search", "order_by" => "image_date_taken desc", "username" => $username);
 	if($filters)
 		foreach ($filters as $key => $value)
 		{
@@ -42,7 +42,17 @@ debug("demographicPortrait users", $users);
 	else if(count($users) == 0)
 		return array();
 
-	$sqlParams = array("table" => "user_upload", "order_by" => "image_date_taken desc");
+	$sqlParams = array("table" => "user_upload_search", "order_by" => "image_date_taken desc");
+
+$date_min = arrayExtract($imageFilters, "date_min");
+$date_max = arrayExtract($imageFilters, "date_max");
+$searchText = trim(arrayExtract($imageFilters, "searchText"));
+
+//searchText: add %%
+	if($searchText)
+		$sqlParams["searchText"] = "%$searchText%";	
+//TODO: date_min and date_max
+
 	foreach ($imageFilters as $key => $value)
 		$sqlParams[$key] = $value;	
 

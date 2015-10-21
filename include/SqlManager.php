@@ -371,10 +371,12 @@ debug("update SQL: $sql ", $params);
 			return "$key in ($sqlValue)";
 		}
 		
+		$op = contains($value, "%") ? "LIKE" : "=";
+
 		if($statement)
-			return "$key = ?";
+			return "$key $op ?";
 		
-		return "$key = '$value'";
+		return "$key $op '$value'";
 	}
 
 	private static function sqlUpdateValues($params)

@@ -23,7 +23,7 @@ function ($window, $state, ProfileService, QueryService)
 //        mc.filters.portrait='personal';
         mc.searchResults=[];
         mc.fpConfig = $window.fpConfig; 
-        
+        mc.wrapper = angular.element("#wrapper");
         mc.showOptions = mc.fpConfig.grid.showOptions;
         mc.options = mc.fpConfig.grid.options;
         if(!mc.options)
@@ -67,8 +67,13 @@ function ($window, $state, ProfileService, QueryService)
 
     mc.toggleSidebar = function()
     {
-        angular.element("#wrapper").toggleClass("toggled");
+        mc.wrapper.toggleClass("toggled");
         mc.resizeGrid(400, 800);
+    };
+
+    mc.showSidebar = function()
+    {
+        return !mc.wrapper.hasClass("toggled");
     };
 
     mc.getCourses = function()
@@ -104,7 +109,10 @@ function ($window, $state, ProfileService, QueryService)
             if(f && filter)
             {
                 var key = isMissing(filter.question_id) ? f : 'Q_'+filter.question_id;
-                params[key] = filter.id || filter.name || filter;
+                if(filter.toLocaleDateString)
+                    params[key] = filter.toLocaleDateString();
+                else
+                    params[key] = filter.id || filter.name || filter;
             }
         }
         

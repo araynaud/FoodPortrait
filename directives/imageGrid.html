@@ -6,15 +6,17 @@
 	{{vm.options.columns}}x{{vm.options.rows}}
 	<span ng-if="vm.delta() > 0" class="glyphicon glyphicon-arrow-up"   style="color:green"></span>
 	<span ng-if="vm.delta() < 0" class="glyphicon glyphicon-arrow-down" style="color:red"></span>
-	{{vm.delta()}} = {{vm.totalWidth}} - {{vm.prevWidth}}
+	delta:{{vm.delta()}} = w:{{vm.totalWidth}} - {{vm.prevWidth}}
+	h:{{vm.parentHeight}}
 </span>
-
 <div class="alert alert-danger" role="alert" ng-if="!vm.images">
 	<span class="glyphicon glyphicon-exclamation-sign"></span> No results found.
 </div>
 
 <div class="imageGrid">
-	<div ng-repeat="im in vm.images" ng-if="im.filename" 
+<span ng-repeat="im in vm.images" ng-if="im.filename">
+	<br ng-if="$index >0 && $index % vm.options.columns==0"/>
+	<div 
 	    class="bgCenterCover cell" ng-class="vm.imageClasses(im)" ng-style="vm.imageStyle(im)"
 	    ng-click="vm.imageDetails(im)" icon0="info-sign" size0="16pt"
 	    fp-popover placement="{{vm.popoverPlacement($index, im)}}" pop-title="{{vm.imageTitle(im)}}" pop-content="{{vm.imageDescription(im)}}">
@@ -22,5 +24,6 @@
 	    <br/>{{vm.imageTitle(im)}}
 		</div>
 	</div>
+</span>
 </div>
 <pre ng-if="vm.showDebug">{{vm.dynamicCss()}}</pre>
