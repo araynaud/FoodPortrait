@@ -80,7 +80,8 @@ My Meals: view latest for this user
 
   <div id="page-content-wrapper">
     <a class="btn btn-default menu-toggle glyphicon glyphicon-search" title="toggle filters" ng-click="mc.toggleSidebar()"></a>
-    <!--a class="btn btn-default glyphicon glyphicon-resize-horizontal" title="resize grid" ng-click="mc.resizeGrid()"></a-->
+    <!--a class="btn btn-default glyphicon glyphicon-resize-horizontal" title="resize grid" ng-click="mc.resizeGrid()"></a>
+    <a class="btn btn-default glyphicon glyphicon-resize-vertical" title="resize grid" ng-click="mc.resizeGrid()"></a-->
     <a class="btn btn-default glyphicon glyphicon-menu-hamburger" title="grid options" ng-click="mc.showOptions=!mc.showOptions"></a>
     <span class="form-signin-heading">{{mc.title}}</span>
     <span ng-if="mc.showOptions">
@@ -90,9 +91,9 @@ My Meals: view latest for this user
         margin:  <input type="number"   ng-model="mc.options.margin"   min="-1" max="50"/> 
         border:  <input type="number"   ng-model="mc.options.border"   min="0"  max="50"/> 
         shadow:  <input type="checkbox" ng-model="mc.options.shadow" /> 
-        debug:  <input type="checkbox" ng-model="mc.showDebug" /> 
+        debug:   <input type="checkbox" ng-model="mc.showDebug" /> 
     </span>
-   <pre ng-if="mc.showDebug">{{mc.options | toJson:true}}</pre>
+   <div ng-if="mc.showDebug">{{mc.options | toJson:true}}</div>
    <div ng-if="mc.showDebug">{{mc.users | toJson:true }}</div>
    <image-grid images="mc.searchResults" options="mc.options" show-debug="mc.showDebug"/>
   </div>

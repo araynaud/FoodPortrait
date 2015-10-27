@@ -15,8 +15,9 @@ angular.module('app').directive('imageGrid', function ()
             vm.win = angular.element(window);
             vm.opts="title,columns,rows,ratio,border,borderColor,margin,shadow".split(",");
             vm.initOptions(vm.opts);
-            vm.grid = angular.element(".imageGrid");
             vm.gridSelector = ".imageGrid";
+            vm.grid = angular.element(vm.gridSelector);
+            vm.parent = vm.grid.parent().parent();
             vm.selector = vm.gridSelector  + " .cell";
             vm.showDebug = valueIfDefined("fpConfig.debug.angular");
             vm.baseUrl = valueIfDefined("fpConfig.upload.baseUrl");
@@ -27,8 +28,9 @@ angular.module('app').directive('imageGrid', function ()
 
             vm.win.bind("resize", function() 
             {
-                imageGrid.resizeInterval(400, 800);
+                vm.resizeInterval(400, 800);
             });
+
         };
 
         vm.initOptions = function(opts)
@@ -58,6 +60,7 @@ angular.module('app').directive('imageGrid', function ()
 
         vm.imageStyle = function(im, subdir)
         {
+            if(!im) return null;
             var bgImage = "url('{0}')".format(vm.imageUrl(im,subdir));
             return { "background-image": bgImage};
         };
@@ -68,7 +71,7 @@ angular.module('app').directive('imageGrid', function ()
             if(!im.exists && vm.baseServer) url = vm.baseServer + url;
             return url;
         };
-
+ 
         vm.imageTitle = function(im)
         {
             var title = "";
@@ -103,22 +106,28 @@ angular.module('app').directive('imageGrid', function ()
 
         vm.imageDetails = function(im)
         {
-        //    vm.options.title = im.caption;
         };
 
         vm.imageWidth = function(n)
         {
             n = n || 1;
-            var width = vm.totalWidth; // = vm.grid.width();
-            if(vm.options.columns > n)
-            {
-                width *= n;
-                width /= vm.options.columns;
-            }
+            var width = vm.gridWidth - vm.options.margin; 
+            if(n < vm.options.columns)
+                width  = width * n / vm.options.columns;
 
-            if(vm.options.margin)  width -= 2 * vm.options.margin;
-
+            width -= vm.options.margin;
             return Math.floor(width);
+        };
+
+        vm.imageHeight = function(n)
+        {
+            n = n || 1;
+            var height = vm.gridHeight - vm.options.margin; 
+            if(n < vm.options.rows)
+                height = height * n / vm.options.rows;
+
+            height -= vm.options.margin;
+            return Math.floor(height);
         };
 
         vm.colspanCss = function(n)
@@ -129,7 +138,7 @@ angular.module('app').directive('imageGrid', function ()
 
         vm.rowspanCss = function(n)
         {
-            var height = vm.imageWidth(n); 
+            var height = vm.imageHeight(n); 
             return "{0}.rowspan{1} { height: {2}px; }\n".format(vm.selector, n, height);
         };
 
@@ -144,7 +153,7 @@ angular.module('app').directive('imageGrid', function ()
                 delay=100;
             }
 
-            for(var t=delay; t<=last ; t+=delay)
+            for(var t=delay; t<=last; t+=delay)
                 vm.resizeAfter(t);        
         };
 
@@ -156,36 +165,36 @@ angular.module('app').directive('imageGrid', function ()
                 vm.resizeGrid();
         };
 
-        vm.delta = function()
+        vm.roundRatio = function()
         {
-            if(!vm.prevWidth) return 0;
-            return vm.grid.width() - vm.prevWidth;
-        }
+            return Math.roundDigits(vm.availableRatio, 2);
+        };
 
         //fit grid in containing element, keep aspect ratio
         vm.resizeGrid = function()
         {
-            vm.prevWidth = vm.totalWidth;
-            vm.totalWidth = vm.grid.width();
-            vm.parentHeight = vm.win.height() - vm.grid.offset().top;
-            vm.totalWidth = Math.min(vm.totalWidth, vm.parentHeight);
-            var delta = vm.delta();
-            //if(!delta && vm.addedCss) return vm.addedCss;
-            vm.width = vm.imageWidth();
+            vm.prevWidth  = vm.gridWidth;
+            vm.gridWidth  = vm.availableWidth  = vm.parent.width();
+            vm.gridHeight = vm.availableHeight = vm.win.height() - vm.grid.offset().top;
+            vm.availableRatio = vm.availableWidth / vm.availableHeight;
+            vm.gridRatio = vm.options.ratio * vm.options.columns / vm.options.rows;
+            vm.fit = vm.availableRatio > vm.gridRatio ? "height" : "width";
+            if(vm.fit == "height")
+                vm.gridWidth = vm.gridHeight * vm.gridRatio;
+            else
+                vm.gridHeight = vm.gridWidth / vm.gridRatio;
 
-            if(delta<0) vm.width += delta;
-            vm.height = vm.options.ratio ? vm.width / vm.options.ratio : vm.width;
-            vm.width = Math.floor(vm.width);
-            vm.height = Math.floor(vm.height);
+            vm.width = vm.imageWidth();
+            vm.height = vm.imageHeight();
             if(!vm.options.borderColor) 
                 vm.options.borderColor = 'black';
             if(vm.options.border)
                 vm.options.borderStyle = "{0}px solid {1}".format(vm.options.border, vm.options.borderColor);
             else 
                 vm.options.borderStyle = "none";
-
-            //vm.addedCss = "{0} { height:{1}px; }\n".format(vm.gridSelector, vm.totalWidth);
-            vm.addedCss = "{0} { width:{1}px; height:{2}px; border:{3}; margin:{4}px; }\n".format(vm.selector, vm.width, vm.height, vm.options.borderStyle, vm.options.margin);
+            vm.addedCss ="";
+            vm.addedCss += "{0} { width:{1}px; height:{2}px; padding:{3}px; }\n".format(vm.gridSelector, vm.gridWidth, vm.gridHeight, vm.options.margin/2);
+            vm.addedCss += "{0} { width:{1}px; height:{2}px; border:{3}; margin:{4}px; }\n".format(vm.selector, vm.width, vm.height, vm.options.borderStyle, vm.options.margin/2);
 
             for(var i=2; i<=vm.options.columns; i++)
                 vm.addedCss += vm.colspanCss(i);

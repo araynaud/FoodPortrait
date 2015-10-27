@@ -2,28 +2,23 @@
 
 <span class="form-signin-heading">{{vm.options.title}}</span>
 
-<span ng-if="vm.showDebug">
-	{{vm.options.columns}}x{{vm.options.rows}}
-	<span ng-if="vm.delta() > 0" class="glyphicon glyphicon-arrow-up"   style="color:green"></span>
-	<span ng-if="vm.delta() < 0" class="glyphicon glyphicon-arrow-down" style="color:red"></span>
-	delta:{{vm.delta()}} = w:{{vm.totalWidth}} - {{vm.prevWidth}}
-	h:{{vm.parentHeight}}
+<span ng-if="vm.showDebug">	
+	grid: {{vm.options.columns}}C x {{vm.options.rows}}R {{vm.gridWidth}} x {{vm.gridHeight}}  / {{vm.gridRatio}}
+	available: {{vm.availableWidth}} x {{vm.availableHeight}} / {{vm.roundRatio()}} 
+	fit:{{vm.fit}}
 </span>
 <div class="alert alert-danger" role="alert" ng-if="!vm.images">
 	<span class="glyphicon glyphicon-exclamation-sign"></span> No results found.
 </div>
+<pre ng-if="vm.showDebug">{{vm.dynamicCss()}}</pre>
 
-<div class="imageGrid">
-<span ng-repeat="im in vm.images" ng-if="im.filename">
-	<br ng-if="$index >0 && $index % vm.options.columns==0"/>
-	<div 
+<div class="imageGrid centered">
+	<div ng-repeat="im in vm.images" ng-if="$index < vm.options.rows * vm.options.columns"
 	    class="bgCenterCover cell" ng-class="vm.imageClasses(im)" ng-style="vm.imageStyle(im)"
 	    ng-click="vm.imageDetails(im)" icon0="info-sign" size0="16pt"
 	    fp-popover placement="{{vm.popoverPlacement($index, im)}}" pop-title="{{vm.imageTitle(im)}}" pop-content="{{vm.imageDescription(im)}}">
-	    <div ng-if="vm.showDebug">{{$index}} {{im.colspan}}x{{im.rowspan}} {{vm.imageWidth(im.colspan)}} 
-	    <br/>{{vm.imageTitle(im)}}
-		</div>
+	    	<div ng-if="vm.showDebug">{{$index}} {{im.colspan}}x{{im.rowspan}} {{vm.imageWidth(im.colspan)}} 
+	    		<br/>{{vm.imageTitle(im)}}
+			</div>
 	</div>
-</span>
 </div>
-<pre ng-if="vm.showDebug">{{vm.dynamicCss()}}</pre>

@@ -75,44 +75,43 @@ $meta["og:url"] = currentUrlDir();
 </head>
 <body ng-controller="LayoutController as lc" ng-class="lc.bodyClasses()">
 
-    <!-- Static navbar -->
-    <nav class="navbar navbar-default navbar-fixed-top">
-      <div class="container">
-          <a class="navbar-brand textOutline" ng-class="{active: lc.stateIs('main')}" href="#/main">
-            <img src="images/logo40.png" alt="FOOD PORTRAIT"/>
-          </a>
+  <!-- Static navbar -->
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <a class="navbar-brand textOutline" ng-class="{active: lc.stateIs('main')}" href="#/main">
+          <img src="images/logo40.png" alt="FOOD PORTRAIT"/>
+        </a>
 
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".mobile #navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-        </div>
-
-        <div id="navbar" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav">
-            <li ng-class="{active: lc.stateIs('about')}" data-toggle="collapse" data-target=".mobile #navbar"><a href="#/about">About</a></li>
-            <li ng-show="lc.loggedIn()" ng-class="{active: lc.stateIs('profile')}" data-toggle="collapse" data-target=".mobile #navbar"><a href="#/profile">Profile</a></li>
-            <li ng-show="lc.loggedIn()" ng-class="{active: lc.stateIs('upload')}"  data-toggle="collapse" data-target=".mobile #navbar"><a href="#/upload">Upload</a></li>
-          </ul>
-          <ul class="nav navbar-nav navbar-right">
-            <li ng-hide="lc.loggedIn()" ng-class="{active: lc.stateIs('signin')}" data-toggle="collapse" data-target=".mobile #navbar"><a href="#/signin">Log in</a></li>
-            <li ng-hide="lc.loggedIn()" ng-class="{active: lc.stateIs('signup')}" data-toggle="collapse" data-target=".mobile #navbar"><a href="#/signup">Sign up</a></li>
-            <li ng-show="lc.loggedIn()" ng-class="{active: lc.stateIs('user')}"   data-toggle="collapse" data-target=".mobile #navbar"><a href="#/main">{{lc.userFullName()}}</a></li>
-            <li ng-show="lc.loggedIn()" data-toggle="collapse" data-target=".mobile #navbar"><a href="#/login" ng-click="lc.logout()">Sign out</a></li>
-          </ul>
-        </div>
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".mobile #navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
       </div>
-    </nav>
+
+      <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+          <li ng-class="{active: lc.stateIs('about')}" data-toggle="collapse" data-target=".mobile #navbar"><a href="#/about">About</a></li>
+          <li ng-show="lc.loggedIn()" ng-class="{active: lc.stateIs('profile')}" data-toggle="collapse" data-target=".mobile #navbar"><a href="#/profile">Profile</a></li>
+          <li ng-show="lc.loggedIn()" ng-class="{active: lc.stateIs('upload')}"  data-toggle="collapse" data-target=".mobile #navbar"><a href="#/upload">Upload</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li ng-hide="lc.loggedIn()" ng-class="{active: lc.stateIs('signin')}" data-toggle="collapse" data-target=".mobile #navbar"><a href="#/signin">Log in</a></li>
+          <li ng-hide="lc.loggedIn()" ng-class="{active: lc.stateIs('signup')}" data-toggle="collapse" data-target=".mobile #navbar"><a href="#/signup">Sign up</a></li>
+          <li ng-show="lc.loggedIn()" ng-class="{active: lc.stateIs('user')}"   data-toggle="collapse" data-target=".mobile #navbar"><a href="#/main">{{lc.userFullName()}}</a></li>
+          <li ng-show="lc.loggedIn()" data-toggle="collapse" data-target=".mobile #navbar"><a href="#/login" ng-click="lc.logout()">Sign out</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
 
   <a class="navbar-brand navbar-collapse collapse" href="#/">
     <img class="logo" src="images/FoodPortrait192.png" alt="logo" ng-hide="true || lc.stateIs('home')" />
   </a>
 
-  <div id="main" ui-view>
-  </div>
-  <br/>
+  <div id="main" ui-view></div>
+  
   <footer class="footer container nowrap" ng-if="lc.showDebug">
     <div class="text-muted"> {{lc.currentState()}} {{lc.windowWidth}} x {{lc.windowHeight}} {{lc.userAgent}}</div>
   </footer>

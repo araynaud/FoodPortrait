@@ -7,7 +7,7 @@ image-grid > .imageGrid
 .imageGrid
 {
 	text-align: left;
-/*	background-color: white; */
+/*    background-color: #AFA; */
 }
 
 .bgCenterCover
@@ -25,4 +25,10 @@ image-grid > .imageGrid
     font-weight: bold;
     font-size: 14px;
     background-color: #eee;
+}
+
+.centered
+{
+    margin-left:auto;
+    margin-right:auto;
 }
