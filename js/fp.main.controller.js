@@ -95,10 +95,24 @@ function ($window, $state, ProfileService, QueryService)
         for(var f in mc.filters)
         {
             if(!mc.filters[f]) continue;
-            params.push(mc.filters[f].label || mc.filters[f].name|| mc.filters[f]);
+            params.push(mc.filterTitle(mc.filters[f]));
         }
         return params.join(", ");
     }
+
+    mc.filterTitle = function(filter)
+    {
+        if(filter.toLocaleDateString)
+            return filter.toLocaleDateString();
+        return filter.label || filter.name || filter;
+    };
+
+    mc.filterValue = function(filter)
+    {
+        if(filter.toLocaleDateString)
+            return filter.toLocaleDateString();
+        return filter.id || filter.name || filter;
+    };
 
     mc.getSearchParams = function()
     {
@@ -109,10 +123,7 @@ function ($window, $state, ProfileService, QueryService)
             if(f && filter)
             {
                 var key = isMissing(filter.question_id) ? f : 'Q_'+filter.question_id;
-                if(filter.toLocaleDateString)
-                    params[key] = filter.toLocaleDateString();
-                else
-                    params[key] = filter.id || filter.name || filter;
+                params[key] = mc.filterValue(filter);
             }
         }
         
