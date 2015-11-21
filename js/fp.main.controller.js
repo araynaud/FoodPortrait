@@ -29,6 +29,7 @@ function ($window, $state, ProfileService, QueryService)
         if(!mc.options)
             mc.options = { columns: 4, rows: 4, margin: 10, border: 1, ratio: 1, shadow: false};
 
+        mc.isMobile =  ProfileService.isMobile();
         mc.showDebug = ProfileService.isDebug();
 
 //date picker options
@@ -64,6 +65,17 @@ function ($window, $state, ProfileService, QueryService)
 		  	});
 		});
 	};
+
+    mc.setOption =  function (opt,val)
+    {
+        mc.options[opt] = val;
+    }
+
+    mc.addOption =  function (opt,val)
+    {
+        if(!mc.options[opt]) mc.setOption(opt,val);
+        mc.options[opt] += val;
+    }
 
     mc.toggleSidebar = function()
     {
