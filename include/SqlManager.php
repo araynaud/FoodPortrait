@@ -354,11 +354,24 @@ debug("update SQL: $sql ", $params);
 	private static function sqlCondition(&$params, $key, $statement)
 	{	
 		$value = $params[$key];
-		if($value == NULL)	
+		if($value === NULL)	
 		{
 			unset($params[$key]);
 			return "$key is NULL";
 		}
+
+		if(is_array($value) && startsWith($value[0], "%")) 
+		{
+			unset($params[$key]);
+			$sqlValue = $sep = "";
+			foreach ($value as $el)
+			{
+				$sqlValue .= "$sep$key LIKE '$el'";
+				$sep = " AND ";
+			}
+			return $sqlValue;
+		}
+		
 		if(is_array($value)) 
 		{
 			unset($params[$key]);

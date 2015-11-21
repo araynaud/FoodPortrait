@@ -44,14 +44,14 @@ debug("demographicPortrait users", $users);
 
 	$sqlParams = array("table" => "user_upload_search", "order_by" => "image_date_taken desc");
 
-$date_min = arrayExtract($imageFilters, "date_min");
-$date_max = arrayExtract($imageFilters, "date_max");
-$searchText = trim(arrayExtract($imageFilters, "searchText"));
+	//TODO: use date_min and date_max
+	$date_min = arrayExtract($imageFilters, "date_min");
+	$date_max = arrayExtract($imageFilters, "date_max");
 
-//searchText: add %%
+	//searchText: add %%
+	$searchText = searchWords(arrayExtract($imageFilters, "searchText"));
 	if($searchText)
-		$sqlParams["searchText"] = "%$searchText%";	
-//TODO: date_min and date_max
+		$sqlParams["searchText"] = $searchText;	
 
 	foreach ($imageFilters as $key => $value)
 		$sqlParams[$key] = $value;	
@@ -59,6 +59,19 @@ $searchText = trim(arrayExtract($imageFilters, "searchText"));
 	$sqlParams["username"] = $users;
 	$uploads = $db->selectWhere($sqlParams);
 	return $uploads;
+}
+
+//searchText: add %% to every word
+function searchWords($text)
+{
+	$text = trim($text);
+	if(!$text) return null;
+	
+	$words = explode(' ', $text);
+	foreach ($words as &$value)
+		$value = "%$value%";
+	debug("searchWords", $words);
+	return $words;
 }
 
 function splitFilters($filters, &$imageFilters, &$demoFilters)
@@ -87,6 +100,8 @@ function hasDemographicFilters($filters)
 	}
 	return false;
 }
+
+//TODO: function searchText for every word like
 
 //get username list from profile filters
 function filterUsers($db, $filters)
