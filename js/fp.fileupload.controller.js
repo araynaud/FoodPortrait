@@ -45,44 +45,49 @@ function ($scope, Upload, $window, $state, $timeout, ProfileService)
     //post file
     //insert db record
     //return file metadata and upload id to form
-    uc.upload = function (files) 
+    uc.upload = function()
     {
-        if (!files || !files.length) return false;
+        if(!uc.files) return false;
 
-        for (var i = 0; i < files.length; i++) 
+        if(!angular.isArray(uc.files))
+            return uc.uploadFile(uc.files);
+
+        for(var i = 0; i < uc.files.length; i++) 
+            uc.uploadFile(uc.files[i]);
+    };
+
+    uc.uploadFile = function (file) 
+    {
+        uc.progressPercentage="";
+        uc.uploadUrl="";
+        uc.log="";
+        Upload.upload({ url: 'api/upload.php', fields: uc.form, file: file })
+        .progress(function (evt) 
         {
-            var file = files[i];
+            uc.progressPercentage = parseInt(100.0 * evt.loaded / evt.total) + '%';
+            if(!uc.showDebug) return;
+
+            var fname = (evt.config && evt.config.file? evt.config.file.name : "(none)");
+            uc.log = 'progress: {0} {1}\n'.format(uc.progressPercentage, fname) + uc.log;
+        })
+        .success(function (data, status, headers, config) 
+        {
             uc.progressPercentage="";
-            uc.uploadUrl="";
-            uc.log="";
-            Upload.upload({ url: 'api/upload.php', fields: uc.form, file: file })
-            .progress(function (evt) 
-            {
-                uc.progressPercentage = parseInt(100.0 * evt.loaded / evt.total) + '%';
-                if(!uc.showDebug) return;
+            uc.uploadUrl = data.uploadUrl;
+            uc.form.upload_id = data.upload_id;
+            uc.parseDate(data.dateTaken);
+            uc.message=data.message;
+            //TODO: message ng-class depending on data.success
+            if(data.description)
+                uc.form.caption = data.description;
+            if(!uc.showDebug) return;
 
-                var fname = (evt.config && evt.config.file? evt.config.file.name : "(none)");
-                uc.log = 'progress: {0} {1}\n'.format(uc.progressPercentage, fname) + uc.log;
-            })
-            .success(function (data, status, headers, config) 
-            {
-                uc.progressPercentage="";
-                uc.uploadUrl = data.uploadUrl;
-                uc.form.upload_id = data.upload_id;
-                uc.parseDate(data.dateTaken);
-                uc.message=data.message;
-                //TODO: message ng-class depending on data.success
-                if(data.description)
-                    uc.form.caption = data.description;
-                if(!uc.showDebug) return;
-
-                var dataLog = data;
-                if(angular.isObject(data))
-                    dataLog = angular.toJson(data, true);
-                var fname = (config.file ? config.file.name : "(none)");
-                uc.log = 'uploaded file: {0}, status: {1}, Response: {2}\n'.format(fname, status, dataLog) + uc.log;
-            });
-        }
+            var dataLog = data;
+            if(angular.isObject(data))
+                dataLog = angular.toJson(data, true);
+            var fname = (config.file ? config.file.name : "(none)");
+            uc.log = 'uploaded file: {0}, status: {1}, Response: {2}\n'.format(fname, status, dataLog) + uc.log;
+        });
     };
 
     uc.parseDate = function(dt)

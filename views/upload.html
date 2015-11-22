@@ -6,8 +6,8 @@
           <img id="thumbnail" ng-src="{{uc.uploadUrl}}" ng-show="uc.uploadUrl"/> 
         </label> 
     </div>
-       <input type="file" id="inputFiles" ngf-select ng-model="uc.file" name="file" ngf-multiple="false" 
-        accept="image/*" required ngf-change="uc.upload([uc.file])" style="width: 0px; height: 0px; " />
+       <input type="file" id="inputFiles" ngf-select ng-model="uc.files" name="file" ngf-multiple="true" 
+        accept="image/*" required ngf-change="uc.upload()" style="width: 0px; height: 0px; " />
 
     <div class="col-md-6 col-sm-6">
       <label for="inputDate">Date:</label> 
