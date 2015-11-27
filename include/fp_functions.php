@@ -181,7 +181,7 @@ function selectMeal($date)
     $mealId = 0;
     $list = getConfig("dropdown.meal");
     foreach($list as $mealId => $meal)
-        if(!$meal["start"] || $hour >= $meal["start"] && $hour < $meal["end"]) 
+        if(!isset($meal["start"]) || $hour >= $meal["start"] && $hour < $meal["end"]) 
             break;
     return $list[$mealId]["name"];
 };
@@ -262,8 +262,10 @@ function getIptcDate($exif)
     if(!$date = arrayGet($exif, "IPTC.CreationDate")) 
         return "";
 
-    $date .= " " . arrayGet($exif, "IPTC.CreationTime");
-//20100907 232516 => 2010-09-07 23:25:16
+    $time = arrayGet($exif, "IPTC.CreationTime");
+    $time = substringBefore($time, "-");
+    $date .= " $time";
+//20100907 232516 => 2010-09-07 23:25:16-0700
     $date = strInsert($date, "-", 4);
     $date = strInsert($date, "-", 7);
     $date = strInsert($date, ":", 13);

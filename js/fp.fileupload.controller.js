@@ -55,6 +55,7 @@ function ($scope, Upload, $window, $state, $timeout, ProfileService)
         uc.resetLog();
         if(isEmpty(uc.files)) return false;
 
+        delete uc.form.upload_id;
         if(!angular.isArray(uc.files))
             return uc.uploadFile(uc.files);
 
