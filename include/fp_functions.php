@@ -91,6 +91,7 @@ function processUpload($file, $username=null)
     $dataRoot = getConfig("upload._diskPath");
     $dataRootUrl = getConfig("upload.baseUrl");
 
+    createDir($dataRoot, $username);
     $uploadDir  = combine($dataRoot, $username);
     $uploadedFile = combine($dataRoot, $username, $filename);
     $uploadUrl = combine($dataRootUrl, $username, $filename);
