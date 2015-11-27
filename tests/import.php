@@ -32,7 +32,7 @@ function importUsers($filename)
 {
 	if(!$filename) return;
 	//$txt = readTextFile($filename);
-	$data = readCsvTableFile($filename, 0, true);
+	$data = readCsvTableFile($filename, false, true);
 	return $data;
 }
 

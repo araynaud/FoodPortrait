@@ -114,33 +114,42 @@ ngFileUpload.service('Upload', ['$http', '$q', '$timeout', function ($http, $q, 
     return promise;
   }
 
-  this.upload = function (config) {
-    function addFieldToFormData(formData, val, key) {
-      if (val !== undefined) {
-        if (angular.isDate(val)) {
-          val = val.toISOString();
-        }
-        if (angular.isString(val)) {
+  this.upload = function (config) 
+  {
+    function addFieldToFormData(formData, val, key) 
+    {
+        if (val === undefined) return;
+
+        if (angular.isDate(val))
+          try{
+            val = val.toISOString();
+          }
+          catch(ex)
+          {
+            console.log(ex);
+          }
+
+        if (angular.isString(val))
           formData.append(key, val);
-        } else if (config.sendFieldsAs === 'form') {
-          if (angular.isObject(val)) {
-            for (var k in val) {
-              if (val.hasOwnProperty(k)) {
+        else if (config.sendFieldsAs === 'form') 
+        {
+          if (angular.isObject(val))
+          {
+            for (var k in val)
+              if (val.hasOwnProperty(k))
                 addFieldToFormData(formData, val[k], key + '[' + k + ']');
-              }
-            }
-          } else {
-            formData.append(key, val);
           }
-        } else {
+          else
+            formData.append(key, val);
+        } 
+        else 
+        {
           val = angular.isString(val) ? val : JSON.stringify(val);
-          if (config.sendFieldsAs === 'json-blob') {
+          if (config.sendFieldsAs === 'json-blob')
             formData.append(key, new Blob([val], {type: 'application/json'}));
-          } else {
+          else
             formData.append(key, val);
-          }
         }
-      }
     }
 
     config.headers = config.headers || {};

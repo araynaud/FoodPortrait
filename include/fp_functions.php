@@ -28,6 +28,15 @@ function getJsonPostData()
     return $postdata;
 }
 
+function errorMessage($msg)
+{
+    global $response;
+    $response["post"] = $_POST;
+    $response["message"] = $msg;
+    $response["time"] = getTimer(true);
+    die(jsValue($response, true));
+}
+
 function hasProfile($db, $username)
 {
     return $db->exists(array("table" => "user_answer", "username" => $username));
@@ -54,30 +63,128 @@ function saveAnswers($db, $username, $user_answers)
     return $result;
 }
 
-//step 1: insert record based on image EXIF metadata
-//step 2: update record based on form data
-function saveUploadData($db, $metadata)
+//process uploaded file
+function processUpload($file, $username=null)
 {
-    //TODO: use remap between exif data and db row?
-    if(isset($metadata["upload_id"]))
-        $data = $metadata;
-    else
+    if(!$username)
+        $username = fpCurrentUsername();
+
+    $tmpFile = $file["tmp_name"];
+    $mimeType = $file["type"];
+    $filename = utf8_decode($file["name"]);
+    $filename = cleanupFilename($filename);
+
+    $getcwd=getcwd();
+    $freeSpace=disk_free_space("/");
+
+    $uploaded = is_uploaded_file($tmpFile);
+    $message="OK";
+    if(!$uploaded)
+        return errorMessage("Uploaded file not found.");
+    //verify file type
+    if(!startsWith($mimeType, "image"))
+        return errorMessage("Uploaded file $filename is not an image. ($mimeType)");
+
+    //cleanup file name
+    $filename = cleanupFilename($filename);
+    //move file to destination dir
+    $dataRoot = getConfig("upload._diskPath");
+    $dataRootUrl = getConfig("upload.baseUrl");
+
+    $uploadDir  = combine($dataRoot, $username);
+    $uploadedFile = combine($dataRoot, $username, $filename);
+    $uploadUrl = combine($dataRootUrl, $username, $filename);
+    $filesize = filesize($tmpFile);
+    $success = move_uploaded_file($tmpFile, $uploadedFile);
+    debug("move to $uploadedFile", $success);
+    if(!$success)
+        return errorMessage("Cannot move file into target dir.");
+
+    //save exif data
+    $message =  "File uploaded.";
+    $exif = getImageMetadata($uploadedFile);
+    $dateTaken = getExifDateTaken($filename, $exif);
+
+    if(!$dateTaken)     $dateTaken = getIptcDate($exif);
+    //if(!$dateTaken)   $dateTaken = getFileDate($filename);
+
+    $description = arrayGetCoalesce($exif, "ImageDescription", "IPTC.Caption");
+    $description = trim($description);
+
+    writeCsvFile("$uploadedFile.exif.txt", $exif);
+    //writeTextFile("$uploadedFile.exif.js", jsValue($exif));
+
+    //resize images and keep hd version
+    $sizes = getConfig("thumbnails.sizes");
+    $resized = resizeMultiple($uploadDir, $filename, $sizes);
+    $keep = getConfig("thumbnails.keep");
+    if($keep)
     {
-        $data = array();
-        $data["filename"] = arrayGet($metadata, "FileName");
-        $data["image_date_taken"] =  getExifDateTaken(null, $metadata);
-        $data["image_width"] =  arrayGet($metadata, "ExifImageWidth");
-        $data["image_height"] = arrayGet($metadata,"ExifImageLength");
-        $data["caption"] = arrayGetCoalesce($metadata, "ImageDescription", "IPTC.Caption");
-        $data["meal"] = arrayGet($metadata, "meal");
-        $data["course"] = arrayGet($metadata, "course");
-        $data["mood"] = arrayGet($metadata, "mood");
+        moveFile("$uploadDir/.$keep", $filename, $uploadDir);
+        rmdir("$uploadDir/.$keep");
+        unset($resized[$keep]);
     }
+
+    $vars = get_defined_vars();
+    $result = array();
+//    $exif["meal"] = selectMeal($dateTaken);
+    $result["_exif"] = $exif;
+    return addVarsToArray($result, "success filename uploadUrl filesize mimeType dateTaken description", $vars);
+}
+
+
+$dataMap = array("FileName" => "filename", 
+         "ExifImageWidth"   => "image_width", 
+         "ExifImageLength"  => "image_height",
+         "ImageDescription" => "caption", 
+         "IPTC.Caption"     => "caption", 
+         "meal"             => "meal",
+         "course"           => "course",
+         "mood"             => "mood");
+
+function saveUploadData($db, $metadata)
+{   
+    global $dataMap, $fpConfig;
+
+    $dbConnected = ($db != NULL);
+    if(!$dbConnected)
+        $db = new SqlManager($fpConfig);
+
+    if($db->offline) return -1;
+
+    //TODO: use remap between exif data and db row?
+    //step 1: insert record based on image EXIF metadata
+    if(!isset($metadata["upload_id"]))
+    {
+        $data = arrayRemap($metadata, $dataMap);
+        $data["image_date_taken"] =  getExifDateTaken(null, $metadata);
+        $data["meal"] = selectMeal($data["image_date_taken"]);
+    }
+    else //step 2: update record based on form data
+        $data = $metadata;
+
     $data["username"] = fpCurrentUsername();
     $data["table"] = "user_upload";
     $result = $db->saveRow($data);
+
+    if(!$dbConnected)
+        $db->disconnect();
+
     return $result;
 }
+
+//select meal based on photo time
+function selectMeal($date)
+{
+    if(!$date) return;
+    $hour = substringBetween($date, " ", ":");
+    $mealId = 0;
+    $list = getConfig("dropdown.meal");
+    foreach($list as $mealId => $meal)
+        if(!$meal["start"] || $hour >= $meal["start"] && $hour < $meal["end"]) 
+            break;
+    return $list[$mealId]["name"];
+};
 
 //uploaded
 function getImagePath($u)
@@ -163,4 +270,6 @@ function getIptcDate($exif)
     $date = strInsert($date, ":", 16);
     return $date;
 }
+
+
 ?>

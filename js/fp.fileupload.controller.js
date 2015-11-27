@@ -7,33 +7,37 @@ angular.module('fpControllers')
 function ($scope, Upload, $window, $state, $timeout, ProfileService)
 {
     var uc = this;
+    $window.UploadController = this;
     if(!ProfileService.user && !ProfileService.isOffline())
         $state.go('home');
 
-    uc.showDebug = valueIfDefined("fpConfig.debug.angular");
-    this.scope = $scope;
-    $window.UploadController = this;
-    this.state = $state;
-    uc.fpConfig = $window.fpConfig;
+    uc.init = function()
+    {
+        uc.showDebug = valueIfDefined("fpConfig.debug.angular");
+        uc.queued = true;
+        this.scope = $scope;
+        this.state = $state;
+        uc.fpConfig = $window.fpConfig;
+        uc.logReverse = false;
+        uc.form = {};
+        uc.form.shared_with=1;
+        uc.resetLog();
 
-    uc.form = {};
-    uc.form.shared_with=1;
-    $scope.log = '';
+    //date picker options
+        uc.datepickerOpen=false;
+        uc.dateFormat = 'MMMM dd, yyyy';
+        uc.dateOptions = { formatYear: 'yy', startingDay: 1 };
+        uc.today = new Date();
+        uc.pickDate = function() { uc.datepickerOpen = true; };
+        uc.setToday = function() { return uc.form.image_date_taken = uc.today; };
+        uc.setToday();
+    // end date picker options
 
-//date picker options
-    uc.datepickerOpen=false;
-    uc.dateFormat = 'MMMM dd, yyyy';
-    uc.dateOptions = { formatYear: 'yy', startingDay: 1 };
-    uc.today = new Date();
-    uc.pickDate = function() { uc.datepickerOpen = true; };
-    uc.setToday = function() { return uc.form.image_date_taken = uc.today; };
-    uc.setToday();
-// end date picker options
+        uc.meals = uc.fpConfig.dropdown.meal.distinct("name");
+        uc.meals.byName = uc.fpConfig.dropdown.meal.indexBy("name");
+    };
 
-    uc.meals = uc.fpConfig.dropdown.meal.distinct("name");
-    uc.meals.byName = uc.fpConfig.dropdown.meal.indexBy("name");
-
-    uc.validate = function(uploadForm)
+    uc.validate = function()
     {
         return $scope.uploadForm.file.$invalid
         || $scope.uploadForm.image_date_taken.$invalid
@@ -47,20 +51,24 @@ function ($scope, Upload, $window, $state, $timeout, ProfileService)
     //return file metadata and upload id to form
     uc.upload = function()
     {
-        if(!uc.files) return false;
+        uc.index=0;
+        uc.resetLog();
+        if(isEmpty(uc.files)) return false;
 
         if(!angular.isArray(uc.files))
             return uc.uploadFile(uc.files);
+
+        if(uc.queued)
+            return uc.uploadFile(uc.files[0]);
 
         for(var i = 0; i < uc.files.length; i++) 
             uc.uploadFile(uc.files[i]);
     };
 
-    uc.uploadFile = function (file) 
+    uc.uploadFile = function(file) 
     {
         uc.progressPercentage="";
         uc.uploadUrl="";
-        uc.log="";
         Upload.upload({ url: 'api/upload.php', fields: uc.form, file: file })
         .progress(function (evt) 
         {
@@ -68,26 +76,64 @@ function ($scope, Upload, $window, $state, $timeout, ProfileService)
             if(!uc.showDebug) return;
 
             var fname = (evt.config && evt.config.file? evt.config.file.name : "(none)");
-            uc.log = 'progress: {0} {1}\n'.format(uc.progressPercentage, fname) + uc.log;
+            uc.addLog('progress: {0} {1}'.format(uc.progressPercentage, fname));
         })
         .success(function (data, status, headers, config) 
         {
             uc.progressPercentage="";
-            uc.uploadUrl = data.uploadUrl;
+//            uc.uploadUrl = data.uploadUrl;
+            uc.uploadUrl = uc.getImageUrl(data, ".tn");
             uc.form.upload_id = data.upload_id;
             uc.parseDate(data.dateTaken);
             uc.message=data.message;
             //TODO: message ng-class depending on data.success
             if(data.description)
                 uc.form.caption = data.description;
-            if(!uc.showDebug) return;
 
-            var dataLog = data;
-            if(angular.isObject(data))
-                dataLog = angular.toJson(data, true);
-            var fname = (config.file ? config.file.name : "(none)");
-            uc.log = 'uploaded file: {0}, status: {1}, Response: {2}\n'.format(fname, status, dataLog) + uc.log;
+            if(uc.showDebug)
+            {
+                var dataLog = data;
+                if(angular.isObject(data))
+                    dataLog = angular.toJson(data, true);
+                var fname = (file ? file.name : "(none)");
+                uc.addLog('uploaded file: {0}, status: {1}, Response: {2}'.format(fname, status, dataLog));
+            }
+
+            if(uc.queued)
+                uc.uploadNextFile();
         });
+    };
+
+    uc.getImageUrl = function (data, subdir)
+    {
+        return String.combine(fpConfig.upload.baseUrl, ProfileService.user.username, subdir, data.filename);
+    };
+
+    uc.resetLog = function (message)
+    {
+        return uc.log = "";
+    };
+
+    uc.addLog = function (message, append)
+    {
+        if(!uc.showDebug) return;
+        if(!message) message = "";
+        if(uc.logReverse)
+            uc.log = message + "\n" + uc.log;
+        else
+            uc.log = uc.log + "\n" + message;
+        return uc.log;
+    };
+
+    uc.uploadNextFile = function()
+    {
+        uc.index++;
+        if(isEmpty(uc.files) || uc.index >= uc.files.length) return;
+        var file = uc.files[uc.index];
+        uc.addLog();
+        uc.addLog("uploadNextFile {0}/{1}: {2} ".format(uc.index+1, uc.files.length, file.name));
+        delete uc.form.upload_id;
+        uc.uploadFile(file);
     };
 
     uc.parseDate = function(dt)
@@ -98,7 +144,7 @@ function ($scope, Upload, $window, $state, $timeout, ProfileService)
         uc.form.image_date_taken = new Date(uc.dateTaken);
         uc.selectMeal(uc.form.image_date_taken);
         return uc.form.image_date_taken;
-    }
+    };
 
     //select meal based on photo time
     uc.selectMeal = function(dt)
@@ -118,7 +164,7 @@ function ($scope, Upload, $window, $state, $timeout, ProfileService)
         var mealId = uc.form.meal; 
         if(!mealId) return [];
         return uc.meals.byName[mealId].courses || [];
-    }
+    };
 
     //post details
     //update db record
@@ -136,9 +182,9 @@ function ($scope, Upload, $window, $state, $timeout, ProfileService)
             var dataLog = data;
             if(angular.isObject(data))
                 dataLog = angular.toJson(data, true);
-            uc.log = dataLog;
+            uc.addLog(dataLog);
         });
-    }
+    };
 
     uc.returnToMain = function(delay)
     {
@@ -155,4 +201,5 @@ function ($scope, Upload, $window, $state, $timeout, ProfileService)
         uc.returnToMain();
     };
 
+    uc.init();
 }]);
