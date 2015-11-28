@@ -23,6 +23,11 @@ angular.module('app').directive('imageGrid', function ()
             vm.baseUrl = valueIfDefined("fpConfig.upload.baseUrl");
             vm.baseServer = valueIfDefined("fpConfig.upload.server");
             if(!vm.options.borderColor) vm.options.borderColor = 'black';
+
+            vm.thumbnails = valueIfDefined("fpConfig.thumbnails");
+            if(vm.thumbnails.keep)
+                delete vm.thumbnails.sizes[vm.thumbnails.keep];
+            vm.tnsizes = Object.toArray(vm.thumbnails.sizes);
         
             vm.resizeInterval(400, 800);
 
@@ -58,15 +63,29 @@ angular.module('app').directive('imageGrid', function ()
             return classes;
         }
 
-        vm.imageStyle = function(im, subdir)
+
+//TODO: use thumbnail based on vm.width / height
+        vm.imageStyle = function(im)
         {
             if(!im) return null;
-            var bgImage = "url('{0}')".format(vm.imageUrl(im,subdir));
+            var bgImage = "url('{0}')".format(vm.imageUrl(im));
             return { "background-image": bgImage};
+        };
+
+        //get first size larger than vm.maxStretch
+        vm.selectImageSize = function()
+        {
+            var tn = "";
+            var maxSize = Math.min(vm.width, vm.height);
+            for(var i=0; i<vm.tnsizes.length; i++)
+                if(maxSize <= vm.tnsizes[i].value)
+                    tn = "." + vm.tnsizes[i].key;
+            return tn;
         };
 
         vm.imageUrl = function(im, subdir)
         {
+            subdir = valueOrDefault(subdir, vm.subdir);
             var url = String.combine(vm.baseUrl, im.username, subdir, im.filename);
             if(!im.exists && vm.baseServer) url = vm.baseServer + url;
             return url;
@@ -186,6 +205,8 @@ angular.module('app').directive('imageGrid', function ()
 
             vm.width = vm.imageWidth();
             vm.height = vm.imageHeight();
+            vm.subdir = vm.selectImageSize()
+
             if(!vm.options.borderColor) 
                 vm.options.borderColor = 'black';
             if(vm.options.border)
