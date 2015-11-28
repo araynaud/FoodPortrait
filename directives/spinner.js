@@ -12,7 +12,6 @@ angular.module('app').directive('spinner', function ()
 
             vm.value = valueOrDefault(vm.value, 0);
             vm.step = valueOrDefault(vm.step, 1);
-            vm.isMobile = true; //valueIfDefined("fpConfig.isMobile");
             vm.isMobile = ProfileService.isMobile();
 
             vm.addValue =  function (incr)

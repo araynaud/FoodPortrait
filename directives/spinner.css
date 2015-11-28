@@ -1,3 +1,9 @@
+.spinner-wrapper
+{
+	margin-left: 10px;
+	white-space: nowrap;
+}
+
 .spinner
 {
     font-weight: bold;
@@ -8,7 +14,7 @@
 }
 
 .spinner .glyphicon-minus-sign { color: red; }
-.spinner .glyphicon-plus-sign { color: green; }
+.spinner .glyphicon-plus-sign  { color: green; }
 .spinner button.glyphicon 
 {
 	background-color: inherit;

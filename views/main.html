@@ -84,13 +84,13 @@ My Meals: view latest for this user
     <span class="form-signin-heading">{{mc.title}}</span>
 
     <span ng-if="mc.showOptions">
-        <spinner label="'columns:'" value="mc.options.columns"  min="1" max="10" /> 
-        <spinner label="'rows:'" value="mc.options.rows"  min="1" max="10" /> 
+        <spinner label="'columns:'" value="mc.options.columns"  min="1" max="8" loop="true"/> 
+        <spinner label="'rows:'" value="mc.options.rows"  min="1" max="8" loop="true"/> 
         <spinner label="'ratio:'"  value="mc.options.ratio"    min="0.5" max="4" step="0.05" loop="true" /> 
         <spinner label="'margin:'" value="mc.options.margin"   min="-1" max="50" loop="true" /> 
         <spinner label="'border:'" value="mc.options.border"   min="0"  max="50" loop="true" /> 
-        shadow:  <input type="checkbox" ng-model="mc.options.shadow" /> 
-        debug:   <input type="checkbox" ng-model="mc.showDebug" /> 
+        &nbsp;<input type="checkbox" ng-model="mc.options.shadow" /> shadow
+        &nbsp;<input type="checkbox" ng-model="mc.showDebug" /> debug
     </span>
    <div ng-if="mc.showDebug">{{mc.options | toJson:true}}</div>
    <div ng-if="mc.showDebug">{{mc.users | toJson:true }}</div>

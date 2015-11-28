@@ -1,7 +1,9 @@
-{{vm.label}}
-<input type="number" ng-if="!vm.isMobile" ng-model="vm.value" min="vm.min" max="vm.max" step="vm.step" /> 
-<span class="spinner" ng-if="vm.isMobile">
-    <button class="glyphicon glyphicon-minus-sign" title="grid options" ng-click="vm.addValue(-1)"></button> 
-    {{vm.value}}
-    <button class="glyphicon glyphicon-plus-sign" title="grid options" ng-click="vm.addValue(1)"></button>
+<span class="spinner-wrapper">
+	{{vm.label}}
+	<input type="number" ng-if="!vm.isMobile" ng-model="vm.value" min="vm.min" max="vm.max" step="vm.step" /> 
+	<span class="spinner" ng-if="vm.isMobile">
+	    <button class="glyphicon glyphicon-minus-sign" title="grid options" ng-click="vm.addValue(-1)"></button> 
+	    {{vm.value}}
+	    <button class="glyphicon glyphicon-plus-sign" title="grid options" ng-click="vm.addValue(1)"></button>
+	</span>
 </span>
