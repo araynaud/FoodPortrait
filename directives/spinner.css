@@ -1,0 +1,18 @@
+.spinner
+{
+    font-weight: bold;
+    background-color: #EEE;
+    border: 1px solid grey;
+    padding: 3px;
+    border-radius: 20px;
+}
+
+.spinner .glyphicon-minus-sign { color: red; }
+.spinner .glyphicon-plus-sign { color: green; }
+.spinner button.glyphicon 
+{
+	background-color: inherit;
+	padding: 0;
+	margin: 0;
+	border: none;
+}

@@ -33,6 +33,7 @@ $meta["og:url"] = currentUrlDir();
 <link rel="stylesheet" href="style/fileUpload.css">
 <link rel="stylesheet" href="directives/objectForm.css">
 <link rel="stylesheet" href="directives/imageGrid.css">
+<link rel="stylesheet" href="directives/spinner.css">
 
 <link rel="icon" href="images/icon128.png">
 <link rel="icon" sizes="192x192" href="images/icon192.png">
@@ -65,6 +66,7 @@ $meta["og:url"] = currentUrlDir();
 <script type="text/javascript" src="js/fp.fileupload.controller.js"></script>
 
 <script type="text/javascript" src="directives/objectForm.js"></script>
+<script type="text/javascript" src="directives/spinner.js"></script>
 <script type="text/javascript" src="directives/popover.js"></script>
 <script type="text/javascript" src="directives/imageGrid.js"></script>
 

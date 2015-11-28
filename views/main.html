@@ -80,29 +80,15 @@ My Meals: view latest for this user
 
   <div id="page-content-wrapper">
     <a class="btn btn-default menu-toggle glyphicon glyphicon-search" title="toggle filters" ng-click="mc.toggleSidebar()"></a>
-    <!--a class="btn btn-default glyphicon glyphicon-resize-horizontal" title="resize grid" ng-click="mc.resizeGrid()"></a>
-    <a class="btn btn-default glyphicon glyphicon-resize-vertical" title="resize grid" ng-click="mc.resizeGrid()"></a-->
     <a class="btn btn-default glyphicon glyphicon-menu-hamburger" title="grid options" ng-click="mc.showOptions=!mc.showOptions"></a>
     <span class="form-signin-heading">{{mc.title}}</span>
 
     <span ng-if="mc.showOptions">
-        columns: 
-        <input type="number"   ng-model="mc.options.columns"  min="1" max="10" ng-if="!mc.isMobile"/> 
-        <span ng-if="mc.isMobile">
-            <span class="glyphicon glyphicon-minus-sign" title="grid options" ng-click="mc.addOption('columns', -1)"></span> {{mc.options.columns}}
-            <span class="glyphicon glyphicon-plus-sign" title="grid options" ng-click="mc.addOption('columns',  1)"></span>
-        </span>
-
-        rows:    
-        <input type="number"   ng-model="mc.options.rows"     min="1" max="10" ng-if="!mc.isMobile" /> 
-        <span ng-if="mc.isMobile">
-            <span class="glyphicon glyphicon-minus-sign" title="grid options" ng-click="mc.addOption('rows', -1)"></span> {{mc.options.rows}}
-            <span class="glyphicon glyphicon-plus-sign" title="grid options" ng-click="mc.addOption('rows', 1)"></span>
-        </span>
-
-        ratio:   <input type="number"   ng-model="mc.options.ratio"    min="0.5" max="4" step="0.05"/> 
-        margin:  <input type="number"   ng-model="mc.options.margin"   min="-1" max="50"/> 
-        border:  <input type="number"   ng-model="mc.options.border"   min="0"  max="50"/> 
+        <spinner label="'columns:'" value="mc.options.columns"  min="1" max="10" /> 
+        <spinner label="'rows:'" value="mc.options.rows"  min="1" max="10" /> 
+        <spinner label="'ratio:'"  value="mc.options.ratio"    min="0.5" max="4" step="0.05" loop="true" /> 
+        <spinner label="'margin:'" value="mc.options.margin"   min="-1" max="50" loop="true" /> 
+        <spinner label="'border:'" value="mc.options.border"   min="0"  max="50" loop="true" /> 
         shadow:  <input type="checkbox" ng-model="mc.options.shadow" /> 
         debug:   <input type="checkbox" ng-model="mc.showDebug" /> 
     </span>
