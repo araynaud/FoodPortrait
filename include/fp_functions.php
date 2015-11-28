@@ -105,15 +105,15 @@ function processUpload($file, $username=null)
     $message =  "File uploaded.";
     $exif = getImageMetadata($uploadedFile);
     $dateTaken = getExifDateTaken($filename, $exif);
-
     if(!$dateTaken)     $dateTaken = getIptcDate($exif);
-    //if(!$dateTaken)   $dateTaken = getFileDate($filename);
+    if(!$dateTaken)   $dateTaken = getFileDate($filename);
+    $exif["dateTaken"]  = $dateTaken;
 
     $description = arrayGetCoalesce($exif, "ImageDescription", "IPTC.Caption");
     $description = trim($description);
 
-    writeCsvFile("$uploadedFile.exif.txt", $exif);
-    //writeTextFile("$uploadedFile.exif.js", jsValue($exif));
+    writeCsvFile("$uploadedFile.txt", $exif);
+    writeTextFile("$uploadedFile.js", jsValue($exif));
 
     //resize images and keep hd version
     $sizes = getConfig("thumbnails.sizes");
@@ -125,6 +125,8 @@ function processUpload($file, $username=null)
         rmdir("$uploadDir/.$keep");
         unset($resized[$keep]);
     }
+    if($dateTaken)
+        setFileDate($uploadedFile, $dateTaken);
 
     $vars = get_defined_vars();
     $result = array();
@@ -137,6 +139,7 @@ function processUpload($file, $username=null)
 $dataMap = array("FileName" => "filename", 
          "ExifImageWidth"   => "image_width", 
          "ExifImageLength"  => "image_height",
+         "dateTaken"        => "image_date_taken",
          "ImageDescription" => "caption", 
          "IPTC.Caption"     => "caption", 
          "meal"             => "meal",
@@ -158,7 +161,6 @@ function saveUploadData($db, $metadata)
     if(!isset($metadata["upload_id"]))
     {
         $data = arrayRemap($metadata, $dataMap);
-        $data["image_date_taken"] =  getExifDateTaken(null, $metadata);
         $data["meal"] = selectMeal($data["image_date_taken"]);
     }
     else //step 2: update record based on form data
