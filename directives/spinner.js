@@ -1,7 +1,7 @@
 angular.module('app').directive('spinner', function () 
 {
     return {
-        scope: { label: '=', value: '=', min: '=', max: '=', step: '=', loop: "=" },
+        scope: { label: '=', value: '=', min: '=', max: '=', step: '=', loop: "=", mobile: "=" },
         templateUrl: 'directives/spinner.html',
         controllerAs: 'vm',
         bindToController: true,
@@ -12,9 +12,18 @@ angular.module('app').directive('spinner', function ()
 
             vm.value = valueOrDefault(vm.value, 0);
             vm.step = valueOrDefault(vm.step, 1);
-            vm.isMobile = ProfileService.isMobile();
+            vm.isMobile = vm.mobile || ProfileService.isMobile();
 
-            vm.addValue =  function (incr)
+            vm.onChange = function()
+            {
+                if(vm.value > vm.max)
+                    vm.value = vm.loop ? vm.min : vm.max;
+                else if(vm.value < vm.min)
+                    vm.value = vm.loop ? vm.max : vm.min;
+                return vm.value;                
+            };
+
+            vm.addValue = function(incr)
             {
                 if(incr > 0 && vm.value == vm.max) 
                     return vm.value = vm.loop ? vm.min : vm.value;
@@ -24,7 +33,7 @@ angular.module('app').directive('spinner', function ()
                 vm.value += incr * vm.step;
                 vm.value = Math.roundDigits(vm.value, 2);
                 return vm.value;
-            }
+            };
         }         
     };
 });

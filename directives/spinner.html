@@ -1,6 +1,6 @@
 <span class="spinner-wrapper">
-	{{vm.label}}
-	<input type="number" ng-if="!vm.isMobile" ng-model="vm.value" min="vm.min" max="vm.max" step="vm.step" /> 
+	{{vm.label}} {{vm.min}}
+	<input type="number" class="spinner" ng-if="!vm.isMobile" ng-model="vm.value" min="{{vm.min - vm.step}}" max="{{vm.max + vm.step}}" step="{{vm.step}}" ng-change="vm.onChange()" /> {{vm.min}}-{{vm.max}}
 	<span class="spinner" ng-if="vm.isMobile">
 	    <button class="glyphicon glyphicon-minus-sign" title="grid options" ng-click="vm.addValue(-1)"></button> 
 	    {{vm.value}}

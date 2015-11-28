@@ -7,13 +7,13 @@
 .spinner
 {
     font-weight: bold;
-    background-color: #EEE;
+    background-color: #FBFBFB;
     border: 1px solid grey;
     padding: 3px;
     border-radius: 20px;
 }
 
-.spinner .glyphicon-minus-sign { color: red; }
+.spinner .glyphicon-minus-sign { color: orange; }
 .spinner .glyphicon-plus-sign  { color: green; }
 .spinner button.glyphicon 
 {
