@@ -9,8 +9,11 @@
     font-weight: bold;
     background-color: #FBFBFB;
     border: 1px solid grey;
-    padding: 3px;
+    padding-top: 3px;
+    padding-left: 3px;
+    padding-bottom: 2px;
     border-radius: 20px;
+    max-width: 50px;
 }
 
 .spinner .glyphicon-minus-sign { color: orange; }
@@ -21,4 +24,14 @@
 	padding: 0;
 	margin: 0;
 	border: none;
+}
+
+.noselect
+{
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }

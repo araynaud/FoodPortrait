@@ -1,9 +1,9 @@
 <span class="spinner-wrapper">
-	{{vm.label}} {{vm.min}}
-	<input type="number" class="spinner" ng-if="!vm.isMobile" ng-model="vm.value" min="{{vm.min - vm.step}}" max="{{vm.max + vm.step}}" step="{{vm.step}}" ng-change="vm.onChange()" /> {{vm.min}}-{{vm.max}}
-	<span class="spinner" ng-if="vm.isMobile">
-	    <button class="glyphicon glyphicon-minus-sign" title="grid options" ng-click="vm.addValue(-1)"></button> 
+	{{vm.label}}
+	<input type="number" class="spinner" ng-if="!vm.isMobile" ng-model="vm.value" min="{{vm.min - vm.step}}" max="{{vm.max + vm.step}}" step="{{vm.step}}" ng-change="vm.onChange()" />
+	<span class="spinner noselect" ng-if="vm.isMobile" title="{{vm.min}} - {{vm.max}}">
+	    <button class="glyphicon glyphicon-minus-sign" ng-mousedown="vm.addValue(-1)"></button>
 	    {{vm.value}}
-	    <button class="glyphicon glyphicon-plus-sign" title="grid options" ng-click="vm.addValue(1)"></button>
+	    <button class="glyphicon glyphicon-plus-sign" ng-mousedown="vm.addValue(1)"></button>
 	</span>
 </span>

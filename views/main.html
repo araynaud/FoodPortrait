@@ -84,7 +84,8 @@ My Meals: view latest for this user
     <span class="form-signin-heading">{{mc.title}}</span>
 
     <spinner label="'columns:'" value="mc.options.columns"  min="1" max="8" loop="true" mobile="true"/> 
-    <spinner label="'rows:'" value="mc.options.rows"  min="1" max="8" loop="true" mobile=""/> 
+    <spinner label="'rows:'" value="mc.options.rows"  min="1" max="8" loop="true" mobile="true"/> 
+    &nbsp;
     <span ng-if="mc.showOptions">
         <spinner label="'ratio:'"  value="mc.options.ratio"    min="0.5" max="4" step="0.05" loop="true" mobile="true" /> 
         <spinner label="'margin:'" value="mc.options.margin"   min="-1" max="50" loop="true" mobile="true"/> 
