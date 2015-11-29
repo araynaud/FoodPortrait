@@ -42,8 +42,7 @@ function ($scope, Upload, $window, $state, $timeout, ProfileService)
         return $scope.uploadForm.file.$invalid
         || $scope.uploadForm.image_date_taken.$invalid
         || $scope.uploadForm.caption.$invalid
-        || $scope.uploadForm.meal.$invalid
-        || $scope.uploadForm.shared_with.$invalid;
+        || $scope.uploadForm.meal.$invalid;
     };
 
     //post file
