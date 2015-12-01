@@ -81,7 +81,6 @@ function ($scope, Upload, $window, $state, $timeout, ProfileService)
         .success(function (data, status, headers, config) 
         {
             uc.progressPercentage="";
-//            uc.uploadUrl = data.uploadUrl;
             uc.uploadUrl = uc.getImageUrl(data, ".tn");
             uc.form.upload_id = data.upload_id;
             uc.parseDate(data.dateTaken);

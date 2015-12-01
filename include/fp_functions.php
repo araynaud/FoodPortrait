@@ -64,6 +64,7 @@ function saveAnswers($db, $username, $user_answers)
 }
 
 //process uploaded file
+//store in destination
 function processUpload($file, $username=null)
 {
     if(!$username)
@@ -85,8 +86,6 @@ function processUpload($file, $username=null)
     if(!startsWith($mimeType, "image"))
         return errorMessage("Uploaded file $filename is not an image. ($mimeType)");
 
-    //cleanup file name
-    $filename = cleanupFilename($filename);
     //move file to destination dir
     $dataRoot = getConfig("upload._diskPath");
     $dataRootUrl = getConfig("upload.baseUrl");
@@ -94,19 +93,25 @@ function processUpload($file, $username=null)
     createDir($dataRoot, $username);
     $uploadDir  = combine($dataRoot, $username);
     $uploadedFile = combine($dataRoot, $username, $filename);
-    $uploadUrl = combine($dataRootUrl, $username, $filename);
     $filesize = filesize($tmpFile);
     $success = move_uploaded_file($tmpFile, $uploadedFile);
     debug("move to $uploadedFile", $success);
     if(!$success)
         return errorMessage("Cannot move file into target dir.");
 
+    return processImage($uploadDir, $filename);
+}
+
+//process image in data folder: extract metadata, resize
+function processImage($uploadDir, $filename)
+{
+    $uploadedFile = combine($uploadDir, $filename);
     //save exif data
     $message =  "File uploaded.";
     $exif = getImageMetadata($uploadedFile);
-    $dateTaken = getExifDateTaken($filename, $exif);
+    $dateTaken = getExifDateTaken($uploadedFile, $exif);
     if(!$dateTaken)     $dateTaken = getIptcDate($exif);
-    if(!$dateTaken)   $dateTaken = getFileDate($filename);
+    if(!$dateTaken)   $dateTaken = getFileDate($uploadedFile);
     $exif["dateTaken"]  = $dateTaken;
 
     $description = arrayGetCoalesce($exif, "ImageDescription", "IPTC.Caption");
@@ -130,9 +135,10 @@ function processUpload($file, $username=null)
 
     $vars = get_defined_vars();
     $result = array();
-//    $exif["meal"] = selectMeal($dateTaken);
+    $exif["meal"] = selectMeal($dateTaken);
     $result["_exif"] = $exif;
-    return addVarsToArray($result, "success filename uploadUrl filesize mimeType dateTaken description", $vars);
+    $result["success"] = true;
+    return addVarsToArray($result, "filename filesize mimeType dateTaken description", $vars);
 }
 
 
@@ -161,7 +167,7 @@ function saveUploadData($db, $metadata)
     if(!isset($metadata["upload_id"]))
     {
         $data = arrayRemap($metadata, $dataMap);
-        $data["meal"] = selectMeal($data["image_date_taken"]);
+//        $data["meal"] = selectMeal($data["image_date_taken"]);
     }
     else //step 2: update record based on form data
         $data = $metadata;
