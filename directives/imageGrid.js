@@ -199,9 +199,9 @@ angular.module('app').directive('imageGrid', function ()
             vm.gridRatio = vm.options.ratio * vm.options.columns / vm.options.rows;
             vm.fit = vm.availableRatio > vm.gridRatio ? "height" : "width";
             if(vm.fit == "height")
-                vm.gridWidth = vm.gridHeight * vm.gridRatio;
+                vm.gridWidth = Math.floor(vm.gridHeight * vm.gridRatio);
             else
-                vm.gridHeight = vm.gridWidth / vm.gridRatio;
+                vm.gridHeight = Math.floor(vm.gridWidth / vm.gridRatio);
 
             vm.width = vm.imageWidth();
             vm.height = vm.imageHeight();

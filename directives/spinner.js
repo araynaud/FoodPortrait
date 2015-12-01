@@ -1,4 +1,4 @@
-angular.module('app').directive('spinner', [ "$timeout", function ($timeout) 
+angular.module('app').directive('spinner', [ "$timeout", "ProfileService", function ($timeout, ProfileService) 
 {
     return {
         scope: { label: '=', value: '=', min: '=', max: '=', step: '=', loop: "=", mobile: "=" },
@@ -9,9 +9,13 @@ angular.module('app').directive('spinner', [ "$timeout", function ($timeout)
         {
             vm.element = el;
             vm.element.on("mouseup",    vm.cancelTimeout);
-            vm.element.on("mouseleave", vm.cancelTimeout);
-            vm.element.on("touchcancel", vm.cancelTimeout);
-//            vm.element.on("touchend", vm.cancelTimeout);
+            if(ProfileService.isMobile())
+            {
+                vm.element.on("touchcancel", vm.cancelTimeout);
+                vm.element.on("touchend",    vm.cancelTimeout);
+            }
+            else
+                vm.element.on("mouseleave",  vm.cancelTimeout);
         },
         controller: function ()
         {

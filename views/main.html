@@ -83,13 +83,13 @@ My Meals: view latest for this user
     <a class="btn btn-default glyphicon glyphicon-menu-hamburger" title="grid options" ng-click="mc.showOptions=!mc.showOptions"></a>
     <span class="form-signin-heading">{{mc.title}}</span>
 
-    <spinner label="'columns:'" value="mc.options.columns"  min="1" max="8" loop="true" mobile="true"/> 
-    <spinner label="'rows:'" value="mc.options.rows"  min="1" max="8" loop="true" mobile="true"/> 
+    <spinner label="'columns:'" value="mc.options.columns"  min="1" max="8" loop="true" mobile="true"></spinner> 
+    <spinner label="'rows:'" value="mc.options.rows"  min="1" max="8" loop="true" mobile="true"></spinner>
     &nbsp;
     <span ng-if="mc.showOptions">
-        <spinner label="'ratio:'"  value="mc.options.ratio"    min="0.5" max="4" step="0.05" loop="true" mobile="true" /> 
-        <spinner label="'margin:'" value="mc.options.margin"   min="-1" max="50" loop="true" mobile="true"/> 
-        <spinner label="'border:'" value="mc.options.border"   min="0"  max="10" loop="true" mobile="true"/> 
+        <spinner label="'margin:'" value="mc.options.margin"   min="-1" max="50" loop="true" mobile="true"></spinner>
+        <spinner label="'border:'" value="mc.options.border"   min="0"  max="10" loop="true" mobile="true"></spinner>
+        <spinner label="'ratio:'"  value="mc.options.ratio"    min="0.5" max="4" step="0.05" loop="true" mobile="true"></spinner>
         &nbsp;<input type="checkbox" ng-model="mc.options.shadow" /> shadow
         &nbsp;<input type="checkbox" ng-model="mc.showDebug" /> debug
     </span>

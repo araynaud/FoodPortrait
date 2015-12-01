@@ -13,7 +13,18 @@
     padding-left: 3px;
     padding-bottom: 2px;
     border-radius: 20px;
+}
+
+input.spinner
+{
     max-width: 50px;
+}
+
+.spinner .value.decimal
+{
+    display: inline-block;
+    width: 30px;
+    text-align: center;
 }
 
 .spinner .glyphicon-minus-sign { color: orange; }
