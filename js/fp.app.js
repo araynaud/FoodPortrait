@@ -12,7 +12,7 @@ app.config(function($stateProvider, $urlRouterProvider)
   $stateProvider
   	.state('home',    { url: "/",        templateUrl: 'views/about.html' })
     .state('main',    { url: "/main",    controller: 'MainController',   controllerAs: 'mc', templateUrl: 'views/main.html' })
-    .state('upload',  { url: "/upload",  controller: 'UploadController', controllerAs: 'uc', templateUrl: 'views/upload.html' })
+    .state('upload',  { url: "/upload/:uploadId",  controller: 'UploadController', controllerAs: 'uc', templateUrl: 'views/upload.html' })
   	.state('signin',  { url: "/signin",  controller: 'LoginController',  controllerAs: 'lc', templateUrl: "views/signin.html" })
   	.state('signup',  { url: "/signup",  controller: 'LoginController',  controllerAs: 'lc', templateUrl: "views/signup.html" })
   	.state('profile', { url: "/profile",

@@ -75,10 +75,15 @@ angular.module('fpServices', ['ngResource'])
         return deferred.promise;
     };
 
+    this.currentUsername = function()
+    {
+        return this.user ? this.user.username : null;
+    };
+
     this.userFullName = function()
     {
         if(!this.user) return "nobody";
-        return this.user.first_name + " " + this.user.last_name 
+        return this.user.first_name + " " + this.user.last_name;
     };
 
 //Profile form

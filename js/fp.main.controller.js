@@ -157,8 +157,9 @@ function ($window, $state, ProfileService, QueryService)
         mc.errorMessage);
     };
 
-    mc.searchMore = function()
+    mc.searchMore = function(value, oldValue)
     {
+        //if(value > oldValue)
         if(mc.searchResults.length < mc.options.rows * mc.options.columns)
             mc.search();
     };

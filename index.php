@@ -96,7 +96,7 @@ $meta["og:url"] = currentUrlDir();
         <ul class="nav navbar-nav">
           <li ng-class="{active: lc.stateIs('about')}" data-toggle="collapse" data-target=".mobile #navbar"><a href="#/about">About</a></li>
           <li ng-show="lc.loggedIn()" ng-class="{active: lc.stateIs('profile')}" data-toggle="collapse" data-target=".mobile #navbar"><a href="#/profile">Profile</a></li>
-          <li ng-show="lc.loggedIn()" ng-class="{active: lc.stateIs('upload')}"  data-toggle="collapse" data-target=".mobile #navbar"><a href="#/upload">Upload</a></li>
+          <li ng-show="lc.loggedIn()" ng-class="{active: lc.stateIs('upload')}"  data-toggle="collapse" data-target=".mobile #navbar"><a href="#/upload/">Upload</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
           <li ng-hide="lc.loggedIn()" ng-class="{active: lc.stateIs('signin')}" data-toggle="collapse" data-target=".mobile #navbar"><a href="#/signin">Log in</a></li>

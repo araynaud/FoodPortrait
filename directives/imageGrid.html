@@ -15,8 +15,10 @@
 <div class="imageGrid centered">
 	<div ng-repeat="im in vm.images" ng-if="$index < vm.options.rows * vm.options.columns"
 	    class="bgCenterCover cell" ng-class="vm.imageClasses(im)" ng-style="vm.imageStyle(im)"
-	    ng-click="vm.imageDetails(im)" icon0="info-sign" size0="16pt"
-	    fp-popover placement="{{vm.popoverPlacement($index, im)}}" pop-title="{{vm.imageTitle(im)}}" pop-content="{{vm.imageDescription(im)}}">
+	    ng-click0="vm.imageDetails(im)">
+	    <fp-popover icon0="info-sign" size0="16pt" placement0="{{vm.popoverPlacement($index, im)}}" pop-title="{{vm.imageTitle(im)}}" pop-content="{{vm.imageDescription(im)}}"></fp-popover>
+		    <i class="textOutline glyphicon glyphicon-edit" ng-if="vm.isMine(im)" ui-sref="upload({ uploadId: im.upload_id })"></i>
+
 	    	<div ng-if="vm.showDebug">{{$index}} {{im.colspan}}x{{im.rowspan}} {{vm.imageWidth(im.colspan)}} 
 	    		<br/>{{vm.imageTitle(im)}}
 			</div>

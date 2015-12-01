@@ -3,8 +3,8 @@
 // =========== File Upload Controller ===========
 // handles query and gallery display
 angular.module('fpControllers')
-.controller('UploadController', ['$scope', 'Upload', '$window', '$state', '$timeout', 'ProfileService',
-function ($scope, Upload, $window, $state, $timeout, ProfileService)
+.controller('UploadController', ['$scope', '$window', '$state', '$stateParams', '$timeout', 'Upload', 'ProfileService', 'QueryService',
+function ($scope, $window, $state, $stateParams, $timeout, Upload, ProfileService, QueryService)
 {
     var uc = this;
     $window.UploadController = this;
@@ -14,13 +14,17 @@ function ($scope, Upload, $window, $state, $timeout, ProfileService)
     uc.init = function()
     {
         uc.showDebug = valueIfDefined("fpConfig.debug.angular");
+        uc.baseUrl = valueIfDefined("fpConfig.upload.baseUrl");
+        uc.baseServer = valueIfDefined("fpConfig.upload.server");
+        uc.newUpload = !$stateParams.uploadId;
         uc.queued = true;
         this.scope = $scope;
         this.state = $state;
         uc.fpConfig = $window.fpConfig;
         uc.logReverse = false;
         uc.form = {};
-        uc.form.shared_with=1;
+        uc.loadData();
+        uc.form.shared_with = 1;
         uc.resetLog();
 
     //date picker options
@@ -37,10 +41,41 @@ function ($scope, Upload, $window, $state, $timeout, ProfileService)
         uc.meals.byName = uc.fpConfig.dropdown.meal.indexBy("name");
     };
 
+//load existing image info from DB
+    uc.loadData = function()
+    {
+        if(!$stateParams.uploadId) return;
+
+        var params = { upload_id: $stateParams.uploadId };
+        QueryService.loadQuery(params).then(function(response) 
+        {
+            if(isEmpty(response))
+            {
+                uc.errorMessage(response);
+                uc.returnToMain();
+            }
+
+            uc.form = response[0];
+            uc.imageUrl = uc.getImageUrl(uc.form, ".ss");
+
+            delete uc.form.exists; 
+            delete uc.form.searchText; 
+            uc.users = QueryService.users;
+        }, 
+        uc.errorMessage);
+    };
+
+    uc.errorMessage =  function (result)
+    {
+        uc.loading = false;
+        uc.status = "Error: No data returned";
+    };
+
     uc.validate = function()
     {
-        return $scope.uploadForm.file.$invalid
-        || $scope.uploadForm.image_date_taken.$invalid
+        return 
+//        $scope.uploadForm.file.$invalid && !$stateParams.uploadId //file required for new upload || 
+        $scope.uploadForm.image_date_taken.$invalid
         || $scope.uploadForm.caption.$invalid
         || $scope.uploadForm.meal.$invalid;
     };
@@ -81,6 +116,7 @@ function ($scope, Upload, $window, $state, $timeout, ProfileService)
         .success(function (data, status, headers, config) 
         {
             uc.progressPercentage="";
+            data.exists=true;
             uc.uploadUrl = uc.getImageUrl(data, ".tn");
             uc.form.upload_id = data.upload_id;
             uc.parseDate(data.dateTaken);
@@ -105,7 +141,9 @@ function ($scope, Upload, $window, $state, $timeout, ProfileService)
 
     uc.getImageUrl = function (data, subdir)
     {
-        return String.combine(fpConfig.upload.baseUrl, ProfileService.user.username, subdir, data.filename);
+        var url = String.combine(uc.baseUrl, ProfileService.user.username, subdir, data.filename);
+        if(!data.exists && uc.baseServer) url = uc.baseServer + url;
+        return url;
     };
 
     uc.resetLog = function (message)
@@ -174,7 +212,7 @@ function ($scope, Upload, $window, $state, $timeout, ProfileService)
         {
             uc.message=data.message;
             if(data.success)
-                uc.returnToMain(500);
+                uc.returnToMain();
 
             if(!uc.showDebug) return;
 

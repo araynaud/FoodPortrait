@@ -86,8 +86,8 @@ My Meals: view latest for this user
     <a class="btn btn-default glyphicon glyphicon-menu-hamburger" title="grid options" ng-click="mc.showOptions=!mc.showOptions"></a>
     <span class="form-signin-heading">{{mc.title}}</span>
 
-    <spinner label="'columns:'" value="mc.options.columns"  min="1" max="8" loop="true" mobile="true" hold="true"></spinner> 
-    <spinner label="'rows:'" value="mc.options.rows"  min="1" max="8" loop="true" mobile="true" hold="true"></spinner>
+    <spinner label="'columns:'" value="mc.options.columns"  min="1" max="8" loop="true" mobile="true" hold="true" change="mc.searchMore"></spinner> 
+    <spinner label="'rows:'"    value="mc.options.rows"     min="1" max="8" loop="true" mobile="true" hold="true" change="mc.searchMore"></spinner>
     &nbsp;
     <span ng-if="mc.showOptions">
         <spinner label="'margin:'" value="mc.options.margin"   min="-1" max="50" loop="true" mobile="true" hold="true"></spinner>

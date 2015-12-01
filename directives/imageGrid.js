@@ -5,7 +5,7 @@ angular.module('app').directive('imageGrid', function ()
     templateUrl: 'directives/imageGrid.html',
     controllerAs: 'vm',
     bindToController: true,
-    controller: function ($timeout)
+    controller: function ($timeout, $state)
     {
         var vm = this; 
         window.imageGrid = this;
@@ -82,6 +82,11 @@ angular.module('app').directive('imageGrid', function ()
             return tn;
         };
 
+        vm.isMine = function(im)
+        {
+            return im.username == ProfileService.currentUsername();
+        };
+
         vm.imageUrl = function(im, subdir)
         {
             subdir = valueOrDefault(subdir, vm.subdir);
@@ -124,6 +129,8 @@ angular.module('app').directive('imageGrid', function ()
 
         vm.imageDetails = function(im)
         {
+            if(im && im.upload_id)
+                $state.go('upload/' + im.upload_id);
         };
 
         vm.imageWidth = function(n)

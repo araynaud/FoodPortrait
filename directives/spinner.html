@@ -4,5 +4,5 @@
 	    <span class="value" ng-class="{decimal: vm.step < 1 }">{{vm.value}}</span>
 	    <button class="glyphicon glyphicon-plus-sign" ng-mousedown="vm.addValue(1)"></button>
 	</span>
-	<input type="number" class="spinner" ng-if="!vm.isMobile" ng-model="vm.value" min="{{vm.min - vm.step}}" max="{{vm.max + vm.step}}" step="{{vm.step}}" ng-change="vm.onChange()" />
+	<input type="number" class="spinner" ng-if="!vm.isMobile" ng-model="vm.value" min="{{vm.min - vm.step}}" max="{{vm.max + vm.step}}" step="{{vm.step}}" ng-change="vm.onInputChange()" />
 </span>
