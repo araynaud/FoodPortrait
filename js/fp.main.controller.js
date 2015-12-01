@@ -142,7 +142,7 @@ function ($window, $state, ProfileService, QueryService)
         if(mc.options.rows && mc.options.columns)
             params.limit = mc.options.rows * mc.options.columns;
         return params;
-    }
+    };
 
     mc.search = function()
     {
@@ -157,17 +157,30 @@ function ($window, $state, ProfileService, QueryService)
         mc.errorMessage);
     };
 
-  mc.errorMessage =  function (result)
-  {
-    mc.loading = false;
-    mc.status = "Error: No data returned";
-  };
+    mc.searchMore = function()
+    {
+        if(mc.searchResults.length < mc.options.rows * mc.options.columns)
+            mc.search();
+    };
 
-  mc.successMessage =  function (result)
-  {
-    mc.loading = false;
-    mc.status = result;
-  };
+    mc.clearSearch = function(refresh)
+    {
+        mc.filters = { };
+        if(refresh)
+            mc.search();
+    };
+
+    mc.errorMessage =  function (result)
+    {
+        mc.loading = false;
+        mc.status = "Error: No data returned";
+    };
+
+    mc.successMessage =  function (result)
+    {
+        mc.loading = false;
+        mc.status = result;
+    };
 
     mc.init();
 }]);

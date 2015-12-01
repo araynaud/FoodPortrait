@@ -1,13 +1,15 @@
 angular.module('app').directive('spinner', [ "$timeout", "ProfileService", function ($timeout, ProfileService) 
 {
     return {
-        scope: { label: '=', value: '=', min: '=', max: '=', step: '=', loop: "=", mobile: "=" },
+        scope: { label: "=", value: "=", min: "=", max: "=", step: "=", loop: "=", mobile: "=", hold: "=" },
         templateUrl: 'directives/spinner.html',
         controllerAs: 'vm',
         bindToController: true,
-        link: function (scope, el, attr, vm) 
+        link: function (scope, element, attr, vm) 
         {
-            vm.element = el;
+            vm.element = element;
+            if(!vm.element && !vm.hold) return;            
+
             vm.element.on("mouseup",    vm.cancelTimeout);
             if(ProfileService.isMobile())
             {
@@ -47,7 +49,8 @@ angular.module('app').directive('spinner', [ "$timeout", "ProfileService", funct
                     vm.value += incr * vm.step;
                     vm.value = Math.roundDigits(vm.value, 2);
                 }
-                timeout = $timeout( function () { vm.addValue(incr); } , 200);
+                if(vm.hold)
+                    timeout = $timeout( function () { vm.addValue(incr); } , 200);
                 return vm.value;
             };
 

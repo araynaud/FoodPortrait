@@ -61,10 +61,8 @@ angular.module('app').directive('imageGrid', function ()
             else if(im.rowspan) classes['rowspan'+ im.rowspan] = true;
             
             return classes;
-        }
+        };
 
-
-//TODO: use thumbnail based on vm.width / height
         vm.imageStyle = function(im)
         {
             if(!im) return null;
@@ -72,6 +70,7 @@ angular.module('app').directive('imageGrid', function ()
             return { "background-image": bgImage};
         };
 
+        //use the right thumbnail based on vm.width / height
         //get first size larger than vm.maxStretch
         vm.selectImageSize = function()
         {

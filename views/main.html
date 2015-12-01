@@ -17,6 +17,9 @@ My Meals: view latest for this user
         <button type="button" class="btn btn-default" ng-click="mc.search()">
           <i class="glyphicon glyphicon-search"></i>
         </button> 
+        <button type="button" class="btn btn-default" ng-click="mc.clearSearch(true)">
+          <i class="glyphicon glyphicon-remove-circle"></i>
+        </button> 
       </span>
     </div>
     <br/>
@@ -83,19 +86,19 @@ My Meals: view latest for this user
     <a class="btn btn-default glyphicon glyphicon-menu-hamburger" title="grid options" ng-click="mc.showOptions=!mc.showOptions"></a>
     <span class="form-signin-heading">{{mc.title}}</span>
 
-    <spinner label="'columns:'" value="mc.options.columns"  min="1" max="8" loop="true" mobile="true"></spinner> 
-    <spinner label="'rows:'" value="mc.options.rows"  min="1" max="8" loop="true" mobile="true"></spinner>
+    <spinner label="'columns:'" value="mc.options.columns"  min="1" max="8" loop="true" mobile="true" hold="true"></spinner> 
+    <spinner label="'rows:'" value="mc.options.rows"  min="1" max="8" loop="true" mobile="true" hold="true"></spinner>
     &nbsp;
     <span ng-if="mc.showOptions">
-        <spinner label="'margin:'" value="mc.options.margin"   min="-1" max="50" loop="true" mobile="true"></spinner>
-        <spinner label="'border:'" value="mc.options.border"   min="0"  max="10" loop="true" mobile="true"></spinner>
-        <spinner label="'ratio:'"  value="mc.options.ratio"    min="0.5" max="4" step="0.05" loop="true" mobile="true"></spinner>
+        <spinner label="'margin:'" value="mc.options.margin"   min="-1" max="50" loop="true" mobile="true" hold="true"></spinner>
+        <spinner label="'border:'" value="mc.options.border"   min="0"  max="10" loop="true" mobile="true" hold="true"></spinner>
+        <spinner label="'ratio:'"  value="mc.options.ratio"    min="0.5" max="4" loop="true" mobile="true" hold="true" step="0.05"></spinner>
         &nbsp;<input type="checkbox" ng-model="mc.options.shadow" /> shadow
         &nbsp;<input type="checkbox" ng-model="mc.showDebug" /> debug
     </span>
    <div ng-if="mc.showDebug">{{mc.options | toJson:true}}</div>
    <div ng-if="mc.showDebug">{{mc.users | toJson:true }}</div>
-   <image-grid images="mc.searchResults" options="mc.options" show-debug="mc.showDebug"/>
+   <image-grid main="mc" images="mc.searchResults" options="mc.options" show-debug="mc.showDebug"/>
   </div>
 
 </div>
