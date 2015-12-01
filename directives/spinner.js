@@ -10,6 +10,8 @@ angular.module('app').directive('spinner', [ "$timeout", function ($timeout)
             vm.element = el;
             vm.element.on("mouseup",    vm.cancelTimeout);
             vm.element.on("mouseleave", vm.cancelTimeout);
+            vm.element.on("touchcancel", vm.cancelTimeout);
+//            vm.element.on("touchend", vm.cancelTimeout);
         },
         controller: function ()
         {
