@@ -201,6 +201,7 @@ debug("selectWhere SQL: $sql", $params);
 		$result = $statement->get_result();
 debug("statement status", $status);		
 debug("statement result ", $statement->num_rows);		
+debug("statement affected_rows", $statement->affected_rows);		
 		if(!$status)
 		{
 			debug("SQL Error ". $this->mysqlConnection->errno, $this->mysqlConnection->error);
@@ -215,9 +216,8 @@ debug("statement result ", $statement->num_rows);
 		else
 			$rows = $status;
 
-debug("statement affected_rows", $statement->affected_rows);		
 		$statement->close();
-//debug("returning", $rows);
+debug("returning", $rows);
 	    return $rows;
 	}
 
@@ -295,9 +295,20 @@ debug("statement affected_rows", $statement->affected_rows);
 	{
 	    $rows = array();
 	    while($row = $result->fetch_assoc()) 
+	    {
+	    	SqlManager::setNullFields($row);
 	        $rows[] = $row;
+	    }
 		$result->free();
 	    return $rows;
+	}
+
+	private static function setNullFields(&$row)
+	{
+		foreach ($row as $key => &$value) 
+			if($value==="NULL") 
+				$value=NULL;
+		return $row;
 	}
 
 	//return rows as array of associative arrays
@@ -328,7 +339,7 @@ debug("update SQL: $sql ", $params);
 	public function delete($where)
 	{
 	    $sql = "DELETE FROM " . $where["table"] . $this->sqlWhere($where);
-//debug("delete SQL: $sql ", $where);
+debug("delete SQL: $sql ", $where);
 	    return $this->selectValue($sql, $where);
 	}
 

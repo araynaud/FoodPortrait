@@ -127,7 +127,7 @@ function processImage($uploadDir, $filename)
     if($keep)
     {
         moveFile("$uploadDir/.$keep", $filename, $uploadDir);
-        rmdir("$uploadDir/.$keep");
+        deleteDir("$uploadDir/.$keep");
         unset($resized[$keep]);
     }
     if($dateTaken)

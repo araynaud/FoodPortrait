@@ -107,7 +107,11 @@ function ($scope, $window, $state, $stateParams, $timeout, Upload, ProfileServic
         Upload.upload({ url: 'api/upload.php', fields: uc.form, file: file })
         .progress(function (evt) 
         {
-            uc.progressPercentage = parseInt(100.0 * evt.loaded / evt.total) + '%';
+            uc.progressPercentage="";
+            if(uc.files.length>1)
+                uc.progressPercentage = "File {0}/{1} ".format(uc.index+1, uc.files.length);
+
+            uc.progressPercentage += parseInt(100.0 * evt.loaded / evt.total) + '%';
             if(!uc.showDebug) return;
 
             var fname = (evt.config && evt.config.file? evt.config.file.name : "(none)");
@@ -125,14 +129,9 @@ function ($scope, $window, $state, $stateParams, $timeout, Upload, ProfileServic
             if(data.description)
                 uc.form.caption = data.description;
 
-            if(uc.showDebug)
-            {
-                var dataLog = data;
-                if(angular.isObject(data))
-                    dataLog = angular.toJson(data, true);
-                var fname = (file ? file.name : "(none)");
-                uc.addLog('uploaded file: {0}, status: {1}, Response: {2}'.format(fname, status, dataLog));
-            }
+            var fname = (file ? file.name : "(none)");
+            uc.addLog('uploaded file: {0}, status: {1}, Response:'.format(fname, status));
+            uc.addLog(data);
 
             if(uc.queued)
                 uc.uploadNextFile();
@@ -154,7 +153,12 @@ function ($scope, $window, $state, $stateParams, $timeout, Upload, ProfileServic
     uc.addLog = function (message, append)
     {
         if(!uc.showDebug) return;
-        if(!message) message = "";
+
+        if(!message)
+            message = "";
+        else if(angular.isObject(message))
+            message = angular.toJson(message, true);
+
         if(uc.logReverse)
             uc.log = message + "\n" + uc.log;
         else
@@ -213,15 +217,22 @@ function ($scope, $window, $state, $stateParams, $timeout, Upload, ProfileServic
             uc.message=data.message;
             if(data.success)
                 uc.returnToMain();
-
-            if(!uc.showDebug) return;
-
-            var dataLog = data;
-            if(angular.isObject(data))
-                dataLog = angular.toJson(data, true);
-            uc.addLog(dataLog);
+            uc.addLog(data);
         });
     };
+
+    uc.deleteFile = function () 
+    {
+        if(!uc.form.upload_id) return;
+        Upload.upload({ url: 'api/delete.php', fields: {upload_id: uc.form.upload_id} }).success(function (data, status, headers, config) 
+        {
+            uc.message=data.message;
+            if(data.success)
+                uc.returnToMain();
+            uc.addLog(data);
+        });
+    };
+
 
     uc.returnToMain = function(delay)
     {
