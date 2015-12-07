@@ -16,6 +16,8 @@ function ($scope, $window, $state, $stateParams, $timeout, Upload, ProfileServic
         uc.showDebug = valueIfDefined("fpConfig.debug.angular");
         uc.baseUrl = valueIfDefined("fpConfig.upload.baseUrl");
         uc.baseServer = valueIfDefined("fpConfig.upload.server");
+        uc.offline = ProfileService.isOffline();
+
         uc.newUpload = !$stateParams.uploadId;
         uc.queued = true;
         this.scope = $scope;
@@ -44,7 +46,7 @@ function ($scope, $window, $state, $stateParams, $timeout, Upload, ProfileServic
 //load existing image info from DB
     uc.loadData = function()
     {
-        if(!$stateParams.uploadId) return;
+        if(uc.newUpload) return;
 
         var params = { upload_id: $stateParams.uploadId };
         QueryService.loadQuery(params).then(function(response) 
@@ -56,8 +58,8 @@ function ($scope, $window, $state, $stateParams, $timeout, Upload, ProfileServic
             }
 
             uc.form = response[0];
-            uc.imageUrl = uc.getImageUrl(uc.form, ".ss");
-
+            uc.imageUrl =  uc.getImageUrl(uc.form, ".ss");
+            uc.uploadUrl = uc.getImageUrl(uc.form, ".tn");
             delete uc.form.exists; 
             delete uc.form.searchText; 
             uc.users = QueryService.users;
@@ -219,6 +221,11 @@ function ($scope, $window, $state, $stateParams, $timeout, Upload, ProfileServic
                 uc.returnToMain();
             uc.addLog(data);
         });
+    };
+
+    uc.confirmDelete = function () 
+    {
+        uc.showConfirm = true;
     };
 
     uc.deleteFile = function () 
