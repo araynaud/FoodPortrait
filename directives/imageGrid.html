@@ -5,7 +5,7 @@
 <span ng-if="vm.showDebug">	
 	grid: {{vm.options.columns}}C x {{vm.options.rows}}R {{vm.gridWidth}} x {{vm.gridHeight}}  / {{vm.gridRatio}}
 	available: {{vm.availableWidth}} x {{vm.availableHeight}} / {{vm.roundRatio()}} 
-	fit:{{vm.fit}}
+	fit: {{vm.fit}}
 </span>
 <div class="alert alert-danger" role="alert" ng-if="!vm.images">
 	<span class="glyphicon glyphicon-exclamation-sign"></span> No results found.
@@ -14,7 +14,7 @@
 
 <div class="imageGrid centered">
 	<div ng-repeat="im in vm.images" ng-if="$index < vm.options.rows * vm.options.columns"
-	    class="bgCenterCover cell" ng-class="vm.imageClasses(im)" ng-style="vm.imageStyle(im)">
+	    class="bgCenterCover cell right" ng-class="vm.imageClasses(im)" ng-style="vm.imageStyle(im)">
 	    	<fp-popover pop-title="{{vm.imageTitle(im)}}" pop-content="{{vm.imageDescription(im)}}"></fp-popover>
 		    <i class="textOutline glyphicon glyphicon-edit" ng-if="vm.isMine(im)" ui-sref="upload({ uploadId: im.upload_id })"></i>
 

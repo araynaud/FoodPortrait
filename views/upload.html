@@ -76,16 +76,16 @@
 </form>
 
 
-<div id="deleteModal" class="modal fade0" role="dialog">
+<div id="deleteModal" class="modal fade0 bs-example-modal-sm" role="dialog">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
         <h4 class="modal-title">Delete File</h4>
       </div>
-      <div class="modal-body">
-       <img class="preview img-responsive" ng-class="{portrait: uc.form.image_width < uc.form.image_height}" ng-src="{{uc.uploadUrl}}"/> 
-        Delete {{uc.form.filename}} ?
+      <div class="modal-body centered">
+       <img class="" ng-class="{portrait: uc.form.image_width < uc.form.image_height}" ng-src="{{uc.uploadUrl}}"/>
+       <br/> Delete {{uc.form.filename}} ?
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="uc.deleteFile()">OK</button>

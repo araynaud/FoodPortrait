@@ -28,6 +28,17 @@ image-grid > .imageGrid
 {
     margin-left:auto;
     margin-right:auto;
+    text-align: center;
+}
+
+.left
+{
+    text-align: left;   
+}
+
+.right
+{
+    text-align: right;   
 }
 
 img.preview.portrait 
