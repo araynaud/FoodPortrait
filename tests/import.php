@@ -28,97 +28,109 @@ debug(count($dbImages) . " DB filenames", $dbImages);
 $CSV_SEPARATOR="\t"; //columns inside a row
 $CSV_SEPARATOR2=";"; //values inside a field
 
-function importUsers($filename)
+function loadUsers($filename)
 {
 	if(!$filename) return;
-	//$txt = readTextFile($filename);
 	$data = readCsvTableFile($filename, false, true);
 	return $data;
 }
 
-//do the same as in upload.php
-//move original to ./original/
-//resize to 1000, .tn
-function importImage($dir, $filename)
-{	
-	//cleanup file name
-	$filename = cleanupFilename($filename);
-	//move file to destination dir
-	$dataRoot = getConfig("upload._diskPath");
-	$dataRootUrl = getConfig("upload.baseUrl");
-
-	createDir($dataRoot, "$username/original"); //depending on user permissions? // username/subdir
-	createDir($dataRoot, "$username/.tn"); //depending on user permissions? // username/subdir
-//resize / move image
-	$uploadDir  = combine($dataRoot, $username, "original");
-	$uploadedFile = combine($dataRoot, $username, "original", $filename);
-	$uploadUrl = combine($dataRootUrl, $username, $filename);
-	$filesize = filesize($tmpFile);
-//	$success = move_uploaded_file($tmpFile, $uploadedFile);
-//	$maxUploadSize = ini_get("upload_max_filesize");
-	$resized = createThumbnail($uploadDir, $filename, '..', 1000);
-	$resizedDir = combine($dataRoot, $username);
-	$resized = createThumbnail($resizedDir, $filename, '.tn', 225);
-
-	debug("moving to $uploadUrl", $success);
-	if(!$success)
-		return errorMessage("Cannot move file into target dir.");
-
-	//save exif data
-	$message =  "File uploaded.";
-	$exif = getImageMetadata($uploadedFile);
-	$dateTaken = getExifDateTaken($filename, $exif);
-
-	if(!$dateTaken)
-		$dateTaken = getIptcDate($exif);
-
-	//if(!$dateTaken)
-	//$dateTaken = getFileDate($filename);
-	$description = arrayGetCoalesce($exif, "ImageDescription", "IPTC.Caption");
-	$description = trim($description);
-
-	writeCsvFile("$uploadedFile.exif.txt", $exif);
-	writeTextFile("$uploadedFile.exif.js", jsValue($exif));
-
-	unlink($uploadedFile);
-
-//TODO: insert row in upload table
-//when to update? if username/filename already exists
-
-	$db = new SqlManager($fpConfig);
-	if($db->offline)
-		$upload_id = -1;
-	else if(!$upload_id) //step 1
-		$upload_id = saveUploadData($db, $exif);
-	else //step 2
-	{
-		$success = saveUploadData($db, $_POST);
-		$message =  "Details saved.";
-	}
-
-	$db->disconnect();
-}
-
-
-//resize image in multiple versions:
-//eg: hd:1920, ss:1000, tn:225
-function resizeImageMultiple($dir, $filename)
+function importUsers($users, $questions)
 {
-	
+	$rows = array();
+	foreach ($users as $user)
+	{
+		$username = arrayExtract($user, "username");
+		if(!$username) continue;
+		$username = str_replace(" ", "", $username);
+		if(!$username) continue;
+
+	//1 insert into user
+		$userRow = array();
+		$userRow["table"] = "user";
+		$userRow["username"] = $username;
+		$userRow["password"] = md5($username);
+		$rows[] = $userRow;
+
+	//2 insert into user_answer 1 row per user column
+		foreach ($user as $column => $userValues)
+		{
+			if(!isset($questions[$column]) || !$userValues) continue;
+
+			$q = $questions[$column];
+//TODO: if question type == multiple,  $userValue is array: insert several rows
+			$userValues = toArray($userValues, ";");
+			foreach ($userValues as $key => $userValue)
+			{
+				$row = array();
+				$row["table"] = "user_answer";
+				$row["username"] = $username;
+				$row["field"] = $column;
+				$row["value"] = $userValue;
+				$row["question_id"] = $q["id"];
+				$answer = findAnswer($q, $userValue);
+				if($answer)
+				{
+					$row["answer_id"] = $answer["id"];
+					$row["answer"] = $answer;
+					if($answer["value"])
+						$row["answer_value"] = $answer["value"];
+				}
+				else if($q["data_type"] == "number")
+					$row["answer_value"] = $userValue;
+				else
+				//TODO if question type is text or number 
+					$row["answer_text"] = $userValue; //TODO: Find answer id, match by  partial text;
+				$rows[] = $row;
+			}
+		}
+	}
+	return $rows;
 }
+
+//TODO: Find answer id, match by  partial text;
+function findAnswer($question, $userValue)
+{
+	if(!isset($question["form_answers"])) return null;
+
+	foreach ($question["form_answers"] as $key => $ans)
+		if(matchStrings($userValue, $ans["label"]))
+			return $ans;
+
+	return null;
+}
+
+//match first word ?
+function matchStrings($userValue, $label)
+{
+//	debug("matchStrings $label", $userValue);
+
+	if(!strcasecmp($userValue, $label)) return true;
+	
+	$firstWord = substringBefore($label, " ");
+	return startsWith($userValue, $firstWord);
+}
+
 
 //TODO: check loggedin. if not admin, return to home page
-
 $username = reqParam("username");
 $filename = "../docs/FoodDiaryUsers.txt";
+$users = loadUsers($filename);
 
 $db = new SqlManager($fpConfig);
-$users = importUsers($filename);
-importImages($db, $username);
+$questions = getFormQuestions($db);
+$questions = arrayIndexBy($questions, "field_name");
+
+$rows = importUsers($users, $questions);
+
+// TODO: SqlManager: insert/update multiple rows;
+
 $db->disconnect();
 
 $response = array();
-addVarToArray($response, "users");
+//$response["questions"] = $questions;
+//$response["users"] = $users;
+addVarsToArray($response, "rows questions");
 $response["time"] = getTimer(true);
 echo jsValue($response, true, true);
 ?>

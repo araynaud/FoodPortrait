@@ -20,8 +20,18 @@ function fpUserLogout()
     unset($_SESSION["fp_user"]);
 }
 
+function readJsonFile($filename)
+{
+    $postdata = file_get_contents($filename);
+    if($postdata)
+        $postdata = json_decode($postdata, true);
+    return $postdata;
+}
+
 function getJsonPostData()
 {
+    return readJsonFile("php://input");
+
     $postdata = file_get_contents("php://input");
     if($postdata)
         $postdata = json_decode($postdata, true);
@@ -40,6 +50,30 @@ function errorMessage($msg)
 function hasProfile($db, $username)
 {
     return $db->exists(array("table" => "user_answer", "username" => $username));
+}
+
+
+function getFormQuestions($db, $section_id=null)
+{
+    if(!$db || $db->offline)
+    {
+        $questions = readJsonFile("../api/form_data.json");
+        if(isset($questions["questions"]))
+            $questions = $questions["questions"];
+        return $questions;
+    }
+
+    if(contains($section_id, ","))
+        $section_id = explode(",", $section_id);
+    $p = array("table" => "form_question", "order_by" => "section_id, position, id");
+    if($section_id) 
+        $p["section_id"] = $section_id;
+    $form_questions = $db->selectWhere($p);
+
+    $p = array("table" => "form_answer", "order_by" => "question_id, position, id");
+    $form_answers = $db->selectWhere($p);
+    //group join the 2 results
+    return $db->groupJoinResults($form_questions, $form_answers, "form_answers", "id", "question_id");
 }
 
 //save form: insert,update,delete user_answers for this user
@@ -241,7 +275,6 @@ IPTC.APP13.2#060;144209
 IPTC.APP13.2#120;Mid-morning snack: chocolate chips
 
 */
-
 
 function parseIptcTags($iptcInfo)
 {

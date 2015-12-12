@@ -22,20 +22,9 @@ switch ($action)
 	case "form_questions":
 	default:
 		$section_id = reqParam("section_id");
-		$where = "";
-		if(contains($section_id, ","))
-			$where = " where section_id in ($section_id)";
-		else if($section_id)
-			$where = " where section_id = $section_id";
-		$sql = "SELECT * FROM form_question $where order by section_id, position, id";
-		$form_questions = $db->select($sql);
-		$sql = "SELECT * FROM form_answer order by question_id, position, id";
-		$form_answers = $db->select($sql);
-		//group join the 2 results
-		$response["questions"] = $db->groupJoinResults($form_questions, $form_answers, "form_answers", "id", "question_id");
+		$response["questions"] = getFormQuestions($db, $section_id);
 		if($username)
-		$response["user_answers"] = $db->selectWhere(array("table" => "user_answer", "username" => $username));
-		break;
+			$response["user_answers"] = $db->selectWhere(array("table" => "user_answer", "username" => $username));
 }
 $db->disconnect();
 
