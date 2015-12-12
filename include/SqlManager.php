@@ -118,11 +118,13 @@ debug("selectWhere SQL: $sql", $params);
 
 	public function getPrimaryKey($tableName)
 	{
+		if($this->offline) return array();
 		return $this->callProcedure("getPrimaryKey", array($tableName), true);
 	}
 
 	public function getForeignKey($tableName)
 	{
+		if($this->offline) return array();
 		return $this->callProcedure("getForeignKey", array($tableName));
 	}
 
@@ -211,10 +213,10 @@ debug("statement affected_rows", $statement->affected_rows);
 			$rows = $statement->insert_id;
 		else if($result)
 		    $rows = SqlManager::getResultData($result, $singleColumn, $singleRow);
-		else if($statement->affected_rows)
+		else //if($statement->affected_rows)
 			$rows = $statement->affected_rows;
-		else
-			$rows = $status;
+//		else
+//			$rows = $status;
 
 		$statement->close();
 debug("returning", $rows);
@@ -447,7 +449,7 @@ debug("insert SQL: $sql ", $values);
 	//TODO: specify which columns test existence
 	public function saveRow($data, $testColumns="")
 	{
-		if($this->offline) return;
+//		if($this->offline) return;
 
 		$table = $data["table"];
 		//1: get table and primary key column name
@@ -461,14 +463,15 @@ debug("insert SQL: $sql ", $values);
 			$where = arrayCopyMultiple($data, $pk);
 			//todo arrayUnsetMultiple
 			$pkey=reset($pk);
-			unset($data[$pkey]); //do not update pk value
+			$updateValues = $data;
+			unset($updateValues[$pkey]); //do not update pk value
 		}
 
 debug("saveRow", $data);
 debug("saveRow", $where);	
 		//2: if where or pk provided in data: try to update row
 		if($where)
-			$status = $this->update($data, $where);
+			$status = $this->update($updateValues, $where);
 		//3: if not updated: try to insert
 		if(!$status)
 			$status = $this->insert($data);

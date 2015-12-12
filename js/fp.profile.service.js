@@ -83,6 +83,9 @@ angular.module('fpServices', ['ngResource'])
     this.userFullName = function()
     {
         if(!this.user) return "nobody";
+        if(!this.user.first_name && !this.user.last_name)   return this.user.username;
+        if(!this.user.first_name)   return this.user.last_name;
+        if(!this.user.last_name)    return this.user.first_name;
         return this.user.first_name + " " + this.user.last_name;
     };
 

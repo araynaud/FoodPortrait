@@ -62,6 +62,7 @@ angular.module('app').directive('objectForm', function ()
                     else if(q.data_type=="single")
                     {
                         var fa=q.faById[ans.id];
+                        if(!ans.id || !fa) continue;
                         answer = {question_id: q.id, answer_id: ans.id};
                         if(fa.data_type =="text")
                             answer.answer_text = ans.text;
