@@ -18,7 +18,8 @@
 	    	<fp-popover pop-title="{{vm.imageTitle(im)}}" pop-content="{{vm.imageDescription(im)}}"></fp-popover>
 		    <i class="textOutline glyphicon glyphicon-edit" ng-if="vm.isMine(im)" ui-sref="upload({ uploadId: im.upload_id })"></i>
 
-	    	<div ng-if="vm.showDebug">{{$index}} {{im.colspan}}x{{im.rowspan}} {{vm.imageWidth(im.colspan)}} 
+	    	<div class="textOutline" ng-if="vm.showDebug">{{$index}} {{im.colspan}}x{{im.rowspan}} {{vm.imageWidth(im.colspan)}} 
+	    		<br/>{{im.filename}}
 	    		<br/>{{vm.imageTitle(im)}}
 			</div>
 	</div>
