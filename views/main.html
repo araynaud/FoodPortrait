@@ -9,7 +9,7 @@ My Meals: view latest for this user
 -->
 <div id="wrapper" class="main ease05">
 
-<div id="sidebar-wrapper" class="ease05">
+<div id="sidebar-wrapper" class="ease05 noprint">
 <form name="filterForm">
     <div class="input-group">
       <input type="text" class="form-control" id="inputDescription" ng-model="mc.filters.searchText" placeholder="Search" />
@@ -96,9 +96,12 @@ My Meals: view latest for this user
         &nbsp;<input type="checkbox" ng-model="mc.options.shadow" /> shadow
         &nbsp;<input type="checkbox" ng-model="mc.showDebug" /> debug
     </span>
-   <div ng-if="mc.showDebug">{{mc.options | toJson:true}}</div>
-   <div ng-if="mc.showDebug">{{mc.users | toJson:true }}</div>
-   <image-grid main="mc" images="mc.searchResults" options="mc.options" show-debug="mc.showDebug"/>
+    <div ng-if="mc.showDebug">{{mc.options | toJson:true}}</div>
+    <div ng-if="mc.showDebug">{{mc.users | toJson:true }}</div>
+    <div id="grids">
+      <div class="col-md-12">
+        <image-grid main="mc" images="mc.searchResults" options="mc.options" show-debug="mc.showDebug"></image-grid>
+      </div>
+    </div>
   </div>
-
 </div>

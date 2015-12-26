@@ -23,7 +23,7 @@ angular.module('app').directive('imageGrid', function ()
             vm.baseUrl = valueIfDefined("fpConfig.upload.baseUrl");
             vm.baseServer = valueIfDefined("fpConfig.upload.server");
             if(!vm.options.borderColor) vm.options.borderColor = 'black';
-
+            vm.isIE = ProfileService.clientIsIE();
             vm.thumbnails = valueIfDefined("fpConfig.thumbnails");
             if(vm.thumbnails.keep)
                 delete vm.thumbnails.sizes[vm.thumbnails.keep];
@@ -65,7 +65,7 @@ angular.module('app').directive('imageGrid', function ()
 
         vm.imageStyle = function(im)
         {
-            if(!im) return null;
+            if(!im || !vm.isIE) return null;
             var bgImage = "url('{0}')".format(vm.imageUrl(im));
             return { "background-image": bgImage};
         };
@@ -89,6 +89,8 @@ angular.module('app').directive('imageGrid', function ()
 
         vm.imageUrl = function(im, subdir)
         {
+            if(!im) return;
+
             subdir = valueOrDefault(subdir, vm.subdir);
             var url = String.combine(vm.baseUrl, im.username, subdir, im.filename);
             if(!im.exists && vm.baseServer) url = vm.baseServer + url;

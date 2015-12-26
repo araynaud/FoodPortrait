@@ -14,13 +14,37 @@
 
 <div class="imageGrid centered">
 	<div ng-repeat="im in vm.images" ng-if="$index < vm.options.rows * vm.options.columns"
-	    class="bgCenterCover cell right" ng-class="vm.imageClasses(im)" ng-style="vm.imageStyle(im)">
-	    	<fp-popover pop-title="{{vm.imageTitle(im)}}" pop-content="{{vm.imageDescription(im)}}"></fp-popover>
-		    <i class="textOutline glyphicon glyphicon-edit" ng-if="vm.isMine(im)" ui-sref="upload({ uploadId: im.upload_id })"></i>
-
-	    	<div class="textOutline" ng-if="vm.showDebug">{{$index}} {{im.colspan}}x{{im.rowspan}} {{vm.imageWidth(im.colspan)}} 
-	    		<br/>{{im.filename}}
-	    		<br/>{{vm.imageTitle(im)}}
+	    class="bgCenterCover cell" ng-class="vm.imageClasses(im)" ng-style="vm.imageStyle(im)">
+	    	<img class="stretch cover" ng-if="!vm.isIE" ng-src="{{vm.imageUrl(im)}}" alt="{{im.filename}}"/>
+	    	<fp-popover pop-title="{{vm.imageTitle(im)}}" pop-content="{{vm.imageDescription(im)}}" placement="{{vm.popoverPlacement($index)}}" 
+	    	></fp-popover>
+	    	<div class="caption stretchW right">
+		    	<div class="textOutline" ng-if="vm.showDebug">{{$index}} {{vm.imageWidth(im.colspan)}}
+		    		<br/>{{im.filename}}
+		    		<br/>{{vm.options.columns}} {{vm.popoverPlacement($index)}}
+		    		<br/>{{vm.imageTitle(im)}}
+				</div>
+			    <i class="textOutline glyphicon glyphicon-edit" ng-if="vm.isMine(im)" ui-sref="upload({ uploadId: im.upload_id })"></i>
 			</div>
 	</div>
+</div>
+
+
+<div id="viewModal" class="modal fade0 bs-example-modal-sm" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">View File</h4>
+      </div>
+      <div class="modal-body centered">
+       <img class="" ng-class="" ng-src="{{vm.imageUrl(vm.currentImage)}}"/>
+       <br/>{{vm.currentImage.filename}} ?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="uc.deleteFile()">OK</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
 </div>
