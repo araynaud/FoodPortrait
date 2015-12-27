@@ -15,7 +15,7 @@
 <div class="imageGrid centered">
 	<div ng-repeat="im in vm.images" ng-if="$index < vm.options.rows * vm.options.columns" class="bgCenterCover cell" ng-class="vm.imageClasses(im)" ng-style="vm.imageStyle(im)" ng-click="vm.openImage(im)">
     	<img class="stretch cover" ng-if="!vm.isIE" ng-src="{{vm.imageUrl(im)}}" alt="{{im.filename}}"/>
-    	<fp-popover pop-title="{{vm.imageTitle(im)}}" pop-content="{{vm.imageDescription(im, true)}}" placement="{{vm.popoverPlacement($index)}}" 
+    	<fp-popover ng-if="!vm.isMobile" pop-title="{{vm.imageTitle(im)}}" pop-content="{{vm.imageDescription(im, true)}}" placement="{{vm.popoverPlacement($index)}}" 
     	></fp-popover>
     	<div class="caption stretchW right">
 	    	<div class="textOutline" ng-if="vm.showDebug">{{$index}} {{vm.imageWidth(im.colspan)}}
