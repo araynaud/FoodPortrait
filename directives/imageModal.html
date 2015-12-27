@@ -1,5 +1,9 @@
-<div class="centered">{{m.title}}<br/>
-<img class="preview stretchW contain" ng-src="{{m.imageUrl}}" alt="" ng-class="{portrait: m.image.image_width <= m.image.image_height}" />
+<div class="modal-header">
+        <button data-dismiss="modal" class="close" type="button" ng-click="m.cancel()">×</button>
+        <h5 class="centered modal-title">{{m.title}}</h5>
+</div>
+<div class="centered">
+	<img class="preview stretchW contain" ng-src="{{m.imageUrl}}" alt="" ng-class="{portrait: m.image.image_width <= m.image.image_height}" />
 </div>
 <div class="caption text textOutline">{{m.caption}}</div>
 

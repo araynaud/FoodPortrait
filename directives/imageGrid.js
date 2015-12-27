@@ -24,6 +24,8 @@ angular.module('app').directive('imageGrid', function ()
             vm.baseServer = valueIfDefined("fpConfig.upload.server");
             if(!vm.options.borderColor) vm.options.borderColor = 'black';
             vm.isIE = ProfileService.clientIsIE();
+            vm.isMobile = ProfileService.isMobile();
+
             vm.thumbnails = valueIfDefined("fpConfig.thumbnails");
             if(vm.thumbnails.keep)
                 delete vm.thumbnails.sizes[vm.thumbnails.keep];
@@ -119,7 +121,8 @@ angular.module('app').directive('imageGrid', function ()
             var title = "";
             if(!im) return title;
             var sep = html ? "<br/>" : "\n";
-            title = title.append(im.caption);
+            //if(html)    title = title.append(sep, "<img src='{0}'/>".format(vm.imageUrl(im)));
+            title = title.append(sep, im.caption);
             title = title.append(sep, im.context);
             //if(vm.showDebug)
             title = title.append(sep, "by @" + im.username);
@@ -136,6 +139,7 @@ angular.module('app').directive('imageGrid', function ()
         {
             var modalInstance = $uibModal.open({
                 animation: true,
+//                backdrop: false,
                 templateUrl: 'directives/imageModal.html',
                 controller: 'ImageModalController',
                 controllerAs: 'm',
