@@ -27,6 +27,7 @@ $meta["og:url"] = currentUrlDir();
 <?php echo metaTagArray($meta); ?>
 
 <link rel="stylesheet" href="../bootstrap/css/bootstrap.css">
+<link rel="stylesheet" href="style/common.css">
 <link rel="stylesheet" href="style/sidebar.css">
 <link rel="stylesheet" href="style/signin.css">
 <link rel="stylesheet" href="style/sticky-footer.css">
@@ -69,6 +70,7 @@ $meta["og:url"] = currentUrlDir();
 <script type="text/javascript" src="directives/spinner.js"></script>
 <script type="text/javascript" src="directives/popover.js"></script>
 <script type="text/javascript" src="directives/imageGrid.js"></script>
+<script type="text/javascript" src="directives/imageModal.js"></script>
 
 <script type="text/javascript">
 <?php echoJsVar("fpConfig"); echoJsVar("fpUser"); ?>

@@ -5,7 +5,7 @@ angular.module('app').directive('imageGrid', function ()
     templateUrl: 'directives/imageGrid.html',
     controllerAs: 'vm',
     bindToController: true,
-    controller: function ($timeout, $state)
+    controller: function ($timeout, $uibModal)
     {
         var vm = this; 
         window.imageGrid = this;
@@ -100,6 +100,7 @@ angular.module('app').directive('imageGrid', function ()
         vm.imageTitle = function(im)
         {
             var title = "";
+            if(!im) return title;
             var dt = im.image_date_taken;
             if(dt)
             {
@@ -113,13 +114,15 @@ angular.module('app').directive('imageGrid', function ()
             return title.toString();
         };
 
-        vm.imageDescription = function(im)
+        vm.imageDescription = function(im, html)
         {
             var title = "";
+            if(!im) return title;
+            var sep = html ? "<br/>" : "\n";
             title = title.append(im.caption);
-            title = title.append("<br/>", im.context);
+            title = title.append(sep, im.context);
             //if(vm.showDebug)
-            title = title.append("<br/>", "by @" + im.username);
+            title = title.append(sep, "by @" + im.username);
 
             return title;
         };
@@ -129,10 +132,24 @@ angular.module('app').directive('imageGrid', function ()
             return index < vm.options.columns ? "bottom" : "top";
         };
 
-        vm.imageDetails = function(im)
+        vm.openImage = function(im)
         {
-            if(im && im.upload_id)
-                $state.go('upload/' + im.upload_id);
+            var modalInstance = $uibModal.open({
+                animation: true,
+                templateUrl: 'directives/imageModal.html',
+                controller: 'ImageModalController',
+                controllerAs: 'm',
+                bindToController: true,
+                size: 'lg',
+                resolve: {
+                    parent:   function() { return vm; },
+                    image:    function() { return im; }, 
+                    imageUrl: function() { return vm.imageUrl(im, '.ss'); }
+                }
+            });
+
+//            modalInstance.result.then(function (result) { vm.selected = result; }, 
+//            function() { console.log('Modal dismissed at: ' + new Date()); });
         };
 
         vm.imageWidth = function(n)
@@ -213,7 +230,7 @@ angular.module('app').directive('imageGrid', function ()
 
             vm.width = vm.imageWidth();
             vm.height = vm.imageHeight();
-            vm.subdir = vm.selectImageSize()
+            vm.subdir = vm.selectImageSize();
 
             if(!vm.options.borderColor) 
                 vm.options.borderColor = 'black';
