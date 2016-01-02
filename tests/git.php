@@ -1,5 +1,5 @@
 <!doctype html>
-<html ng-app="app">
+<html>
 <head>
 <title>git update</title>
 <meta charset="utf-8">
@@ -9,16 +9,11 @@
 <meta name="mobile-web-app-capable" content="yes" />
 <link rel="stylesheet" href="../../bootstrap/css/bootstrap.css">
 </head>
-<body class="container-fluid" ng-controller="LayoutController as lc">
-
-<?php
-require_once("../include/includes.php");
-//setContentType("text", "plain");
-
-$gitPath = getExePath($exe="GIT", $key="_GIT");
-?>
+<body class="container">
 <br/>
 <pre><?php
+require_once("../include/includes.php");
+$gitPath = getExePath($exe="GIT", $key="_GIT");
 if(!$gitPath || !file_exists($gitPath)) 
 	echo "git disabled.";
 else
@@ -29,7 +24,6 @@ else
 	echo execCommand(makeCommand("[0] pull --rebase", $gitPath));
 }
 ?></pre>
-
 <a href="..">return to application</a>
 </body>
 </html>
