@@ -3,8 +3,8 @@
 // =========== Main Controller ===========
 // handles query and gallery display
 angular.module('fpControllers')
-.controller('MainController', ['$window', '$state', 'ProfileService', 'QueryService', 
-function ($window, $state, ProfileService, QueryService)
+.controller('MainController', ['$window', '$state', '$timeout', 'ProfileService', 'QueryService', 
+function ($window, $state,  $timeout, ProfileService, QueryService)
 {
     //TODO:
     //post filters to album.php service
@@ -157,11 +157,12 @@ function ($window, $state, ProfileService, QueryService)
         mc.errorMessage);
     };
 
-    mc.searchMore = function(value, oldValue)
+    mc.searchMore = function()
     {
-        //if(value > oldValue)
-        if(mc.searchResults.length < mc.options.rows * mc.options.columns)
-            mc.search();
+         $timeout(function() { 
+            if(mc.searchResults.length < mc.options.rows * mc.options.columns)
+                mc.search();
+          }, 0);
     };
 
     mc.clearSearch = function(refresh)
