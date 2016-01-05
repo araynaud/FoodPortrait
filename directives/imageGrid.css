@@ -19,7 +19,6 @@ image-grid > .imageGrid
 {
 	display: inline-block; 
     overflow: hidden; 
-    font-weight: bold;
     font-size: 14px;
     background-color: #eee;
     position: relative;

@@ -3,7 +3,9 @@
         <h5 class="centered modal-title">{{m.title}}</h5>
 </div>
 <div class="centered">
-	<img class="preview stretchW contain" ng-src="{{m.imageUrl}}" alt="" ng-class="{portrait: m.image.image_width <= m.image.image_height}" />
+	<img class="preview stretchW contain" ng-src="{{m.imageUrl}}" alt="" ng-class="{landscape: m.image.image_width > m.image.image_height, portrait: m.image.image_width <= m.image.image_height}" />
 </div>
-<div class="caption text textOutline">{{m.caption}}</div>
-
+<div class="caption-right text bold textOutline">{{m.caption}}</div>
+<div class="caption text bold textOutline">
+	<i class="glyphicon glyphicon-edit" ng-if="m.parent.isMine(m.image)" ui-sref="upload({uploadId: m.image.upload_id})" ng-click="m.cancel()"></i>	
+</div>
