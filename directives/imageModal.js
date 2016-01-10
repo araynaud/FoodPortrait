@@ -16,4 +16,13 @@ angular.module('app').controller('ImageModalController', function ($uibModalInst
     {
         $uibModalInstance.dismiss('cancel');
     };
+
+    m.getDomainName = function(url)
+    {
+        if(!url) return "";
+        return url.substringAfter("//").substringBefore("/");
+    }
+
+    m.domain = m.getDomainName(image.link);
+
 });

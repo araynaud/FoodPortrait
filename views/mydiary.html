@@ -1,0 +1,107 @@
+<!---
+My Meals: view latest for this user
+* view User’s Individual Portrait - Meal Type grid with four grids 
+<grid
+ directive/>
+* Grid will have blanks until the user has completed 16 or 20 of each Meal Type - will need lines to show incomplete grid (to encourage completing grid) .
+1 grid by meal
+1 grid with 1 column / meal, 1 row / day
+-->
+<div id="wrapper" class="main ease05">
+
+<div id="sidebar-wrapper" class="ease05 noprint">
+<form name="filterForm">
+    <div class="input-group">
+      <input type="text" class="form-control" id="inputDescription" ng-model="mc.filters.searchText" placeholder="Search" />
+      <span class="input-group-btn">
+        <button type="button" class="btn btn-default" ng-click="mc.search()">
+          <i class="glyphicon glyphicon-search"></i>
+        </button> 
+        <button type="button" class="btn btn-default" ng-click="mc.clearSearch(true)">
+          <i class="glyphicon glyphicon-remove-circle"></i>
+        </button> 
+      </span>
+    </div>
+    <br/>
+    <div class="input-group">
+      <input type="text" id="inputDate" name="date_min" class="form-control"
+      ng-model="mc.filters.date_min" uib-datepicker-popup="{{mc.dateFormat}}" ng-click="mc.pickDate(1)"
+      is-open="mc.datepickerOpen1" max-date="mc.today" datepicker-options="mc.dateOptions" close-text="Close" placeholder="From date"/>
+      <span class="input-group-btn">
+        <button type="button" class="btn btn-default" ng-click="mc.pickDate(1)">
+          <i class="glyphicon glyphicon-calendar"></i>          
+        </button>
+      </span>
+    </div>
+    <br/>
+    <div class="input-group">
+      <input type="text" id="inputDateMax" name="date_max" class="form-control"
+      ng-model="mc.filters.date_max" uib-datepicker-popup="{{mc.dateFormat}}" ng-click="mc.pickDate(2)"
+      is-open="mc.datepickerOpen2" max-date="mc.today" datepicker-options="mc.dateOptions" close-text="Close" placeholder="To date"/>
+      <span class="input-group-btn">
+        <button type="button" class="btn btn-default" ng-click="mc.pickDate(2)">
+          <i class="glyphicon glyphicon-calendar"></i>
+        </button>
+      </span>
+    </div>
+    <br/>
+
+    <ul class="nav nav-sidebar filters">
+    <li>
+        <label for="dd_meal">Meal:</label> 
+        <select id="dd_meal" ng-model="mc.filters.meal" name="meal" class="form-control" ng-options="item.name for item in mc.fpConfig.dropdown.meal" ng-change="mc.search()">
+          <option value="">-</option>
+        </select>
+    </li>
+    <li>
+        <label for="dd_course">Course:</label> 
+        <select id="dd_course" ng-model="mc.filters.course" name="course" class="form-control" ng-options="item for item in mc.getCourses()" ng-change="mc.search()">
+          <option value="">-</option>
+        </select>
+    </li>
+    <li>
+        <label for="dd_mood">Mood:</label> 
+        <select id="dd_mood" ng-model="mc.filters.mood" name="mood" class="form-control" ng-options="item for item in mc.fpConfig.dropdown.mood" ng-change="mc.search()">
+          <option value="">-</option>
+        </select>
+    </li>
+    </ul>
+    <hr/>
+    <ul class="nav nav-sidebar filters">
+      <li ng-repeat="q in mc.questions" ng-if="mc.isFilter(q)">
+        <label for="dd_{{q.field_name}}">{{q.title}}:</label>
+        <select id="dd_{{q.field_name}}" name="{{q.field_name}}" class="form-control" ng-model="mc.filters[q.field_name]" ng-options="a.label for a in q.form_answers" ng-change="mc.search()">
+          <option value="">-</option>
+        </select>
+      </li>
+    </ul>
+
+   <pre ng-if="mc.showDebug">{{mc.params  | toJson:true}}</pre>
+   <pre ng-if="mc.showDebug">{{mc.filters | toJson:true}}</pre>
+</form>
+</div>
+
+  <div id="page-content-wrapper">
+    <a class="btn btn-default menu-toggle glyphicon glyphicon-search" title="toggle filters" ng-click="mc.toggleSidebar()"></a>
+    <a class="btn btn-default glyphicon glyphicon-menu-hamburger" title="grid options" ng-click="mc.showOptions=!mc.showOptions"></a>
+    <span class="form-signin-heading">{{mc.title}}</span>
+
+    <spinner label="'columns:'" value="mc.options.columns"  min="1" max="8" loop="true" mobile="true" hold="true" change="mc.searchMore"></spinner> 
+    <spinner label="'rows:'"    value="mc.options.rows"     min="1" max="8" loop="true" mobile="true" hold="true" change="mc.searchMore"></spinner>
+    &nbsp;
+    <span ng-if="mc.showOptions">
+        <spinner label="'margin:'" value="mc.options.margin"   min="-1" max="50" loop="true" mobile="true" hold="true"></spinner>
+        <spinner label="'border:'" value="mc.options.border"   min="0"  max="10" loop="true" mobile="true" hold="true"></spinner>
+        <spinner label="'ratio:'"  value="mc.options.ratio"    min="0.5" max="4" loop="true" mobile="true" hold="true" step="0.05"></spinner>
+        &nbsp;<input type="checkbox" ng-model="mc.options.shadow" /> shadow
+        &nbsp;<input type="checkbox" ng-model="mc.showDebug" /> debug
+    </span>
+    <div ng-if="mc.showDebug">{{mc.options | toJson:true}}</div>
+    <div ng-if="mc.showDebug">{{mc.users | toJson:true }}</div>
+    <div id="grids">
+      <div class="col-md-12">
+        <image-grid main="mc" images="mc.searchResults" options="mc.options" show-debug="mc.showDebug"></image-grid>
+      </div>
+    </div>
+  </div>
+</div>

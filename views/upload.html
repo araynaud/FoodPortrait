@@ -59,8 +59,14 @@
 
     <div class="col-md-6">
         <label for="inputContext">Meal Context:</label> 
-        <input type="text" id="inputContext" name="context" class="form-control" ng-model="uc.form.context" placeholder="Context" required/>
+        <input type="text" id="inputContext" name="context" class="form-control" ng-model="uc.form.context" placeholder="Context"/>
     </div>
+
+    <div class="col-md-12">
+        <label for="inputLink">Web Link:</label> 
+        <input type="text" id="inputLink" name="link" class="form-control" ng-model="uc.form.link" placeholder="Link URL"/>
+    </div>
+
     <p class="col-md-6">
       <br/>
       <button class="btn btn-primary" type="submit" ng-click="uc.saveUpload()" ng-disabled="uc.validate()">Save</button>
