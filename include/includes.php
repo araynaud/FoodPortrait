@@ -5,7 +5,7 @@ if(!file_exists("$APP_DIR/fp.config"))
 
 $MT_DIR = "$APP_DIR/../mt";
 if(!file_exists("$MT_DIR/include/http_functions.php"))
-	$MT_DIR = "$APP_DIR/../../MediaThingy";
+	$MT_DIR = "$APP_DIR/../MediaThingy";
 
 require_once("$MT_DIR/include/http_functions.php");
 require_once("$MT_DIR/include/text_functions.php");
