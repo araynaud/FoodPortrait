@@ -16,31 +16,6 @@ div#main
   background-color: #e7e7e7;
 }
 
-.textOutline
-{
-  color: white;
-  text-shadow: 
-     -1px -1px 0 #000,  
-      1px -1px 0 #000,
-      -1px 1px 0 #000,
-       1px 1px 0 #000;
-}
-
-.textOutline2
-{
-  color: white;
-  text-shadow: 
-     -2px -2px 0 #000,  
-      2px -2px 0 #000,
-      -2px 2px 0 #000,
-       2px 2px 0 #000,
-     -2px 0px 0 #000,  
-      2px 0px 0 #000,
-      0px -2px 0 #000,
-      0px 2px 0 #000;
-}
-
-
 img.logo
 {
     margin-top: 50px;
