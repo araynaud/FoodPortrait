@@ -25,9 +25,9 @@ require_once("$APP_DIR/include/fp_functions.php");
 require_once("$APP_DIR/include/SqlManager.php");
 require_once("$APP_DIR/include/data_html_functions.php");
 
+$config = $fpConfig = readConfigFile("$APP_DIR/fp.config");
+
 if(isDebugMode())
 	header("Content-Type: text/plain");
 startTimer();
-
-$config = $fpConfig = readConfigFile("$APP_DIR/fp.config");
 ?>
