@@ -123,7 +123,9 @@
     }
 
     #page-content-wrapper {
-/*        padding: 20px; */
+        padding-top: 10px;
+        padding-right: 10px;
+        padding-left: 10px;
         position: relative;
     }
 
