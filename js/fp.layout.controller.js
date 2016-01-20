@@ -45,7 +45,9 @@ function ($scope, $window, $state, ProfileService)
 
     lc.toggleSidebar = function(st)
     {   
-        return lc.sidebar = valueOrDefault(st, !lc.sidebar);
+        lc.sidebar = valueOrDefault(st, !lc.sidebar);
+        lc.getWindowSize();
+        return lc.sidebar;
     };
 
     lc.width = function()

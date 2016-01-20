@@ -12,7 +12,12 @@ My Meals: view latest for this user
 <div id="sidebar-wrapper" class="ease05 noprint">
 <form name="filterForm">
     <div class="input-group">
-      <input type="text" class="form-control" id="inputDescription" ng-model="mc.filters.searchText" placeholder="Search" />
+      <span class="input-group-btn">
+        <button type="button" class="btn btn-default" ng-click="lc.toggleSidebar(false);  mc.resizeGrid(400, 800);">
+          <i class="glyphicon glyphicon-triangle-left"></i>
+        </button> 
+      </span>
+      <input type="text" class="form-control" id="inputDescription" ng-model="mc.filters.searchText" placeholder="Search" ng-blur="mc.search()"/>
       <span class="input-group-btn">
         <button type="button" class="btn btn-default" ng-if="mc.filters.searchText" ng-click="mc.clearSearch(true)">
           <i class="glyphicon glyphicon-remove-circle"></i>
@@ -82,7 +87,7 @@ My Meals: view latest for this user
 </div>
 
   <div id="page-content-wrapper">
-    <a class="btn btn-default menu-toggle glyphicon glyphicon-search" title="toggle filters" ng-click="mc.toggleSidebar()"></a>
+    <a class="btn btn-default menu-toggle glyphicon glyphicon-search" title="toggle filters" ng-hide="lc.sidebar" ng-click="lc.toggleSidebar(true);  mc.resizeGrid(400, 800);"></a>
     <a class="btn btn-default glyphicon glyphicon-menu-hamburger" title="grid options" ng-click="mc.showOptions=!mc.showOptions"></a>
     <span class="form-signin-heading">{{mc.title}}</span>
 

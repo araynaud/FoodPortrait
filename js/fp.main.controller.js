@@ -23,7 +23,6 @@ function ($window, $state,  $timeout, ProfileService, QueryService)
 //        mc.filters.portrait='personal';
         mc.searchResults=[];
         mc.fpConfig = $window.fpConfig; 
-        mc.wrapper = angular.element("#wrapper");
         mc.showOptions = mc.fpConfig.grid.showOptions;
         mc.options = mc.fpConfig.grid.options;
         if(!mc.options)
@@ -69,23 +68,12 @@ function ($window, $state,  $timeout, ProfileService, QueryService)
     mc.setOption =  function (opt,val)
     {
         mc.options[opt] = val;
-    }
+    };
 
     mc.addOption =  function (opt,val)
     {
         if(!mc.options[opt]) mc.setOption(opt,val);
         mc.options[opt] += val;
-    }
-
-    mc.toggleSidebar = function()
-    {
-        mc.wrapper.toggleClass("toggled");
-        mc.resizeGrid(400, 800);
-    };
-
-    mc.showSidebar = function()
-    {
-        return !mc.wrapper.hasClass("toggled");
     };
 
     mc.getCourses = function()
@@ -93,7 +81,7 @@ function ($window, $state,  $timeout, ProfileService, QueryService)
         if(!mc.filters.meal) 
             return mc.fpConfig.dropdown.meal[1].courses;
         return mc.filters.meal.courses;
-    }
+    };
 
     mc.resizeGrid = function(delay, last)
     {
