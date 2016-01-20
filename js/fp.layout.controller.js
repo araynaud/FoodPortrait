@@ -22,7 +22,8 @@ function ($scope, $window, $state, ProfileService)
         if(!ProfileService.user)
             $state.go('signin');
 
-    }
+         lc.toggleSidebar(lc.isWider(768));
+    };
 
     lc.getWindowSize = function()
     {
@@ -33,10 +34,19 @@ function ($scope, $window, $state, ProfileService)
 
     lc.bodyClasses = function()
     {
-        var isSmall = lc.isMobile || $window.innerWidth < 768 ;
-        var classes = { mobile: isSmall, desktop: !isSmall  };        
-        return classes;
+        var isSmall = lc.isMobile || lc.isSmaller(768);
+        return { isMobile: isSmall, isDesktop: !isSmall, aboveFooter: lc.showDebug };
     }
+
+    lc.sidebarWrapperClasses = function()
+    {
+        return {"toggled": lc.sidebar} ;
+    }
+
+    lc.toggleSidebar = function(st)
+    {   
+        return lc.sidebar = valueOrDefault(st, !lc.sidebar);
+    };
 
     lc.width = function()
     {
@@ -56,6 +66,11 @@ function ($scope, $window, $state, ProfileService)
     lc.isWider = function(min)
     {
       return $window.innerWidth >= min;      
+    };
+
+    lc.isSmaller = function(max)
+    {
+        return $window.innerWidth < max;      
     };
 
     lc.userFullName = function()

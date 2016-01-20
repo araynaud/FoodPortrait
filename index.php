@@ -26,21 +26,21 @@ $meta["og:url"] = currentUrlDir();
 <meta name="mobile-web-app-capable" content="yes" />
 <?php echo metaTagArray($meta); ?>
 
-<link rel="stylesheet" href="../bootstrap/css/bootstrap.css">
-<link rel="stylesheet" href="style/common.css">
-<link rel="stylesheet" href="style/sidebar.css">
-<link rel="stylesheet" href="style/signin.css">
-<link rel="stylesheet" href="style/sticky-footer.css">
-<link rel="stylesheet" href="style/fileUpload.css">
-<link rel="stylesheet" href="directives/objectForm.css">
-<link rel="stylesheet" href="directives/imageGrid.css">
-<link rel="stylesheet" href="directives/spinner.css">
+<link rel="stylesheet" href="../bootstrap/css/bootstrap.css"/>
+<link rel="stylesheet" href="style/common.css"/>
+<link rel="stylesheet" href="style/sidebar.css"/>
+<link rel="stylesheet" href="style/signin.css"/>
+<link rel="stylesheet" href="style/sticky-footer.css"/>
+<link rel="stylesheet" href="style/fileUpload.css"/>
+<link rel="stylesheet" href="directives/objectForm.css"/>
+<link rel="stylesheet" href="directives/imageGrid.css"/>
+<link rel="stylesheet" href="directives/spinner.css"/>
 
-<link rel="icon" href="images/icon128.png">
-<link rel="icon" sizes="192x192" href="images/icon192.png">
-<link rel="icon" sizes="128x128" href="images/icon128.png">
-<link rel="apple-touch-icon" sizes="128x128" href="images/icon128.png">
-<link rel="apple-touch-icon-precomposed" sizes="128x128" href="images/icon128.png">
+<link rel="icon" href="images/icon128.png"/>
+<link rel="icon" sizes="192x192" href="images/icon192.png"/>
+<link rel="icon" sizes="128x128" href="images/icon128.png"/>
+<link rel="apple-touch-icon" sizes="128x128" href="images/icon128.png"/>
+<link rel="apple-touch-icon-precomposed" sizes="128x128" href="images/icon128.png"/>
 
 <script type="text/javascript" src="js/lib/jquery.min.js"></script>
 <script type="text/javascript" src="../bootstrap/js/bootstrap.min.js"></script>
