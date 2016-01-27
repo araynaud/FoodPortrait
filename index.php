@@ -23,7 +23,8 @@ $meta["og:url"] = currentUrlDir();
 <meta name="mobile-web-app-capable" content="yes" />
 <?php echo metaTagArray($meta); ?>
 
-<?php addCssFromConfig("lib.bootstrap"); addAllCss("style"); ?>
+<?php addCssFromConfig("lib.bootstrap"); 
+      addAllCss("style"); ?>
 
 <link rel="icon" href="images/icon128.png"/>
 <link rel="icon" sizes="192x192" href="images/icon192.png"/>
@@ -40,8 +41,8 @@ $meta["og:url"] = currentUrlDir();
 <script type="text/javascript" src="/mt/js/mt.extensions.js"></script>
 
 <?php addAllScripts("js");
-  addAllScripts("directives"); 
   addAllCss("directives"); 
+  addAllScripts("directives"); 
 ?>
 
 <script type="text/javascript">
