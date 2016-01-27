@@ -54,9 +54,9 @@ function ($window, $state, ProfileService)
           lc.user = response.user; 
           lc.loggedIn = response.success;
           lc.message = response.message;
-          if(ProfileService.user.hasProfile)
+          if(lc.user && lc.user.hasProfile)
             $state.go('main');
-          else if(ProfileService.user)
+          else if(lc.user)
             $state.go('profile');
       });
     };

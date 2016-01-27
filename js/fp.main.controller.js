@@ -20,11 +20,9 @@ function ($window, $state,  $timeout, ProfileService, QueryService)
     mc.init = function()
     {
         mc.filters = { };
-//        mc.filters.portrait='personal';
         mc.searchResults=[];
-        mc.fpConfig = $window.fpConfig; 
-        mc.showOptions = mc.fpConfig.grid.showOptions;
-        mc.options = mc.fpConfig.grid.options;
+        mc.showOptions = ProfileService.getConfig("grid.showOptions");
+        mc.options = ProfileService.getConfig("grid.options")
         if(!mc.options)
             mc.options = { columns: 4, rows: 4, margin: 10, border: 1, ratio: 1, shadow: false};
 
@@ -56,8 +54,8 @@ function ($window, $state,  $timeout, ProfileService, QueryService)
 		{
 			mc.loading = false;    
 		    mc.questions = response.questions;
-		    if(mc.questions)
-		      mc.questions.byId = mc.questions.indexBy("id");
+		    if(!mc.questions) return;
+            mc.questions.byId = mc.questions.indexBy("id");
 		  	mc.questions.forEach(function (q) 
 		  	{
 		  		q.title = q.field_name.makeTitle(true);
@@ -79,7 +77,7 @@ function ($window, $state,  $timeout, ProfileService, QueryService)
     mc.getCourses = function()
     {
         if(!mc.filters.meal) 
-            return mc.fpConfig.dropdown.meal[1].courses;
+            return ProfileService.getConfig("dropdown.meal.1.courses");
         return mc.filters.meal.courses;
     };
 

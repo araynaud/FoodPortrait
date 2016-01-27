@@ -16,14 +16,19 @@ angular.module('fpServices', ['ngResource'])
         this.loadCountries();
     };
 
+    this.getConfig = function(key)
+    {
+        return valueIfDefined(key, service.config);
+    }
+
     this.isDebug = function()
     {
-        return valueIfDefined('config.debug.angular', service);
+        return service.getConfig("debug.angular");
     };
     
     this.isOffline = function()
     {
-        return valueIfDefined('config.debug.offline', service);
+        return service.getConfig("debug.offline");
     };
 
     this.serviceExt = function()

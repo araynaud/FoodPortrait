@@ -23,26 +23,22 @@ $meta["og:url"] = currentUrlDir();
 <meta name="mobile-web-app-capable" content="yes" />
 <?php echo metaTagArray($meta); ?>
 
-<?php addCssFromConfig("lib.bootstrap"); 
-      addAllCss("style"); ?>
-
 <link rel="icon" href="images/icon128.png"/>
 <link rel="icon" sizes="192x192" href="images/icon192.png"/>
 <link rel="icon" sizes="128x128" href="images/icon128.png"/>
 <link rel="apple-touch-icon" sizes="128x128" href="images/icon128.png"/>
 <link rel="apple-touch-icon-precomposed" sizes="128x128" href="images/icon128.png"/>
 
-<?php addScriptFromConfig("lib", "jquery.min.js");
+<?php addCssFromConfig("lib.bootstrap"); 
+      addAllCss("style");
+      addAllCss("directives"); 
+      addScriptFromConfig("lib", "jquery.min.js");
       addScriptFromConfig("lib.bootstrap");
       addScriptFromConfig("lib.angular"); 
       addScriptFromConfig("lib"); 
-?>
-
-<script type="text/javascript" src="/mt/js/mt.extensions.js"></script>
-
-<?php addAllScripts("js");
-  addAllCss("directives"); 
-  addAllScripts("directives"); 
+      addScriptFromConfig("MediaThingy", "mt.extensions.js");
+      addAllScripts("js");
+      addAllScripts("directives"); 
 ?>
 
 <script type="text/javascript">
