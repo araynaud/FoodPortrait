@@ -23,12 +23,7 @@ $meta["og:url"] = currentUrlDir();
 <meta name="mobile-web-app-capable" content="yes" />
 <?php echo metaTagArray($meta); ?>
 
-<?php addCssFromConfig("lib.bootstrap") ?>
-<link rel="stylesheet" href="style/common.css"/>
-<link rel="stylesheet" href="style/sidebar.css"/>
-<link rel="stylesheet" href="style/signin.css"/>
-<link rel="stylesheet" href="style/sticky-footer.css"/>
-<link rel="stylesheet" href="style/fileUpload.css"/>
+<?php addCssFromConfig("lib.bootstrap"); addAllCss("style"); ?>
 
 <link rel="icon" href="images/icon128.png"/>
 <link rel="icon" sizes="192x192" href="images/icon192.png"/>
@@ -43,18 +38,11 @@ $meta["og:url"] = currentUrlDir();
 ?>
 
 <script type="text/javascript" src="/mt/js/mt.extensions.js"></script>
-<script type="text/javascript" src="js/fp.app.js"></script>
-<script type="text/javascript" src="js/fp.profile.service.js"></script>
-<script type="text/javascript" src="js/fp.query.service.js"></script>
 
-<script type="text/javascript" src="js/fp.layout.controller.js"></script>
-<script type="text/javascript" src="js/fp.login.controller.js"></script>
-<script type="text/javascript" src="js/fp.profile.controller.js"></script>
-<script type="text/javascript" src="js/fp.main.controller.js"></script>
-<script type="text/javascript" src="js/fp.fileupload.controller.js"></script>
-
-<?php addAllScripts("directives"); 
-addAllCss("directives"); ?>
+<?php addAllScripts("js");
+  addAllScripts("directives"); 
+  addAllCss("directives"); 
+?>
 
 <script type="text/javascript">
 <?php echoJsVar("fpConfig"); echoJsVar("fpUser"); ?>
