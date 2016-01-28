@@ -14,7 +14,7 @@ function ($scope, $window, $state, ProfileService)
         $window.addEventListener("load",   lc.getWindowSize);
         $window.addEventListener("resize", lc.getWindowSize);
         
-        lc.showDebug = valueIfDefined("fpConfig.debug.angular");
+        lc.showDebug = ProfileService.isDebug();
         lc.userAgent = navigator.userAgent.substringAfter(")", true);
         lc.isMobile = ProfileService.isMobile();
 

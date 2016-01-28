@@ -54,7 +54,7 @@ My Meals: view latest for this user
     <ul class="nav nav-sidebar filters">
     <li>
         <label for="dd_meal">Meal:</label> 
-        <select id="dd_meal" ng-model="mc.filters.meal" name="meal" class="form-control" ng-options="item.name for item in mc.fpConfig.dropdown.meal" ng-change="mc.search()">
+        <select id="dd_meal" ng-model="mc.filters.meal" name="meal" class="form-control" ng-options="item.name for item in mc.mealList" ng-change="mc.search()">
           <option value="">-</option>
         </select>
     </li>
@@ -66,7 +66,7 @@ My Meals: view latest for this user
     </li>
     <li>
         <label for="dd_mood">Mood:</label> 
-        <select id="dd_mood" ng-model="mc.filters.mood" name="mood" class="form-control" ng-options="item for item in mc.fpConfig.dropdown.mood" ng-change="mc.search()">
+        <select id="dd_mood" ng-model="mc.filters.mood" name="mood" class="form-control" ng-options="item for item in mc.moodList" ng-change="mc.search()">
           <option value="">-</option>
         </select>
     </li>

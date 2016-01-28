@@ -11,8 +11,8 @@ angular.module('app').directive('objectForm', function ()
             window.objectForm = this;
 
             vm.title="Your Profile";
-            vm.showDebug = valueIfDefined("fpConfig.debug.angular");
-            vm.isMobile = valueIfDefined("fpConfig.isMobile");
+            vm.showDebug = ProfileService.isDebug();
+            vm.isMobile = ProfileService.isMobile();
 
             //transform user_answer array into formdata object.
             vm.loadUserAnswers = function() 

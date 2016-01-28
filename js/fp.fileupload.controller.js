@@ -13,16 +13,15 @@ function ($scope, $window, $state, $stateParams, $timeout, Upload, ProfileServic
 
     uc.init = function()
     {
-        uc.showDebug = valueIfDefined("fpConfig.debug.angular");
-        uc.baseUrl = valueIfDefined("fpConfig.upload.baseUrl");
-        uc.baseServer = valueIfDefined("fpConfig.upload.server");
+        uc.showDebug = ProfileService.getConfig("debug.angular");
+        uc.baseUrl = ProfileService.getConfig("upload.baseUrl");
+        uc.baseServer = ProfileService.getConfig("upload.server");
         uc.offline = ProfileService.isOffline();
 
         uc.newUpload = !$stateParams.uploadId;
         uc.queued = true;
         this.scope = $scope;
         this.state = $state;
-        uc.fpConfig = $window.fpConfig;
         uc.logReverse = false;
         uc.form = {};
         uc.loadData();
@@ -38,9 +37,13 @@ function ($scope, $window, $state, $stateParams, $timeout, Upload, ProfileServic
         uc.setToday = function() { return uc.form.image_date_taken = uc.today; };
         uc.setToday();
     // end date picker options
-
-        uc.meals = uc.fpConfig.dropdown.meal.distinct("name");
-        uc.meals.byName = uc.fpConfig.dropdown.meal.indexBy("name");
+        uc.moodList = ProfileService.getConfig("dropdown.mood");
+        uc.mealList = ProfileService.getConfig("dropdown.meal");
+        if(uc.mealList)
+        {
+            uc.mealNames = uc.mealList.distinct("name");
+            uc.mealsbyName = uc.mealList.indexBy("name");
+        }
     };
 
 //load existing image info from DB
@@ -195,18 +198,17 @@ function ($scope, $window, $state, $stateParams, $timeout, Upload, ProfileServic
         if(!dt) return;
         var hour = dt.getHours();
         var mealId = 0;
-        var list = uc.fpConfig.dropdown.meal;
-        for(mealId = 0; mealId < list.length; mealId++)
-            if(!list[mealId].start || hour >= list[mealId].start && hour < list[mealId].end) break;
+        for(mealId = 0; mealId < uc.mealList.length; mealId++)
+            if(!uc.mealList[mealId].start || hour >= uc.mealList[mealId].start && hour < uc.mealList[mealId].end) break;
         uc.mealId = mealId;
-        return uc.form.meal = uc.fpConfig.dropdown.meal[mealId].name;
+        return uc.form.meal = uc.mealList[mealId].name;
     };
 
     uc.getCourses = function()
     {
         var mealId = uc.form.meal; 
         if(!mealId) return [];
-        return uc.meals.byName[mealId].courses || [];
+        return uc.mealsbyName[mealId].courses || [];
     };
 
     //post details

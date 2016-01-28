@@ -9,7 +9,6 @@ angular.module('fpServices')
     this.init = function()
     {
         $window.QueryService = this;
-        this.config = $window.fpConfig;
         this.serviceUrl = 'api/query' + ProfileService.serviceExt();
         this.queryResource = $resource(this.serviceUrl);
     };

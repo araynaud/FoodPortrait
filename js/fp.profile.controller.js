@@ -17,15 +17,11 @@ function ($window, $state, ProfileService)
 
   pc.plural = plural;
   pc.loading = false;
-  pc.config = $window.fpConfig;
-  pc.showDebug = valueIfDefined("fpConfig.debug.angular");
+  pc.showDebug = ProfileService.isDebug();
   pc.form = {};
 
   pc.init = function()
   {
-    if(!pc.config)
-      pc.actions.getConfig();
-    pc.config.isMobile = ProfileService.isMobile();
     pc.actions.getForm();
   } 
 
@@ -111,8 +107,8 @@ function ($window, $state, ProfileService)
 
   pc.title = function()
   {
-    document.title = ProfileService.title ? ProfileService.title + " - " + pc.config.defaultTitle : pc.config.defaultTitle;
-    return ProfileService.title || pc.config.defaultTitle;
+    var defaultTitle = ProfileService.getConfig("defaultTitle");
+    return document.title = String.append(ProfileService.title, " - ", defaultTitle);
   };
 
   pc.init();

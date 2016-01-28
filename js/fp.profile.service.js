@@ -1,13 +1,13 @@
 'use strict';
 
 angular.module('fpServices', ['ngResource'])
-.service('ProfileService', ['$http', '$resource', '$q', function($http, $resource, $q) 
+.service('ProfileService', ['$window', '$http', '$resource', '$q', function($window, $http, $resource, $q) 
 {
     var service = this;
     this.init = function()
     {
-        window.ProfileService = this;
-        this.config = window.fpConfig;
+        $window.ProfileService = this;
+        this.config = $window.fpConfig;
 
         this.questions = [];
         this.configResource = $resource('api/config.php');

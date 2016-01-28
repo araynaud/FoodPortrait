@@ -19,14 +19,14 @@ angular.module('app').directive('imageGrid', function ()
             vm.grid = angular.element(vm.gridSelector);
             vm.parent = vm.grid.parent().parent();
             vm.selector = vm.gridSelector  + " .cell";
-            vm.showDebug = valueIfDefined("fpConfig.debug.angular");
-            vm.baseUrl = valueIfDefined("fpConfig.upload.baseUrl");
-            vm.baseServer = valueIfDefined("fpConfig.upload.server");
-            if(!vm.options.borderColor) vm.options.borderColor = 'black';
+
+            vm.showDebug = ProfileService.isDebug();
+            vm.baseUrl = ProfileService.getConfig("upload.baseUrl");
+            vm.baseServer = ProfileService.getConfig("upload.server");
             vm.isIE = ProfileService.clientIsIE();
             vm.isMobile = ProfileService.isMobile();
 
-            vm.thumbnails = valueIfDefined("fpConfig.thumbnails");
+            vm.thumbnails = ProfileService.getConfig("thumbnails");
             if(vm.thumbnails.keep)
                 delete vm.thumbnails.sizes[vm.thumbnails.keep];
             vm.tnsizes = Object.toArray(vm.thumbnails.sizes);
@@ -44,12 +44,15 @@ angular.module('app').directive('imageGrid', function ()
         {
             if(!vm.options) vm.options = {};
             opts.forEach(vm.initOption);
+            if(!vm.options.borderColor) 
+                vm.options.borderColor = 'black';
             return vm.options;
         };
 
         vm.initOption = function(name)
         {            
-            if(vm[name]) vm.options[name] = vm[name];
+            if(vm[name]) 
+                vm.options[name] = vm[name];
             return vm.options[name];
         };
 
