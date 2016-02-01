@@ -1,11 +1,21 @@
 .form-signin
 {
-  max-width: 400px;
   padding: 10px;
   margin: 0 auto;
 }
 
-.form-signin .form-signin-heading, .form-signin .margin, .form-signin .marginB
+.form-signin.narrow, .form-signin .narrow
+{
+  max-width: 400px;
+}
+
+.form-signin .form-signin-heading
+{
+	text-align: center;
+	margin-top: 10px;
+}
+
+.form-signin .form-signin-heading, .form-signin .margin, .marginB
 {
   margin-bottom: 10px;
 }
@@ -15,39 +25,3 @@
   font-weight: normal;
 }
 
-.form-signin .form-control
-{
-  position: relative;
-  height: auto;
-  -webkit-box-sizing: border-box;
-     -moz-box-sizing: border-box;
-          box-sizing: border-box;
-  padding: 10px;
-}
-
-/*
-.form-signin .form-control:focus 
-{
-  z-index: 2;
-}
-*/
-
-/*
-.form-signin input[type="text"], .form-signin input[type="password"], .form-signin input[type="email"]
-{
-  margin-bottom: -1px;
-  border-radius: 0;
-}
-*/
-
-.form-signin input.first
-{
-  border-top-left-radius: 4px;
-  border-top-right-radius: 4px;
-}
-
-.form-signin input.last
-{
-  border-bottom-right-radius: 4px;
-  border-bottom-left-radius: 4px;
-}
