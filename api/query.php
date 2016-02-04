@@ -35,20 +35,8 @@ function demographicPortrait($db, $filters)
 {
 	global $users;
 	splitFilters($filters, $imageFilters, $demoFilters);
-
-/*
-	$users = filterUsers($db, $demoFilters);
-debug("demographicPortrait users", $users);
-
-	if($users === null)
-		$users = fpCurrentUsername();
-	else if(empty($users))
-		return array();
-*/
 	$sqlParams = array("table" => "user_upload_search", "order_by" => "upload_id desc");
 
-//	if($users !== null)
-//		$sqlParams["username"] = $users;
 	if($demoFilters)
 		$sqlParams["where"] = userFilterCondition($demoFilters);
 
@@ -71,8 +59,9 @@ debug("demographicPortrait users", $users);
 
 function randomize($db, $size)
 {
-	$minmax = $db->selectRow("SELECT MIN(upload_id) minid, MAX(upload_id) maxid from user_upload");
+	$minmax = $db->selectRow("SELECT MIN(upload_id) minid, MAX(upload_id) maxid, COUNT(upload_id) nb from user_upload");
 debug("min max ids", $minmax);
+$size *= $minmax["maxid"] / $minmax["nb"];
 	$ids = randomArray($size, $minmax["minid"], $minmax["maxid"]);
 //	sort($ids);
 //	return array_values($ids);
@@ -141,30 +130,22 @@ function hasDemographicFilters($filters)
 //get username list from profile filters
 function filterUsers($db, $filters)
 {
-debug("filterUsers", $filters, "print_r");
+debug("filterUsers", $filters);
 
 	if(!$filters) return null; //all users
 
 	$query = "SELECT username FROM user";
-//where username in (select username from user_answer where question_id = 0 and answer_id = 3)
-//and username in (select username from user_answer where question_id = 16 and answer_id = 65)
-
 	$where = userFilterCondition($filters);
 	if($where)
 		$query .= " WHERE $where";
 
-/*	$and = "WHERE";
-	foreach ($filters as $questionId => $answerId) 
-	{
-		$query .= " $and username in (select username from user_answer where question_id = $questionId and answer_id = $answerId)";
-		$and="AND";
-	}
-debug("filterUsers", $query);
-*/
 	$users = $db->select($query, null, true);
 	return $users;
 }
 
+
+//where username in (select username from user_answer where question_id = 0 and answer_id = 3)
+//and username in (select username from user_answer where question_id = 16 and answer_id = 65)
 function userFilterCondition($filters)
 {
 	$and="";
