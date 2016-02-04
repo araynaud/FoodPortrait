@@ -20,6 +20,7 @@ angular.module('fpServices')
         {
             service.results = response.results;
             service.users = response.users;
+            service.queries = response.queries;
             deferred.resolve(service.results);
         });
         return deferred.promise;

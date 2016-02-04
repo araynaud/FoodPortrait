@@ -141,6 +141,7 @@ function ($window, $state,  $timeout, ProfileService, QueryService)
         {
             mc.searchResults = response; 
             mc.users = QueryService.users;
+            mc.queries = QueryService.queries;
         }, 
         mc.errorMessage);
     };
@@ -148,7 +149,7 @@ function ($window, $state,  $timeout, ProfileService, QueryService)
     mc.searchMore = function()
     {
          $timeout(function() { 
-            if(mc.searchResults.length < mc.options.rows * mc.options.columns)
+            if(!mc.searchResults || mc.searchResults.length < mc.options.rows * mc.options.columns)
                 mc.search();
           }, 0);
     };

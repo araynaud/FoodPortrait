@@ -7,6 +7,7 @@ class SqlManager
 	private $mysqlConfig = null;
 	private $mysqlConnection = null;
 	private static $MYSQL_PARAM_TYPES = array("string"=>"s", "integer" => "i", "double"=>"d",  "blob"=>"b");
+	private $sqlLog = array();
 
 	function __construct($config)
 	{
@@ -15,11 +16,15 @@ class SqlManager
 
 	private function configure($config)
 	{
-		$this->offline = arrayGet($config, "debug.offline");
-		if($this->offline) return;
-
+		$this->debug = arrayGet($config, "debug.sql");
+		if($this->offline = arrayGet($config, "debug.offline")) return;
 	    $this->mysqlConfig = isset($config["_mysql"]) ? $config["_mysql"] : $config;
 	    //debug("config", $this->mysqlConfig);
+	}
+
+	public function getLog()
+	{
+		return $this->sqlLog;
 	}
 
 	public function getDbModel()
@@ -79,10 +84,11 @@ class SqlManager
 
 	public function selectWhere($params)
 	{	
-		$table = $params["table"];
-		$orderBy = @$params["order_by"];
-		$groupBy = @$params["group_by"];
-		$limit = @$params["limit"];
+		$table = arrayExtract($params, "table");
+		$orderBy = arrayExtract($params, "order_by");
+		$groupBy = arrayExtract($params, "group_by");
+		$limit = arrayExtract($params, "limit");
+
 		$sql = "SELECT * FROM $table" . $this->sqlWhere($params);
 		if($groupBy)	$sql .= " group by $groupBy";
 		if($orderBy)	$sql .= " order by $orderBy";
@@ -190,10 +196,15 @@ debug("selectWhere SQL: $sql", $params);
 
 	public function select($query, $params=null, $singleColumn=false, $singleRow=false)
 	{	
+		debug("SQL: $query", $params);
+		if($this->debug && count($params))
+			$this->sqlLog[] = array("SQL" => $query) + $params;
+		else if($this->debug)
+			$this->sqlLog[] = $query;
+
 		if($this->offline) return;
 	    $this->connect(); 
 		//create a prepared statement
-	debug("SQL: $query", $params);
 		$statement = $this->mysqlConnection->prepare($query);
 		if (!$statement)
 		    throw new Exception($this->mysqlConnection->error);
@@ -326,8 +337,9 @@ debug("returning", $rows);
 // check if columns part of table
 	public function update($values, $where)
 	{
-	    $sql = "UPDATE " . $values["table"];
-		unset($values["table"]);
+		$table = arrayExtract($values, "table");
+	    $sql = "UPDATE $table";
+
 	    $valuesSql = $this->sqlUpdateValues($values);
 	    if($valuesSql) 
 	    	$sql .= " SET" . $valuesSql;
@@ -340,7 +352,8 @@ debug("update SQL: $sql ", $params);
 
 	public function delete($where)
 	{
-	    $sql = "DELETE FROM " . $where["table"] . $this->sqlWhere($where);
+		$table = arrayExtract($values, "table");
+	    $sql = "DELETE FROM $table " . $this->sqlWhere($where);
 debug("delete SQL: $sql ", $where);
 	    return $this->selectValue($sql, $where);
 	}
@@ -356,11 +369,16 @@ debug("delete SQL: $sql ", $where);
 		unset($params["group_by"]);
 		unset($params["order_by"]);
 		unset($params["limit"]);
+		$where = arrayExtract($params, "where");
+
 	 	foreach($params as $key => $param)
 		{
 			$sql .= " $sep " . SqlManager::sqlCondition($params, $key, true);
 			$sep = "AND";
 		}
+
+		if($where)
+			$sql .= " $sep $where";
 		return $sql;
 	}
 

@@ -25,6 +25,7 @@ function userLatestUploads($db, $username, $filters = null)
 
 function setExists(&$uploads)
 {
+	if(!$uploads) return;
 	foreach ($uploads as &$u)
 		$u["exists"] = uploadedFileExists($u);
 }
@@ -34,15 +35,22 @@ function demographicPortrait($db, $filters)
 {
 	global $users;
 	splitFilters($filters, $imageFilters, $demoFilters);
+
+/*
 	$users = filterUsers($db, $demoFilters);
 debug("demographicPortrait users", $users);
 
 	if($users === null)
 		$users = fpCurrentUsername();
-	else if(count($users) == 0)
+	else if(empty($users))
 		return array();
+*/
+	$sqlParams = array("table" => "user_upload_search", "order_by" => "upload_id desc");
 
-	$sqlParams = array("table" => "user_upload_search", "order_by" => "image_date_taken desc");
+//	if($users !== null)
+//		$sqlParams["username"] = $users;
+	if($demoFilters)
+		$sqlParams["where"] = userFilterCondition($demoFilters);
 
 	//TODO: use date_min and date_max
 	$date_min = arrayExtract($imageFilters, "date_min");
@@ -56,9 +64,36 @@ debug("demographicPortrait users", $users);
 	foreach ($imageFilters as $key => $value)
 		$sqlParams[$key] = $value;	
 
-	$sqlParams["username"] = $users;
 	$uploads = $db->selectWhere($sqlParams);
 	return $uploads;
+}
+
+
+function randomize($db, $size)
+{
+	$minmax = $db->selectRow("SELECT MIN(upload_id) minid, MAX(upload_id) maxid from user_upload");
+debug("min max ids", $minmax);
+	$ids = randomArray($size, $minmax["minid"], $minmax["maxid"]);
+//	sort($ids);
+//	return array_values($ids);
+
+	$sqlParams = array("table" => "user_upload_search", "order_by" => "upload_id desc", "upload_id" => $ids);
+	$uploads = $db->selectWhere($sqlParams);
+	return $uploads;
+}
+
+
+function randomArray($size, $min, $max)
+{
+	$arr = array();
+	for($i=0; $i < $size;)
+	{
+		$id = rand ($min, $max);
+		if(isset($arr[$id])) continue;
+		$arr[$id] = $id;
+		$i++;
+	}
+	return array_values($arr);
 }
 
 //searchText: add %% to every word
@@ -114,18 +149,36 @@ debug("filterUsers", $filters, "print_r");
 //where username in (select username from user_answer where question_id = 0 and answer_id = 3)
 //and username in (select username from user_answer where question_id = 16 and answer_id = 65)
 
-	$and = "WHERE";
+	$where = userFilterCondition($filters);
+	if($where)
+		$query .= " WHERE $where";
+
+/*	$and = "WHERE";
 	foreach ($filters as $questionId => $answerId) 
 	{
 		$query .= " $and username in (select username from user_answer where question_id = $questionId and answer_id = $answerId)";
 		$and="AND";
 	}
 debug("filterUsers", $query);
-
+*/
 	$users = $db->select($query, null, true);
-
 	return $users;
 }
+
+function userFilterCondition($filters)
+{
+	$and="";
+	$query = "";
+	foreach ($filters as $questionId => $answerId) 
+	{
+		$query .= " $and username in (select username from user_answer where question_id = $questionId and answer_id = $answerId)";
+		$and="AND";
+	}
+	debug("userFilterCondition", $query);
+	return $query;
+}
+
+
 
 // end functions
 
@@ -142,17 +195,23 @@ if($db->offline)
 	return;
 }
 
-//if profile filters( Q_ ) : demographic
-//otherwise: personal
-$results = demographicPortrait($db, $params);
+$mode = getParam("mode");
+$limit = reqParam("limit", 20);
+if($mode=="random")
+	$results = randomize($db, $limit);
+else
+	$results = demographicPortrait($db, $params);
 //$results = array_filter($results, "uploadedFileExists");	
 setExists($results);
+
+$queries = $db->getLog();
+
 $db->disconnect();
 
 $response=array();
-addVarToArray($response, "params");
-addVarToArray($response, "users");
-addVarToArray($response, "results");
-
+$response["time"] = getTimer();
+debugVar("db");
+addVarsToArray($response, "params queries users results");
+getTimer();
 echo jsValue($response, true);
 ?>
