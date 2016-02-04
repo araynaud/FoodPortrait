@@ -352,7 +352,7 @@ debug("update SQL: $sql ", $params);
 
 	public function delete($where)
 	{
-		$table = arrayExtract($values, "table");
+		$table = arrayExtract($where, "table");
 	    $sql = "DELETE FROM $table " . $this->sqlWhere($where);
 debug("delete SQL: $sql ", $where);
 	    return $this->selectValue($sql, $where);
