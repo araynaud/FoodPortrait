@@ -31,11 +31,14 @@ function setExists(&$uploads)
 }
 
 //filter uploads from selected user
-function demographicPortrait($db, $filters)
+function demographicPortrait($db, $filters, $order="")
 {
 	global $users;
 	splitFilters($filters, $imageFilters, $demoFilters);
-	$sqlParams = array("table" => "user_upload_search", "order_by" => "upload_id desc");
+
+	setIfEmpty($order, "upload_id desc");
+	if($order == "random") $order = "rand()";
+	$sqlParams = array("table" => "user_upload_search", "order_by" => $order);
 
 	if($demoFilters)
 		$sqlParams["where"] = userFilterCondition($demoFilters);
@@ -54,35 +57,6 @@ function demographicPortrait($db, $filters)
 
 	$uploads = $db->selectWhere($sqlParams);
 	return $uploads;
-}
-
-
-function randomize($db, $size)
-{
-	$minmax = $db->selectRow("SELECT MIN(upload_id) minid, MAX(upload_id) maxid, COUNT(upload_id) nb from user_upload");
-debug("min max ids", $minmax);
-$size *= $minmax["maxid"] / $minmax["nb"];
-	$ids = randomArray($size, $minmax["minid"], $minmax["maxid"]);
-//	sort($ids);
-//	return array_values($ids);
-
-	$sqlParams = array("table" => "user_upload_search", "order_by" => "upload_id desc", "upload_id" => $ids);
-	$uploads = $db->selectWhere($sqlParams);
-	return $uploads;
-}
-
-
-function randomArray($size, $min, $max)
-{
-	$arr = array();
-	for($i=0; $i < $size;)
-	{
-		$id = rand ($min, $max);
-		if(isset($arr[$id])) continue;
-		$arr[$id] = $id;
-		$i++;
-	}
-	return array_values($arr);
 }
 
 //searchText: add %% to every word
@@ -176,23 +150,23 @@ if($db->offline)
 	return;
 }
 
-$mode = getParam("mode");
+$order = arrayExtract($params, "order");
+$group = arrayExtract($params, "group");
 $limit = reqParam("limit", 20);
-if($mode=="random")
-	$results = randomize($db, $limit);
-else
-	$results = demographicPortrait($db, $params);
-//$results = array_filter($results, "uploadedFileExists");	
+$results = demographicPortrait($db, $params, $order);
+$users = arrayDistinct($results, "username");
+
 setExists($results);
 
-$queries = $db->getLog();
+if($group)
+	$results = arrayGroupBy($results, $group);
 
+$queries = $db->getLog();
 $db->disconnect();
 
 $response=array();
 $response["time"] = getTimer();
-debugVar("db");
 addVarsToArray($response, "params queries users results");
-getTimer();
 echo jsValue($response, true);
+getTimer();
 ?>

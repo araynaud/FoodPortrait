@@ -82,6 +82,12 @@ class SqlManager
 	    return $this->select($sql);
 	}
 
+	public function selectAllDistinct($tableName, $column)
+	{
+	    $sql = "SELECT DISTINCT $column FROM $tableName";
+	    return $this->selectColumn($sql);
+	}
+
 	public function selectWhere($params)
 	{	
 		$table = arrayExtract($params, "table");
@@ -99,14 +105,24 @@ debug("selectWhere SQL: $sql", $params);
 
 	public function exists($params)
 	{
-	    $query = "SELECT 1 FROM " . $params["table"] . $this->sqlWhere($params);
+		$table = arrayExtract($params, "table");
+	    $query = "SELECT 1 FROM $table" . $this->sqlWhere($params);
 		$query = "SELECT EXISTS($query) ex";
 		return $this->selectValue($query, $params);
 	}
 
+	public function distinct($params)
+	{		
+		$table = arrayExtract($params, "table");
+		$columns = arrayExtract($params, "columns");
+	    $query = "SELECT DISTINCT $columns FROM $table" . $this->sqlWhere($params);
+		return $this->selectColumn($query, $params);
+	}
+
 	public function count($params)
 	{
-	    $query = "SELECT COUNT(1) nb FROM " . $params["table"] . $this->sqlWhere($params);
+		$table = arrayExtract($params, "table");
+	    $query = "SELECT COUNT(1) nb FROM $table" . $this->sqlWhere($params);
 		return $this->selectValue($query, $params);
 	}
 
@@ -114,12 +130,6 @@ debug("selectWhere SQL: $sql", $params);
 	{	
 		$type = gettype($param);
 		return isset($MYSQL_PARAM_TYPES[$type]) ? $MYSQL_PARAM_TYPES[$type] : $type[0];
-	}
-
-	public function showColumns($tableName)
-	{
-	    $query = "SHOW COLUMNS FROM $tableName";
-		return $this->select($query);
 	}
 
 	public function getPrimaryKey($tableName)
@@ -162,6 +172,12 @@ debug("selectWhere SQL: $sql", $params);
 	{
 	    $query = "SHOW COLUMNS FROM $tableName";
 		return $this->query($query, true);
+	}
+
+	public function showColumns($tableName)
+	{
+	    $query = "SHOW COLUMNS FROM $tableName";
+		return $this->select($query);
 	}
 
 	public function showTables()
@@ -252,10 +268,13 @@ debug("returning", $rows);
 	//get result of select as array of rows. each row is an associative array
 	private function query($query, $singleColumn=false, $singleRow=false)
 	{
+		debug("SQL: query", $query);
+		if($this->debug)
+			$this->sqlLog[] = $query;
+
 		if($this->offline) return;
 
 	    $this->connect(); //if connection not already open 
-	debug("query", $query);
 	    $result = $this->mysqlConnection->query($query);
 	    $rows = SqlManager::getResultData($result, $singleColumn, $singleRow);
 	    return $rows;
@@ -414,8 +433,21 @@ debug("delete SQL: $sql ", $where);
 			}
 			return "$key in ($sqlValue)";
 		}
-		
-		$op = contains($value, "%") ? "LIKE" : "=";
+
+		//SQL operator	
+		$op = "=";
+		if(endsWith($key, "_max"))
+		{
+			$op= "<=";
+			$key = substringBefore($key, "_max");
+		}
+		else if(endsWith($key, "_min"))
+		{
+			$op= ">=";
+			$key = substringBefore($key, "_min");
+		}
+		else if(contains($value, "%"))
+			$op = "LIKE";
 
 		if($statement)
 			return "$key $op ?";
