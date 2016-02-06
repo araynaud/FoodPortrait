@@ -30,7 +30,7 @@ My Meals: view latest for this user
     <br/>
     <div class="input-group">
       <input type="text" id="inputDate" name="date_min" class="form-control"
-      ng-model="mc.filters.date_min" uib-datepicker-popup="{{mc.dateFormat}}" ng-click="mc.pickDate(1)"
+      ng-model="mc.filters.upload_date_min" uib-datepicker-popup="{{mc.dateFormat}}" ng-click="mc.pickDate(1)"
       is-open="mc.datepickerOpen1" max-date="mc.today" datepicker-options="mc.dateOptions" close-text="Close" placeholder="From date"/>
       <span class="input-group-btn">
         <button type="button" class="btn btn-default" ng-click="mc.pickDate(1)">
@@ -41,7 +41,7 @@ My Meals: view latest for this user
     <br/>
     <div class="input-group">
       <input type="text" id="inputDateMax" name="date_max" class="form-control"
-      ng-model="mc.filters.date_max" uib-datepicker-popup="{{mc.dateFormat}}" ng-click="mc.pickDate(2)"
+      ng-model="mc.filters.upload_date_max" uib-datepicker-popup="{{mc.dateFormat}}" ng-click="mc.pickDate(2)"
       is-open="mc.datepickerOpen2" max-date="mc.today" datepicker-options="mc.dateOptions" close-text="Close" placeholder="To date"/>
       <span class="input-group-btn">
         <button type="button" class="btn btn-default" ng-click="mc.pickDate(2)">

@@ -31,21 +31,18 @@ function setExists(&$uploads)
 }
 
 //filter uploads from selected user
-function demographicPortrait($db, $filters, $order="")
+function demographicPortrait($db, $filters)
 {
 	global $users;
 	splitFilters($filters, $imageFilters, $demoFilters);
-
-	setIfEmpty($order, "upload_id desc");
-	if($order == "random") $order = "rand()";
-	$sqlParams = array("table" => "user_upload_search", "order_by" => $order);
+	$sqlParams = array("table" => "user_upload_search");
 
 	if($demoFilters)
 		$sqlParams["where"] = userFilterCondition($demoFilters);
 
 	//TODO: use date_min and date_max
-	$date_min = arrayExtract($imageFilters, "date_min");
-	$date_max = arrayExtract($imageFilters, "date_max");
+//	$date_min = arrayExtract($imageFilters, "date_min");
+//	$date_max = arrayExtract($imageFilters, "date_max");
 
 	//searchText: add %%
 	$searchText = searchWords(arrayExtract($imageFilters, "searchText"));
@@ -54,6 +51,9 @@ function demographicPortrait($db, $filters, $order="")
 
 	foreach ($imageFilters as $key => $value)
 		$sqlParams[$key] = $value;	
+
+	if(!@$sqlParams["order_by"])
+		$sqlParams["order_by"] = "upload_id desc";
 
 	$uploads = $db->selectWhere($sqlParams);
 	return $uploads;

@@ -110,7 +110,7 @@ function ($window, $state,  $timeout, ProfileService, QueryService)
     mc.filterValue = function(filter)
     {
         if(filter.toLocaleDateString)
-            return filter.toLocaleDateString();
+            return filter.toISOString().substringBefore('T');
         return filter.id || filter.name || filter;
     };
 

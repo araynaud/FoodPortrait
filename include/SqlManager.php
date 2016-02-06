@@ -90,15 +90,16 @@ class SqlManager
 
 	public function selectWhere($params)
 	{	
-		$table = arrayExtract($params, "table");
-		$orderBy = arrayExtract($params, "order_by");
+		$table   = arrayExtract($params, "table");
 		$groupBy = arrayExtract($params, "group_by");
-		$limit = arrayExtract($params, "limit");
+		$limit   = arrayExtract($params, "limit");
+		$orderBy = arrayExtract($params, "order_by");
+		if($orderBy === "random") $orderBy = "rand()";
 
 		$sql = "SELECT * FROM $table" . $this->sqlWhere($params);
-		if($groupBy)	$sql .= " group by $groupBy";
-		if($orderBy)	$sql .= " order by $orderBy";
-		if($limit)		$sql .= " limit $limit";
+		if($groupBy)	$sql .= " GROUP BY $groupBy";
+		if($orderBy)	$sql .= " ORDER BY $orderBy";
+		if($limit)		$sql .= " LIMIT $limit";
 debug("selectWhere SQL: $sql", $params);
 	    return $this->select($sql, $params);
 	}
