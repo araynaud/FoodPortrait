@@ -1,7 +1,7 @@
 angular.module('app').directive('spinner', [ "$timeout", "ProfileService", function ($timeout, ProfileService) 
 {
     return {
-        scope: { label: "=", value: "=", min: "=", max: "=", step: "=", loop: "=", mobile: "=", hold: "=", change: '=' },
+        scope: { label: "@", value: "=", min: "=", max: "=", step: "=", loop: "=", mobile: "=", hold: "=", change: '=' },
         templateUrl: 'directives/spinner.html',
         controllerAs: 'vm',
         bindToController: true,

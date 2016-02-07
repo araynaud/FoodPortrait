@@ -112,6 +112,11 @@ img.cover
   padding-bottom: 5px;
 }
 
+button label
+{
+  margin-bottom: 0px;
+}
+
 @media (min-width: 768px) 
 {
     img.preview.portrait 

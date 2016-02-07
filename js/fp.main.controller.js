@@ -160,6 +160,14 @@ function ($window, $state,  $timeout, ProfileService, QueryService)
             mc.search();
     };
 
+    mc.clearFilter = function(key, refresh)
+    {
+        delete mc.filters[key];
+        if(refresh)
+            mc.search();
+    };
+
+
     mc.errorMessage =  function (result)
     {
         mc.loading = false;
