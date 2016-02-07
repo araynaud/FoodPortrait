@@ -56,7 +56,7 @@ $meta["og:url"] = currentUrlDir();
         </a>
 
       <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".mobile #navbar" aria-expanded="false" aria-controls="navbar">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".isMobile #navbar" aria-expanded="false" aria-controls="navbar">
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
@@ -65,15 +65,15 @@ $meta["og:url"] = currentUrlDir();
 
       <div id="navbar" class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
-          <li ng-class="{active: lc.stateIs('about')}" data-toggle="collapse" data-target=".mobile #navbar"><a href="#/about">About</a></li>
-          <li ng-show="lc.loggedIn()" ng-class="{active: lc.stateIs('profile')}" data-toggle="collapse" data-target=".mobile #navbar"><a href="#/profile">Profile</a></li>
-          <li ng-show="lc.loggedIn()" ng-class="{active: lc.stateIs('upload')}"  data-toggle="collapse" data-target=".mobile #navbar"><a href="#/upload/">Upload</a></li>
+          <li ng-class="{active: lc.stateIs('about')}" data-toggle="collapse" data-target=".isMobile #navbar"><a href="#/about">About</a></li>
+          <li ng-show="lc.loggedIn()" ng-class="{active: lc.stateIs('profile')}" data-toggle="collapse" data-target=".isMobile #navbar"><a href="#/profile">Profile</a></li>
+          <li ng-show="lc.loggedIn()" ng-class="{active: lc.stateIs('upload')}"  data-toggle="collapse" data-target=".isMobile #navbar"><a href="#/upload/">Upload</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-          <li ng-hide="lc.loggedIn()" ng-class="{active: lc.stateIs('signin')}" data-toggle="collapse" data-target=".mobile #navbar"><a href="#/signin">Log in</a></li>
-          <li ng-hide="lc.loggedIn()" ng-class="{active: lc.stateIs('signup')}" data-toggle="collapse" data-target=".mobile #navbar"><a href="#/signup">Sign up</a></li>
-          <li ng-show="lc.loggedIn()" ng-class="{active: lc.stateIs('user')}"   data-toggle="collapse" data-target=".mobile #navbar"><a href="#/main">{{lc.userFullName()}}</a></li>
-          <li ng-show="lc.loggedIn()" data-toggle="collapse" data-target=".mobile #navbar"><a href="#/login" ng-click="lc.logout()">Sign out</a></li>
+          <li ng-hide="lc.loggedIn()" ng-class="{active: lc.stateIs('signin')}" data-toggle="collapse" data-target=".isMobile #navbar"><a href="#/signin">Log in</a></li>
+          <li ng-hide="lc.loggedIn()" ng-class="{active: lc.stateIs('signup')}" data-toggle="collapse" data-target=".isMobile #navbar"><a href="#/signup">Sign up</a></li>
+          <li ng-show="lc.loggedIn()" ng-class="{active: lc.stateIs('user')}"   data-toggle="collapse" data-target=".isMobile #navbar"><a href="#/main">{{lc.userFullName()}}</a></li>
+          <li ng-show="lc.loggedIn()" data-toggle="collapse" data-target=".isMobile #navbar"><a href="#/login" ng-click="lc.logout()">Sign out</a></li>
         </ul>
       </div>
     </div>
