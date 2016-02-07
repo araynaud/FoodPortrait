@@ -37,9 +37,8 @@ function ($window, $state,  $timeout, ProfileService, QueryService)
         mc.setMinToday = function() { return mc.filters.date_min = mc.today; };
         mc.setMaxToday = function() { return mc.filters.date_max = mc.today; };
 // end date picker options
-        mc.mealList = ProfileService.getConfig("dropdown.meal");
-        mc.moodList = ProfileService.getConfig("dropdown.mood");
 
+        mc.dropdown = ProfileService.getConfig("dropdown");
         mc.getFilters();
         mc.search();
     }
