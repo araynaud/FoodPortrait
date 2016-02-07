@@ -41,7 +41,10 @@ function demographicPortrait($db, $filters)
 	splitFilters($filters, $imageFilters, $demoFilters);
 	$sqlParams = array("table" => "user_upload_search");
 
-	if($demoFilters)
+	$portraitType = arrayExtract($imageFilters, "portrait");
+	if($portraitType == "personal")
+		$sqlParams["username"] = fpCurrentUsername();
+	else if($demoFilters)
 		$sqlParams["where"] = userFilterCondition($demoFilters);
 
 	//searchText: add %%

@@ -19,7 +19,7 @@ function ($window, $state,  $timeout, ProfileService, QueryService)
 
     mc.init = function()
     {
-        mc.filters = { };
+        mc.filters = { portrait: "personal" };
         mc.searchResults=[];
         mc.showOptions = ProfileService.getConfig("grid.showOptions");
         mc.options = ProfileService.getConfig("grid.options")
