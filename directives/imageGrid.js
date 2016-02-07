@@ -97,6 +97,7 @@ angular.module('app').directive('imageGrid', function ()
             if(!im) return;
 
             subdir = valueOrDefault(subdir, vm.subdir);
+            if(subdir == ".ss" && im.noss) subdir="";
             var url = String.combine(vm.baseUrl, im.username, subdir, im.filename);
             if(!im.exists && vm.baseServer) url = vm.baseServer + url;
             return url;

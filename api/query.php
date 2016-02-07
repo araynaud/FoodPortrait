@@ -27,7 +27,11 @@ function setExists(&$uploads)
 {
 	if(!$uploads) return;
 	foreach ($uploads as &$u)
+	{
 		$u["exists"] = uploadedFileExists($u);
+		if(!uploadedFileExists($u, ".ss"))
+			$u["noss"] = true;
+	}
 }
 
 //filter uploads from selected user

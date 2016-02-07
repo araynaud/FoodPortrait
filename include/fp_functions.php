@@ -230,21 +230,21 @@ function selectMeal($date)
 };
 
 //uploaded
-function getImagePath($u)
+function getImagePath($u, $subdir="")
 {
     $basePath = getConfig("upload._diskPath");
-    return combine($basePath, $u["username"], $u["filename"]);
+    return combine($basePath, $u["username"], $subdir, $u["filename"]);
 }
 
-function getImageUrl($u)
+function getImageUrl($u, $subdir="")
 {
     $basePath = getConfig("upload.baseUrl");
-    return combine($basePath, $u["username"], $u["filename"]);
+    return combine($basePath, $u["username"], $subdir, $u["filename"]);
 }
 
-function uploadedFileExists($u)
+function uploadedFileExists($u, $subdir="")
 {
-    $imagePath = getImagePath($u);
+    $imagePath = getImagePath($u, $subdir);
     return file_exists($imagePath);
 }
 
