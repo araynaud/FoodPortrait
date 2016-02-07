@@ -116,12 +116,13 @@ debug("selectWhere SQL: $sql", $params);
 
 	public function distinct($params)
 	{		
+		$searchText = arrayExtract($params, "searchText");
 		$table = arrayExtract($params, "table");
 		$columns = arrayExtract($params, "columns");
 		$reverse = arrayExtract($params, "reverse");
 	    $query = "SELECT DISTINCT $columns FROM $table" . $this->sqlWhere($params);
 	    $query .= " ORDER BY 1";
-//		if($reverse) $query .= " DESC";
+		if($reverse) $query .= " DESC";
 		return $this->selectColumn($query, $params);
 	}
 

@@ -19,7 +19,7 @@ function ($window, $state,  $timeout, ProfileService, QueryService)
 
     mc.init = function()
     {
-        mc.filters = { portrait: "personal", reverse: true };
+        mc.filters = { portrait: "personal", reverse: true, order_by: "image_date_taken" };
         mc.searchResults=[];
         mc.showOptions = ProfileService.getConfig("grid.showOptions");
         mc.options = ProfileService.getConfig("grid.options")
@@ -103,7 +103,7 @@ function ($window, $state,  $timeout, ProfileService, QueryService)
         var params = [];
         for(var f in mc.filters)
         {
-            if(!mc.filters[f]) continue;
+            if(!mc.filters[f] || mc.filters[f] === true) continue;
             params.push(mc.filterTitle(mc.filters[f]));
         }
         return params.join(", ");

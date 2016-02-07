@@ -29,7 +29,13 @@ My Meals: view latest for this user
     </div>
 
     <br/>
-
+    <div class="input-group">
+      <span class="input-group-btn">
+         <button type="button" class="btn btn-default"><label for="dd_portrait">Portrait</label></button> 
+      </span>
+      <select id="dd_portrait" ng-model="mc.filters.portrait" name="meal" class="form-control" ng-options="item for item in mc.dropdown.portrait" ng-change="mc.search()">
+        </select>
+    </div>
     <div class="input-group">
       <span class="input-group-btn">
         <button type="button" class="btn btn-default" ng-click="mc.filters.reverse = !mc.filters.reverse; mc.search()">
@@ -108,15 +114,6 @@ My Meals: view latest for this user
       </select>
     </div>
     <br/>
-
-    <div class="input-group">
-      <span class="input-group-btn">
-         <button type="button" class="btn btn-default"><label for="dd_portrait">Portrait</label></button> 
-      </span>
-      <select id="dd_portrait" ng-model="mc.filters.portrait" name="meal" class="form-control" ng-options="item for item in mc.dropdown.portrait" ng-change="mc.search()">
-        </select>
-    </div>
-
     <div class="input-group" ng-repeat="q in mc.questions" ng-if="mc.isFilter(q) && mc.filters.portrait=='demographic'">
       <span class="input-group-btn">
         <button type="button" class="btn btn-default"><label for="dd_{{q.field_name}}">{{q.title}}</label></button> 
