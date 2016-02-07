@@ -89,7 +89,16 @@ function ($window, $state,  $timeout, ProfileService, QueryService)
 
     mc.gridClasses = function()
     {
-        return { "col-sm-6": mc.searchResults.length > 1 };
+        var classes = {};
+        if(!mc.searchResults || mc.searchResults.length <= 1) return classes;
+        var nbCols = 12 / mc.searchResults.length;
+        var lg = Math.max(nbCols, 3); //large: 4 grids per row
+        var sm = Math.max(nbCols, 6); //small: 2 grids per row
+
+        classes["col-sm-"+sm] = true;
+        classes["col-lg-"+lg] = true;
+
+        return classes;
     }
 
     mc.resizeGrid = function(delay, last)

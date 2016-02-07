@@ -23,6 +23,8 @@
 }
 
 #sidebar-wrapper {
+    z-index: 1000;
+    background-color: white;
     position: fixed;
     left: 250px;
     width: 0;
