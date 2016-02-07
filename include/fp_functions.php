@@ -144,7 +144,7 @@ function processImage($uploadDir, $filename)
     $message =  "File uploaded.";
     $exif = getImageMetadata($uploadedFile);
     $dateTaken = getExifDateTaken($uploadedFile, $exif);
-    if(!$dateTaken)     $dateTaken = getIptcDate($exif);
+    if(!$dateTaken)   $dateTaken = getDateFromFilename($filename);
     if(!$dateTaken)   $dateTaken = getFileDate($uploadedFile);
     $exif["dateTaken"]  = $dateTaken;
 

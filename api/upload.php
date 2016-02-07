@@ -52,7 +52,7 @@ if($success)
 }
 
 $response["post"] = $_POST;
-addVarsToArray($response, "success message nbFiles upload_id dateTaken description");
+addVarsToArray($response, "success message nbFiles upload_id");
 $response["time"] = getTimer(true);
 echo jsValue($response, true, true);
 ?>
