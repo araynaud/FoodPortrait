@@ -19,7 +19,7 @@ function ($window, $state,  $timeout, ProfileService, QueryService)
 
     mc.init = function()
     {
-        mc.filters = { portrait: "personal" };
+        mc.filters = { portrait: "personal", reverse: true };
         mc.searchResults=[];
         mc.showOptions = ProfileService.getConfig("grid.showOptions");
         mc.options = ProfileService.getConfig("grid.options")
@@ -86,6 +86,11 @@ function ($window, $state,  $timeout, ProfileService, QueryService)
             return ProfileService.getConfig("dropdown.meal.1.courses");
         return mc.filters.meal.courses;
     };
+
+    mc.gridClasses = function()
+    {
+        return { "col-sm-6": mc.searchResults.length > 1 };
+    }
 
     mc.resizeGrid = function(delay, last)
     {

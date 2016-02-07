@@ -18,7 +18,7 @@ angular.module('fpServices')
         var deferred = $q.defer();
         this.queryResource.get(filters, function(response)
         {
-            service.results = response.results;
+            service.results = Object.toArray(response.results);
             service.users = response.users;
             service.queries = response.queries;
             deferred.resolve(service.results);

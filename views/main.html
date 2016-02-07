@@ -43,10 +43,10 @@ My Meals: view latest for this user
     </div>
     <div class="input-group">
       <span class="input-group-btn">
-        <button type="button" class="btn btn-default"><label for="dd_group">Group by</label></button> 
+        <button type="button" class="btn btn-default"><label for="dd_group">Grid by</label></button> 
       </span>
         <select id="dd_group" ng-model="mc.filters.group" name="group" class="form-control" ng-options="item for item in mc.dropdown.group" ng-change="mc.search()">
-          <option value="">-</option>
+          <option value="">1 grid</option>
         </select>
     </div>
 
@@ -135,8 +135,6 @@ My Meals: view latest for this user
 <div id="page-content-wrapper">
     <a class="btn btn-default menu-toggle glyphicon glyphicon-search" title="toggle filters" ng-hide="lc.sidebar" ng-click="lc.toggleSidebar(true);  mc.resizeGrid(400, 800);"></a>
     <a class="btn btn-default glyphicon glyphicon-menu-hamburger" title="grid options" ng-click="mc.showOptions=!mc.showOptions"></a>
-    <span class="form-signin-heading">{{mc.title}}</span>
-
     <spinner label="columns:" value="mc.options.columns"  min="1" max="8" loop="true" mobile="true" hold="true" change="mc.searchMore"></spinner> 
     <spinner label="rows:"    value="mc.options.rows"     min="1" max="8" loop="true" mobile="true" hold="true" change="mc.searchMore"></spinner>
     &nbsp;
@@ -151,8 +149,10 @@ My Meals: view latest for this user
     <div ng-if="mc.showDebug">{{mc.users | toJson:true }}</div>
     <pre ng-if="mc.showDebug && mc.queries">{{mc.queries | toJson:true }}</pre>
     <div id="grids">
-      <div class="col-md-12">
-        <image-grid main="mc" images="mc.searchResults" options="mc.options" show-debug="mc.showDebug"></image-grid>
+      <h2 class="text-center">{{mc.title}}</h2>
+      <div ng-class="mc.gridClasses()" ng-repeat="group in mc.searchResults">
+        <h3 class="text-center" ng-if="mc.searchResults.length>1">{{group.key}}</h3>
+        <image-grid main="mc" images="group" options="mc.options" show-debug="mc.showDebug"></image-grid>
       </div>
     </div>
 </div>

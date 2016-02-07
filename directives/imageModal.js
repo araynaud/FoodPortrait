@@ -19,7 +19,7 @@ angular.module('app').controller('ImageModalController', function ($uibModalInst
 
     m.getDomainName = function(url)
     {
-        if(!url) return "";
+        if(!url || !angular.isString(url)) return "";
         return url.substringAfter("//").substringBefore("/");
     }
 

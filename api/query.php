@@ -35,17 +35,16 @@ function setExists(&$uploads)
 }
 
 //filter uploads from selected user
-function demographicPortrait($db, $filters)
+function demographicPortrait($db, $filters, $portraitType)
 {
 	global $users;
 	splitFilters($filters, $imageFilters, $demoFilters);
 	$sqlParams = array("table" => "user_upload_search");
 
-	$portraitType = arrayExtract($imageFilters, "portrait");
-	if($portraitType == "personal")
-		$sqlParams["username"] = fpCurrentUsername();
-	else if($demoFilters)
+	if($portraitType == "demographic")
 		$sqlParams["where"] = userFilterCondition($demoFilters);
+	else // if($demoFilters)
+		$sqlParams["username"] = fpCurrentUsername();
 
 	//searchText: add %%
 	$searchText = searchWords(arrayExtract($imageFilters, "searchText"));
@@ -60,6 +59,13 @@ function demographicPortrait($db, $filters)
 
 	$uploads = $db->selectWhere($sqlParams);
 	return $uploads;
+}
+
+function getDistinctGroups($db, $params, $groupBy)
+{
+	$params["table"] = "user_upload";
+	$params["columns"] = $groupBy;
+	return $db->distinct($params);
 }
 
 //searchText: add %% to every word
@@ -153,16 +159,31 @@ if($db->offline)
 	return;
 }
 
+$portraitType = arrayExtract($params, "portrait");
 $order = arrayExtract($params, "order");
-$group = arrayExtract($params, "group");
+$groupBy = arrayExtract($params, "group");
 $limit = reqParam("limit", 20);
-$results = demographicPortrait($db, $params);
-$users = arrayDistinct($results, "username");
 
-setExists($results);
-
-if($group)
-	$results = arrayGroupBy($results, $group);
+if(!$groupBy)
+{
+	$results = demographicPortrait($db, $params, $portraitType);
+	$users = arrayDistinct($results, "username");
+	setExists($results);
+	$results = array("all" => $results);
+}
+else
+{
+	splitFilters($params, $imageFilters, $demoFilters);
+	$users = $distinctGroups = getDistinctGroups($db, $imageFilters, $groupBy);
+	$results = array();
+	foreach ($distinctGroups as $value) 
+	{
+		if($value === "NULL") continue;
+		$params[$groupBy] = $value;
+		$results[$value] = demographicPortrait($db, $params, $portraitType);
+		setExists($results[$value]);
+	}
+}
 
 $queries = $db->getLog();
 $db->disconnect();

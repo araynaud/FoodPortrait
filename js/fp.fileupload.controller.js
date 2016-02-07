@@ -60,7 +60,7 @@ function ($scope, $window, $state, $stateParams, $timeout, Upload, ProfileServic
                 uc.returnToMain();
             }
 
-            uc.form = response[0];
+            uc.form = response[0][0];
             uc.imageUrl =  uc.getImageUrl(uc.form, ".ss");
             uc.uploadUrl = uc.getImageUrl(uc.form, ".tn");
             delete uc.form.exists; 
