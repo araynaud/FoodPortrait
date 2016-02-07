@@ -64,6 +64,11 @@ function ($window, $state,  $timeout, ProfileService, QueryService)
 		});
 	};
 
+    mc.orderArrow = function()
+    {
+        return { 'glyphicon-arrow-up': !mc.filters.reverse, 'glyphicon-arrow-down': mc.filters.reverse };
+    };
+
     mc.setOption =  function (opt,val)
     {
         mc.options[opt] = val;

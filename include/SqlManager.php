@@ -94,11 +94,13 @@ class SqlManager
 		$groupBy = arrayExtract($params, "group_by");
 		$limit   = arrayExtract($params, "limit");
 		$orderBy = arrayExtract($params, "order_by");
+		$reverse = arrayExtract($params, "reverse");
 		if($orderBy === "random") $orderBy = "rand()";
 
 		$sql = "SELECT * FROM $table" . $this->sqlWhere($params);
 		if($groupBy)	$sql .= " GROUP BY $groupBy";
 		if($orderBy)	$sql .= " ORDER BY $orderBy";
+		if($reverse)    $sql .= " DESC";
 		if($limit)		$sql .= " LIMIT $limit";
 debug("selectWhere SQL: $sql", $params);
 	    return $this->select($sql, $params);

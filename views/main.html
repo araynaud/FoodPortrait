@@ -32,9 +32,9 @@ My Meals: view latest for this user
 
     <div class="input-group">
       <span class="input-group-btn">
-        <button type="button" class="btn btn-default">
+        <button type="button" class="btn btn-default" ng-click="mc.filters.reverse = !mc.filters.reverse; mc.search()">
           <label for="dd_order">Order</label>
-          <i class="glyphicon glyphicon-arrow-up"></i>
+          <i class="glyphicon" ng-class="mc.orderArrow()"></i>
         </button> 
       </span>
       <select id="dd_order" ng-model="mc.filters.order_by" name="order" class="form-control" ng-options="item for item in mc.dropdown.order" ng-change="mc.search()">

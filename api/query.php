@@ -44,10 +44,6 @@ function demographicPortrait($db, $filters)
 	if($demoFilters)
 		$sqlParams["where"] = userFilterCondition($demoFilters);
 
-	//TODO: use date_min and date_max
-//	$date_min = arrayExtract($imageFilters, "date_min");
-//	$date_max = arrayExtract($imageFilters, "date_max");
-
 	//searchText: add %%
 	$searchText = searchWords(arrayExtract($imageFilters, "searchText"));
 	if($searchText)
@@ -57,7 +53,7 @@ function demographicPortrait($db, $filters)
 		$sqlParams[$key] = $value;	
 
 	if(!@$sqlParams["order_by"])
-		$sqlParams["order_by"] = "upload_id desc";
+		$sqlParams["order_by"] = "upload_id";
 
 	$uploads = $db->selectWhere($sqlParams);
 	return $uploads;
@@ -157,7 +153,7 @@ if($db->offline)
 $order = arrayExtract($params, "order");
 $group = arrayExtract($params, "group");
 $limit = reqParam("limit", 20);
-$results = demographicPortrait($db, $params, $order);
+$results = demographicPortrait($db, $params);
 $users = arrayDistinct($results, "username");
 
 setExists($results);
