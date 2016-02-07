@@ -38,14 +38,13 @@ My Meals: view latest for this user
         </button> 
       </span>
       <select id="dd_order" ng-model="mc.filters.order_by" name="order" class="form-control" ng-options="item for item in mc.dropdown.order" ng-change="mc.search()">
-          <option value="">-</option>
       </select>
     </div>
     <div class="input-group">
       <span class="input-group-btn">
         <button type="button" class="btn btn-default"><label for="dd_group">Grid by</label></button> 
       </span>
-        <select id="dd_group" ng-model="mc.filters.group" name="group" class="form-control" ng-options="item for item in mc.dropdown.group" ng-change="mc.search()">
+        <select id="dd_group" ng-model="mc.filters.group" name="group" class="form-control" ng-options="item for item in mc.dropdown.group[mc.filters.portrait]" ng-change="mc.search()">
           <option value="">1 grid</option>
         </select>
     </div>
