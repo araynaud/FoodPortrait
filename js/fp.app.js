@@ -23,6 +23,11 @@ app.config(function($stateProvider, $urlRouterProvider)
 angular.module('fpServices', ['ngResource']);
 angular.module('fpControllers', []);
 
+app.isMobile = function() 
+{ 
+    return !!navigator.userAgent.match(/Android|webOS|iPhone|iPad|iPod|BlackBerry|Phone|mobile/i);
+};
+
 app.toJson = function(data, loop)
 {
   if(!data || angular.isString(data)) return data;

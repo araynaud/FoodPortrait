@@ -1,8 +1,8 @@
-angular.module('app').directive('spinner', [ "$timeout", "ProfileService", function ($timeout, ProfileService) 
+angular.module('app').directive('spinner', [ "$timeout", function ($timeout) 
 {
     return {
         scope: { label: "@", value: "=", min: "=", max: "=", step: "=", loop: "=", mobile: "=", hold: "=", change: '=' },
-        templateUrl: 'directives/spinner.html',
+        templateUrl: '../foodportrait/directives/spinner.html',
         controllerAs: 'vm',
         bindToController: true,
         link: function (scope, element, attr, vm) 
@@ -10,7 +10,7 @@ angular.module('app').directive('spinner', [ "$timeout", "ProfileService", funct
             if(!element || !vm.hold) return;            
 
             element.on("mouseup",    vm.cancelTimeout);
-            if(ProfileService.isMobile())
+            if(app.isMobile())
             {
                 element.on("touchcancel", vm.cancelTimeout);
                 element.on("touchend",    vm.cancelTimeout);
@@ -21,11 +21,10 @@ angular.module('app').directive('spinner', [ "$timeout", "ProfileService", funct
         controller: function ()
         {
             var vm = this;
-            window.spinner = this;
 
             vm.value = valueOrDefault(vm.value, 0);
             vm.step = valueOrDefault(vm.step, 1);
-            vm.isMobile = vm.mobile || ProfileService.isMobile();
+            vm.isMobile = vm.mobile || app.isMobile();
             var timeout = null;
 
             vm.onInputChange = function()
