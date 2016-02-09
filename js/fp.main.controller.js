@@ -96,7 +96,7 @@ function ($window, $state,  $timeout, ProfileService, QueryService)
         var sm = Math.max(nbCols, 6); //small: 2 grids per row
 
         classes["col-sm-"+sm] = true;
-        classes["col-lg-"+lg] = true;
+        //classes["col-lg-"+lg] = true;
 
         return classes;
     }
