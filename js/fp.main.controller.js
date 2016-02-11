@@ -10,8 +10,8 @@ function ($window, $state,  $timeout, ProfileService, QueryService)
     //post filters to album.php service
     //query user table where username = user and password = md5
     //return array of uploads to display
-    if(!ProfileService.user && !ProfileService.isOffline())
-        $state.go('home');
+//    if(!ProfileService.user && !ProfileService.isOffline())
+//        $state.go('home');
     
     var mc = this;
     $window.MainController = this;
@@ -19,7 +19,7 @@ function ($window, $state,  $timeout, ProfileService, QueryService)
 
     mc.init = function()
     {
-        mc.filters = { portrait: "personal", reverse: true, order_by: "image_date_taken" };
+        mc.filters = { portrait: "demographic", reverse: true, order_by: "image_date_taken" };
         mc.searchResults=[];
         mc.showOptions = ProfileService.getConfig("grid.showOptions");
         mc.options = ProfileService.getConfig("grid.options")
