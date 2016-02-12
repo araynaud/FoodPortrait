@@ -1,24 +1,21 @@
 <div class="container">
 
 <h3 class="form-signin-heading">Welcome to</h3>
-<img alt="FOOD PORTRAIT" src="images/logo1.png">
+<a href="#/main"><img alt="FOOD PORTRAIT" src="images/logo1.png"/></a>
 
-<h3 class="form-signin-heading">How to participate</h3>
-<p>Upload a photo of one meal, or every meal for a week, a month, or more.  If you do a month’s worth then you will get a food diary portrait print.</p>
-<p>Complete the grid to create a portrait of yourself as you are now, at this particular time in your life. Keep uploading, and watch how your portrait evolves over time based on your lifestyle.</p>
-<p>To Participate in the Food Portrait Project:</p>
+<h3 class="form-signin-heading">How to participate in Food Portrait Project</h3>
 
+<p>You can <a href="#/main">search content</a> by age, gender, city, date, etc. (demographic portrait)</p>
+
+<p ng-hide="lc.loggedIn()">You can also <a  class="btn btn-default" href="#/signin">Log in</a>
+or <a class="btn btn-default" ng-hide="lc.loggedIn()" href="#/signup">Sign up</a> to:</p>
 <ul>
-<li ng-hide="lc.loggedIn()">
-	<a  class="btn btn-default" href="#/signin">Log in</a>
-or
-	<a  class="btn btn-default" ng-hide="lc.loggedIn()" href="#/signup">Sign up</a>
-</li>
 <li>Complete the user profile questionnaire</li>
-<li>Upload your meal photos</li>
+<li>Upload your meal photos: a photo of one meal, or every meal for a week, a month, or more.</li>
+<li>Upload photo of one meal, or every meal for a week, a month, special occasion, or just meals you eat out or meals you make.<br/>
+If you can take the photos from straight above and include the entire plate then that will create a consistency for broader groups photos.</li>
+<li>Create a portrait grid of your group or yourself through what you eat. Keep uploading, and watch how your portrait evolves over time.</li>
 </ul>
 
-<p>The first 100 participants to compete a month will receive a free print of
-their first month’s Food Portrait.</p>
 
 </div>
