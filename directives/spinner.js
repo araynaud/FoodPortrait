@@ -21,14 +21,27 @@ angular.module('app').directive('spinner', [ "$timeout", function ($timeout)
         controller: function ()
         {
             var vm = this;
-
-            vm.value = valueOrDefault(vm.value, 0);
-            vm.step = valueOrDefault(vm.step, 1);
-            vm.isMobile = vm.mobile || app.isMobile();
             var timeout = null;
+            vm.init = function()
+            {
+                vm.isMobile = vm.mobile || app.isMobile();
+                vm.numValue();
+                vm.step = valueOrDefault(vm.step, 1);
+            };
+
+            //ensure numeric value;
+            vm.numValue = function()
+            {
+                vm.value = valueOrDefault(vm.value, 0);
+                vm.value = parseInt(vm.value);
+                if(isNaN(vm.value))
+                    vm.value = vm.min || 0;
+                return vm.value;
+            };
 
             vm.onInputChange = function()
             {
+                vm.numValue();
                 vm.oldValue = vm.value;
                 if(vm.value > vm.max)
                     vm.value = vm.loop ? vm.min : vm.max;
@@ -41,6 +54,7 @@ angular.module('app').directive('spinner', [ "$timeout", function ($timeout)
 
             vm.addValue = function(incr)
             {
+                vm.numValue();
                 vm.oldValue = vm.value;
                 if(incr > 0 && vm.value == vm.max) 
                     vm.value = vm.loop ? vm.min : vm.value;
@@ -64,6 +78,8 @@ angular.module('app').directive('spinner', [ "$timeout", function ($timeout)
                 if (timeout)    $timeout.cancel(timeout);
                 timeout = null;
             };
+
+            vm.init();
         }         
     };
 }]);
