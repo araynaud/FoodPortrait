@@ -65,6 +65,8 @@ function ($window, $state, ProfileService)
       {
           var ans = pc.user_answers[i];
           var q = pc.questions.byId[ans.question_id];
+          if(!q) continue;
+          
           if(q.data_type=="multiple")
           {
               if(!formData[q.id])
