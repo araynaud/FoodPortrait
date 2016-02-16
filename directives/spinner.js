@@ -33,7 +33,7 @@ angular.module('app').directive('spinner', [ "$timeout", function ($timeout)
             vm.numValue = function()
             {
                 vm.value = valueOrDefault(vm.value, 0);
-                vm.value = parseInt(vm.value);
+                vm.value = parseFloat(vm.value);
                 if(isNaN(vm.value))
                     vm.value = vm.min || 0;
                 return vm.value;
