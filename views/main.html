@@ -148,7 +148,7 @@ My Meals: view latest for this user
       <h2 class="text-center">{{mc.title}}</h2>
       <div ng-class="mc.gridClasses()" ng-repeat="group in mc.searchResults">
         <h3 class="text-center" ng-if="mc.searchResults.length>1">{{group.key}}</h3>
-        <image-grid main="mc" images="group" options="mc.options" show-debug="mc.showDebug"></image-grid>
+        <image-grid main="mc" images="group.value" options="mc.options" show-debug="mc.showDebug"></image-grid>
       </div>
     </div>
 </div>
