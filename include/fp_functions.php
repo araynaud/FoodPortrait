@@ -65,7 +65,7 @@ function getFormQuestions($db, $section_id=null)
 
     if(contains($section_id, ","))
         $section_id = explode(",", $section_id);
-    $p = array("table" => "form_question", "order_by" => "section_id, position, id");
+    $p = array("table" => "form_question", "order_by" => "section_id, position, id", "required" => 1);
     if($section_id) 
         $p["section_id"] = $section_id;
     $form_questions = $db->selectWhere($p);

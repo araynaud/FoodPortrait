@@ -13,8 +13,6 @@
         <button id="btnSubmit" class="btn blue-button large-button"  ng-click="vm.saveForm()">Submit</button>
         <button id="btnCancel" class="btn white-button large-button" ng-click="vm.cancel()" type="button">Cancel</button>
         <button id="btnReload" class="btn white-button large-button" ng-click="vm.loadUserAnswers()" ng-show="vm.showDebug">Reload</button>
-        {{step}}
-        <a ng-click="vm.showDebug = !vm.showDebug">debug</a>
     </div>
     <div ng-show="vm.showDebug">       
         <div class="col-md-6">
