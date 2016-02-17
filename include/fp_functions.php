@@ -20,24 +20,6 @@ function fpUserLogout()
     unset($_SESSION["fp_user"]);
 }
 
-function readJsonFile($filename)
-{
-    $postdata = file_get_contents($filename);
-    if($postdata)
-        $postdata = json_decode($postdata, true);
-    return $postdata;
-}
-
-function getJsonPostData()
-{
-    return readJsonFile("php://input");
-
-    $postdata = file_get_contents("php://input");
-    if($postdata)
-        $postdata = json_decode($postdata, true);
-    return $postdata;
-}
-
 function errorMessage($msg)
 {
     global $response;
