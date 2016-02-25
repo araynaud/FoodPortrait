@@ -73,7 +73,7 @@ img.cover
   white-space:pre-line;
 }
 
-.textOutline
+.textOutline, .textBlackOutline
 {
   color: white;
   text-shadow: 
@@ -83,7 +83,16 @@ img.cover
        1px 1px 0 #000;
 }
 
-.textOutline2
+.textWhiteOutline
+{
+  text-shadow: 
+     -1px -1px 0 white,  
+      1px -1px 0 white,
+      -1px 1px 0 white,
+       1px 1px 0 white;
+}
+
+.textOutline2, .textBlackOutline2
 {
   color: white;
   text-shadow: 
@@ -97,6 +106,18 @@ img.cover
       0px 2px 0 #000;
 }
 
+.textWhiteOutline2
+{
+  text-shadow: 
+     -2px -2px 0 white,  
+      2px -2px 0 white,
+      -2px 2px 0 white,
+       2px 2px 0 white,
+     -2px 0px 0 white,  
+      2px 0px 0 white,
+      0px -2px 0 white,
+      0px 2px 0 white;
+}
 
 
 @media print
