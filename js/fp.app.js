@@ -45,7 +45,7 @@ app.toJson = function(data, loop)
 
   if(loop && angular.isObject(data))
   {
-    for(key in data)
+    for(var key in data)
       result += key + ": " + app.toJson(data[key]) + '\n';
     return result;
   }
