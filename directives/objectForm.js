@@ -5,7 +5,7 @@ angular.module('app').directive('objectForm', function ()
         templateUrl: 'directives/objectForm.html',
         controllerAs: 'vm',
         bindToController: true,
-        controller: function ()
+        controller: function (ProfileService)
         {
             var vm = this; 
             window.objectForm = this;

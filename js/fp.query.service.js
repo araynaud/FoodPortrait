@@ -8,9 +8,8 @@ angular.module('fpServices')
     var service = this;
     this.init = function()
     {
-        $window.QueryService = this;
-        this.serviceUrl = 'api/query' + ProfileService.serviceExt();
-        this.queryResource = $resource(this.serviceUrl);
+        //$window.QueryService = this;
+        this.queryResource = ProfileService.getResource("foodportrait", "query" + ProfileService.serviceExt());
     };
     
     this.loadQuery = function(filters)

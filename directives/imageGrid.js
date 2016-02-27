@@ -5,7 +5,7 @@ angular.module('app').directive('imageGrid', function ()
     templateUrl: 'directives/imageGrid.html',
     controllerAs: 'vm',
     bindToController: true,
-    controller: function ($timeout, $uibModal)
+    controller: function ($timeout, $uibModal, ProfileService)
     {
         var vm = this; 
         window.imageGrid = this;
@@ -21,6 +21,9 @@ angular.module('app').directive('imageGrid', function ()
             vm.selector = vm.gridSelector  + " .cell";
 
             vm.showDebug = ProfileService.isDebug();
+            vm.api = ProfileService.getConfig("api.foodportrait.url");
+            vm.isExternalApi = String.isExternalUrl(vm.api);
+
             vm.baseUrl = ProfileService.getConfig("upload.baseUrl");
             vm.baseServer = ProfileService.getConfig("upload.server");
             vm.isIE = ProfileService.clientIsIE();
@@ -99,7 +102,8 @@ angular.module('app').directive('imageGrid', function ()
             subdir = valueOrDefault(subdir, vm.subdir);
             if(subdir == ".ss" && im.noss) subdir="";
             var url = String.combine(vm.baseUrl, im.username, subdir, im.filename);
-            if(!im.exists && vm.baseServer) url = vm.baseServer + url;
+            if(vm.isExternalApi || !im.exists && vm.baseServer)
+                url = vm.baseServer + url;
             return url;
         };
  

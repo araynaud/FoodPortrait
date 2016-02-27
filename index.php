@@ -52,7 +52,7 @@ $meta["og:url"] = currentUrlDir();
   <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container">
         <a class="navbar-brand textOutline" ng-class="{active: lc.stateIs('main')}" href="#/main">
-          <img src="images/logo40.png" alt="FOOD PORTRAIT"/>
+          <img class="stretchH" src="images/logo40.png" alt="FOOD PORTRAIT"/>
         </a>
 
       <div class="navbar-header">

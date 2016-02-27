@@ -6,14 +6,36 @@ angular.module('fpServices', ['ngResource'])
     var service = this;
     this.init = function()
     {
-        $window.ProfileService = this;
+//        $window.ProfileService = this;
         this.config = $window.fpConfig;
 
         this.questions = [];
-        this.configResource = $resource('api/config.php');
-        this.formResource = $resource('api/form_data' + this.serviceExt());
-        this.loginResource = $resource('api/login' + this.serviceExt());
+        this.configResource = this.getResource("foodportrait", "config.php");
+        this.formResource =   this.getResource("foodportrait", "form_data" + this.serviceExt());
+        this.loginResource =  this.getResource("foodportrait", "login" + this.serviceExt());
         this.loadCountries();
+    };
+
+    this.getResourceUrl = function(api, url, qs)
+    {
+        if(this.offline)
+        {
+            var svcName = url.substringBefore("/:")
+            svcName = svcName.substringAfter("/", false, true);
+            return "api/" + svcName + ".json";
+        }
+
+        var baseUrl = this.getConfig("api."+api+".url");
+        var proxy = String.isExternalUrl(baseUrl) ? this.getConfig("api.proxy") : null;
+        var url = String.combine(proxy, baseUrl, url);
+        if(qs) url += "?" + qs;
+        return url;
+    };
+
+    this.getResource = function(api, url, qs, defaults)
+    {
+        url = this.getResourceUrl(api, url, qs);
+        return $resource(url, defaults);
     };
 
     this.getConfig = function(key)

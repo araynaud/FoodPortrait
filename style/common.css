@@ -1,3 +1,11 @@
+@media screen
+{
+  div#main
+  {
+    margin-top: 50px;
+  }
+}
+
 .centered
 {
     margin-left:auto;
@@ -140,6 +148,11 @@ img.cover
 }
 
 /* === Bootstrap customizations === */
+
+a.navbar-brand
+{
+    padding: 2px;
+}
 
 .modal-header 
 {
