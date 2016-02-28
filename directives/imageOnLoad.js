@@ -1,4 +1,4 @@
-app.directive('onLoad', function() 
+angular.module('app').directive('onLoad', function() 
 {
     return {
         restrict: 'A',
