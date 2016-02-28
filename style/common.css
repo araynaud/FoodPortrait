@@ -41,6 +41,11 @@
     text-align: right;   
 }
 
+.bgwhite
+{
+  background-color: white;
+}
+
 img.contain
 {
     object-position: center center;
@@ -213,22 +218,4 @@ a.glyphicon
 {
     text-decoration: none;
     cursor: pointer;
-}
-
-h1, .h1,
-h2, .h2,
-h3, .h3 {
-  margin-top: 10px;
-  margin-bottom: 5px;
-}
-h4, .h4,
-h5, .h5,
-h6, .h6 {
-  margin-top: 5px;
-  margin-bottom: 5px;
-
-  small,
-  .small {
-    font-size: 75%;
-  }
 }

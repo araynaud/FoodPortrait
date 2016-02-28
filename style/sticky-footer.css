@@ -4,16 +4,27 @@
 body.aboveFooter
 {
   /* Margin bottom by footer height */
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
 
-.footer 
+footer, .footer 
 {
-  position: fixed;
-  bottom: 0;
-  max-height: 40px;
+  max-height: 30px;
   width: 100%;
-  background-color: #f5f5f5;
   text-align: center;
 }
 
+footer.fixed, .footer.fixed, .isMobile footer, .isMobile .footer
+{
+	position: fixed;
+	bottom: 0;
+}
+
+@media print
+{
+	footer, .footer
+	{
+		position: fixed;
+		bottom: 0;
+	}
+}
