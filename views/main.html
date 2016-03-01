@@ -96,7 +96,7 @@ My Meals: view latest for this user
         </select>
     </div>
 
-    <div class="input-group">
+    <!--div class="input-group">
       <span class="input-group-btn">
         <button type="button" class="btn btn-default"><label for="dd_course">Course</label></button> 
       </span>
@@ -112,7 +112,7 @@ My Meals: view latest for this user
       <select id="dd_mood" ng-model="mc.filters.mood" name="mood" class="form-control" ng-options="item for item in mc.dropdown.mood" ng-change="mc.search()">
           <option value="">-</option>
       </select>
-    </div>
+    </div-->
     <br/>
     <div class="input-group" ng-repeat="q in mc.questions" ng-if="mc.isFilter(q) && mc.filters.portrait=='demographic'">
       <span class="input-group-btn">

@@ -107,6 +107,11 @@ angular.module('fpServices', ['ngResource'])
         return this.user ? this.user.username : null;
     };
 
+    this.isAdmin = function()
+    {
+        return this.user && this.user.is_admin;
+    };
+
     this.userFullName = function()
     {
         if(!this.user) return "nobody";

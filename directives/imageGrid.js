@@ -21,6 +21,7 @@ angular.module('app').directive('imageGrid', function ()
             vm.selector = vm.gridSelector  + " .cell";
 
             vm.showDebug = ProfileService.isDebug();
+            vm.isAdmin = ProfileService.isAdmin();
             vm.api = ProfileService.getConfig("api.foodportrait.url");
             vm.isExternalApi = String.isExternalUrl(vm.api);
 
@@ -132,8 +133,8 @@ angular.module('app').directive('imageGrid', function ()
             //if(html)    title = title.append(sep, "<img src='{0}'/>".format(vm.imageUrl(im)));
             title = title.append(sep, im.caption);
             title = title.append(sep, im.context);
-            //if(vm.showDebug)
-            title = title.append(sep, "by @" + im.username);
+            if(vm.showDebug || vm.isAdmin)
+                title = title.append(sep, "by @" + im.username);
 
             return title;
         };
