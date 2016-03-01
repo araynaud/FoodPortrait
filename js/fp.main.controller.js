@@ -27,6 +27,7 @@ function ($window, $state,  $timeout, ProfileService, QueryService)
             mc.options = { columns: 4, rows: 4, margin: 10, border: 1, ratio: 1, shadow: false};
 
         mc.isMobile =  ProfileService.isMobile();
+        mc.isAdmin  =  ProfileService.isAdmin();
         mc.showDebug = ProfileService.isDebug();
 
 //date picker options
@@ -86,6 +87,13 @@ function ($window, $state,  $timeout, ProfileService, QueryService)
             return ProfileService.getConfig("dropdown.meal.1.courses");
         return mc.filters.meal.courses;
     };
+
+    mc.getGroupOptions = function()
+    {
+        var key = mc.isAdmin ? "admin" : mc.filters.portrait;
+        var opts = mc.dropdown.group[key];
+        return angular.isArray(opts) ? opts : [opts];
+    }
 
     mc.gridClasses = function()
     {
