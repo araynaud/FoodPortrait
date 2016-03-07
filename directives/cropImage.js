@@ -19,7 +19,7 @@ angular.module('app').directive('cropImage', function ()
 
         vm.remove = function(element)
         {
-            console.log("removing " + vm.src);
+//            console.log("removing " + vm.src);
             element.parent().remove();
         };
 
