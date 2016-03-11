@@ -219,3 +219,13 @@ a.glyphicon
     text-decoration: none;
     cursor: pointer;
 }
+
+.has-error
+{   
+    color: #B00;
+}
+
+.has-error label:after 
+{
+    content: " *";
+}
