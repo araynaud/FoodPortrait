@@ -229,3 +229,13 @@ a.glyphicon
 {
     content: " *";
 }
+
+.star-rating .glyphicon-star
+{
+  color: orange;
+}
+
+.star-rating .glyphicon-star-empty
+{
+  color: black;
+}
