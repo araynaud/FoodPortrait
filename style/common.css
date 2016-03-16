@@ -230,6 +230,11 @@ a.glyphicon
     content: " *";
 }
 
+.star-rating a.glyphicon
+{
+  margin-left: 3px;
+}
+
 .star-rating .glyphicon-star
 {
   color: orange;
