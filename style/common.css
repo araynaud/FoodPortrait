@@ -88,6 +88,7 @@ img.cover
 
 .textOutline, .textBlackOutline
 {
+  padding: 1px;
   color: white;
   text-shadow: 
      -1px -1px 0 #000,  
@@ -107,6 +108,7 @@ img.cover
 
 .textOutline2, .textBlackOutline2
 {
+  padding: 2px;
   color: white;
   text-shadow: 
      -2px -2px 0 #000,  
