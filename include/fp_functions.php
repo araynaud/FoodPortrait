@@ -34,6 +34,16 @@ function hasProfile($db, $username)
     return $db->exists(array("table" => "user_answer", "username" => $username));
 }
 
+function setExists(&$uploads)
+{
+    if(!$uploads) return;
+    foreach ($uploads as &$u)
+    {
+        $u["exists"] = uploadedFileExists($u);
+        if(!uploadedFileExists($u, ".ss"))
+            $u["noss"] = true;
+    }
+}
 
 function getFormQuestions($db, $section_id=null)
 {
@@ -229,7 +239,6 @@ function uploadedFileExists($u, $subdir="")
     $imagePath = getImagePath($u, $subdir);
     return file_exists($imagePath);
 }
-
 
 function loadUsers($filename)
 {
