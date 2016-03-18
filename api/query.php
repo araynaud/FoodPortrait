@@ -9,20 +9,6 @@ session_start();
 
 //TODO: add sort, limit = columns x rows
 //filters = meal, date
-function userLatestUploads($db, $username, $filters = null)
-{
-	$sqlParams = array("table" => "user_upload_search", "order_by" => "image_date_taken desc", "username" => $username);
-	if($filters)
-		foreach ($filters as $key => $value)
-		{
-			if(startsWith($key,"Q_")) continue;
-			$sqlParams[$key] = $value;	
-		}
-
-	$uploads = $db->selectWhere($sqlParams);
-	return $uploads;
-}
-
 function setExists(&$uploads)
 {
 	if(!$uploads) return;
@@ -133,8 +119,9 @@ function userFilterCondition($filters)
 {
 	$and="";
 	$query = "";
-	foreach ($filters as $questionId => $answerId) 
+	foreach ($filters as $questionId => $answerId)
 	{
+		//if not multiple choice : answer_value = $answerId
 		$query .= " $and username in (select username from user_answer where question_id = $questionId and answer_id = $answerId)";
 		$and="AND";
 	}
