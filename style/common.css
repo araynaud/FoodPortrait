@@ -135,7 +135,11 @@ img.cover
 }
 
 .pad0 {
-    padding: 2px;
+    padding: 0px;
+}
+
+.pad1 {
+    padding: 1px;
 }
 
 .pad2 {
