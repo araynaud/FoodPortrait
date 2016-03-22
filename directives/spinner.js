@@ -47,8 +47,8 @@ angular.module('app').directive('spinner', [ "$timeout", function ($timeout)
                     vm.value = vm.loop ? vm.min : vm.max;
                 else if(vm.value < vm.min)
                     vm.value = vm.loop ? vm.max : vm.min;
-                if(angular.isFunction(vm.onchange))
-                    vm.onchange(vm.value, vm.oldValue);
+                if(angular.isFunction(vm.change))
+                    vm.change(vm.value, vm.oldValue);
                 return vm.value;
             };
 
