@@ -17,17 +17,17 @@ angular.module('app').directive('cropImage', function ()
             return { "background-image": bgImage};
         };
 
+        vm.imageClasses = function()
+        {
+            if(!vm.isIE)
+                return "stretch cover";
+            return "stretchW visible-print-block";
+        };
+
         vm.remove = function(element)
         {
 //            console.log("removing " + vm.src);
             element.parent().remove();
         };
-
-        vm.hide = function(element)
-        {
-            if(vm.isIE)
-                element.remove();
-        };
-
     }         
 }});
