@@ -1,6 +1,6 @@
 angular.module('app').directive('cropImage', function () 
 { return {
-    scope: { src: '@', title: '@' },
+    scope: { src: '@', title: '@', model: '=' },
     templateUrl: '../foodportrait/directives/cropImage.html',
     controllerAs: 'vm',
     bindToController: true,
@@ -9,6 +9,9 @@ angular.module('app').directive('cropImage', function ()
     {
         var vm = this; 
         vm.isIE = ConfigService.clientIsIE();
+
+        if(vm.model)
+            vm.model.hasPhoto = true;
 
         vm.imageStyle = function()
         {
@@ -28,6 +31,8 @@ angular.module('app').directive('cropImage', function ()
         {
 //            console.log("removing " + vm.src);
             element.parent().remove();
+            if(vm.model)
+                vm.model.hasPhoto = false;
         };
     }         
 }});
