@@ -3,7 +3,7 @@
 /* App Module */
 
 // Define new module for our application
-var app = angular.module('app', ['ui.router', 'ui.bootstrap', 'ngFileUpload', 'fpControllers', 'fpServices']);
+var app = angular.module('app', ['ui.router', 'ui.bootstrap', 'fpControllers', 'fpServices']);
 
 app.config(function($stateProvider, $urlRouterProvider)
 {  
@@ -21,7 +21,7 @@ app.config(function($stateProvider, $urlRouterProvider)
 });
 
 angular.module('fpServices', ['ngResource']);
-angular.module('fpControllers', []);
+angular.module('fpControllers', ['ngAnimate', 'ngFileUpload']);
 
 app.isMobile = function() 
 { 

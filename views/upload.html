@@ -16,14 +16,11 @@
     <div class="col-md-6 col-sm-6">
       <label for="inputDate">Date:</label> 
       <div class="input-group">
-        <input type="text" id="inputDate" 
-            name="image_date_taken" class="form-control" 
+        <input type="text" id="inputDate" name="image_date_taken" class="form-control" 
             ng-model="uc.form.image_date_taken" ng-click="uc.pickDate()"
-            uib-datepicker-popup="{{uc.dateFormat}}" 
-            is-open="uc.datepickerOpen" max-date="uc.today" 
-            uib-datepicker-options="uc.dateOptions" ng-required="true" 
-            close-text="Close" placeholder="Date"/>
-
+            uib-datepicker-popup="{{uc.dateFormat}}" alt-input-formats="uc.altInputFormats"
+            is-open="uc.datepickerOpen" datepicker-options="uc.dateOptions" 
+            ng-required="true" close-text="Close"/>
         <span class="input-group-btn">
           <button type="button" class="btn btn-default" ng-click="uc.pickDate()">
             <i class="glyphicon glyphicon-calendar"></i>

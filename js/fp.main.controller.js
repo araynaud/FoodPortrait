@@ -32,8 +32,8 @@ function ($window, $state,  $timeout, ProfileService, QueryService)
 
 //date picker options
         mc.dateFormat = 'MM/dd/yyyy';
-        mc.dateOptions = { formatYear: 'yy', startingDay: 1 };
         mc.today = new Date();
+        mc.dateOptions = { formatYear: 'yy', startingDay: 1, maxDate: mc.today };
         mc.pickDate = function(id) { mc['datepickerOpen' + id] = true; };
         mc.setMinToday = function() { return mc.filters.date_min = mc.today; };
         mc.setMaxToday = function() { return mc.filters.date_max = mc.today; };

@@ -30,9 +30,10 @@ function ($scope, $window, $state, $stateParams, $timeout, Upload, ProfileServic
 
     //date picker options
         uc.datepickerOpen=false;
-        uc.dateFormat = 'MMMM dd, yyyy';
-        uc.dateOptions = { formatYear: 'yy', startingDay: 1 };
         uc.today = new Date();
+        uc.dateFormat = 'MMMM dd, yyyy';
+        uc.altInputFormats = ['M!/d!/yyyy'];
+        uc.dateOptions = { formatYear: 'yy', startingDay: 1, maxDate: uc.today };
         uc.pickDate = function() { uc.datepickerOpen = true; };
         uc.setToday = function() { return uc.form.image_date_taken = uc.today; };
         uc.setToday();
