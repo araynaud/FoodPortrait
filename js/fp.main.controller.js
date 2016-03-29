@@ -19,7 +19,7 @@ function ($window, $state,  $timeout, ProfileService, QueryService)
 
     mc.init = function()
     {
-        mc.filters = { portrait: "demographic", reverse: true, order_by: "image_date_taken" };
+        mc.filters = { portrait: "demographic", reverse: true, order_by: "Photo Date" };
         mc.searchResults=[];
         mc.showOptions = ProfileService.getConfig("grid.showOptions");
         mc.options = ProfileService.getConfig("grid.options")
@@ -34,15 +34,20 @@ function ($window, $state,  $timeout, ProfileService, QueryService)
         mc.dateFormat = 'MM/dd/yyyy';
         mc.today = new Date();
         mc.dateOptions = { formatYear: 'yy', startingDay: 1, maxDate: mc.today };
-        mc.pickDate = function(id) { mc['datepickerOpen' + id] = true; };
-        mc.setMinToday = function() { return mc.filters.date_min = mc.today; };
-        mc.setMaxToday = function() { return mc.filters.date_max = mc.today; };
 // end date picker options
 
+        mc.labels = ProfileService.getConfig("labels.filters");
         mc.dropdown = ProfileService.getConfig("dropdown");
+        if(isDefined("dropdown.order_by", mc))
+            mc.dropdown.order_by.$keys = Object.keys(mc.dropdown.order_by);
+
         mc.getFilters();
         mc.search();
     }
+
+    mc.pickDate = function(id) { mc['datepickerOpen' + id] = true; };
+    mc.setMinToday = function() { return mc.filters.date_min = mc.today; };
+    mc.setMaxToday = function() { return mc.filters.date_max = mc.today; };
 
     mc.isFilter = function(q)
     {
@@ -121,23 +126,33 @@ function ($window, $state,  $timeout, ProfileService, QueryService)
         for(var f in mc.filters)
         {
             if(!mc.filters[f] || mc.filters[f] === true) continue;
-            params.push(mc.filterTitle(mc.filters[f]));
+            params.push(mc.filterTitle(mc.filters[f], f));
         }
         return params.join(", ");
     }
 
-    mc.filterTitle = function(filter)
+    mc.filterTitle = function(filter, key)
     {
+        var label = mc.labels[key];
+        var prefix = angular.isArray(label) ? label[0] : label || "";
+        var suffix = angular.isArray(label) ? label[1] : "";
+
+        var title = filter.label || filter.name || filter;
         if(filter.toLocaleDateString)
-            return filter.toLocaleDateString();
-        return filter.label || filter.name || filter;
+            title = filter.toLocaleDateString();
+        title = prefix + " " + title + " " + suffix;
+        return title.trim();
     };
 
-    mc.filterValue = function(filter)
+    mc.filterValue = function(filter, key)
     {
         if(filter.toLocaleDateString)
             return filter.toISOString().substringBefore('T');
-        return filter.id || filter.name || filter;
+
+        //convert dropdown label into value
+        var ddValue = valueIfDefined([key, filter], mc.dropdown);
+
+        return ddValue || filter.id || filter.name || filter;
     };
 
     mc.getSearchParams = function()
@@ -149,7 +164,7 @@ function ($window, $state,  $timeout, ProfileService, QueryService)
             if(f && filter)
             {
                 var key = isMissing(filter.question_id) ? f : 'Q_'+filter.question_id;
-                params[key] = mc.filterValue(filter);
+                params[key] = mc.filterValue(filter, key);
             }
         }
         

@@ -43,7 +43,7 @@ My Meals: view latest for this user
           <i class="glyphicon" ng-class="mc.orderArrow()"></i>
         </button> 
       </span>
-      <select id="dd_order" ng-model="mc.filters.order_by" name="order" class="form-control" ng-options="item for item in mc.dropdown.order" ng-change="mc.search()">
+      <select id="dd_order" ng-model="mc.filters.order_by" name="order" class="form-control" ng-options="item for item in mc.dropdown.order_by.$keys" ng-change="mc.search()">
       </select>
     </div>
     <div class="input-group border-collapse">
@@ -60,7 +60,7 @@ My Meals: view latest for this user
     <div class="input-group">
       <input type="text" id="inputDate" name="date_min" class="form-control"
       ng-model="mc.filters.image_date_taken_min" uib-datepicker-popup="{{mc.dateFormat}}" ng-click="mc.pickDate(1)"
-      is-open="mc.datepickerOpen1" datepicker-options="mc.dateOptions" close-text="Close" placeholder="From date"/>
+      is-open="mc.datepickerOpen1" datepicker-options="mc.dateOptions" close-text="Close" placeholder="From date"  ng-change="mc.search()"/>
       <span class="input-group-btn">
         <button type="button" class="btn btn-default" ng-if="mc.filters.image_date_taken_min" ng-click="mc.clearFilter('image_date_taken_min')">
           <i class="glyphicon glyphicon-remove-circle"></i>
@@ -74,7 +74,7 @@ My Meals: view latest for this user
     <div class="input-group border-collapse">
       <input type="text" id="inputDateMax" name="date_max" class="form-control"
       ng-model="mc.filters.image_date_taken_max" uib-datepicker-popup="{{mc.dateFormat}}" ng-click="mc.pickDate(2)"
-      is-open="mc.datepickerOpen2" datepicker-options="mc.dateOptions" close-text="Close" placeholder="To date"/>
+      is-open="mc.datepickerOpen2" datepicker-options="mc.dateOptions" close-text="Close" placeholder="To date"  ng-change="mc.search()"/>
       <span class="input-group-btn">
         <button type="button" class="btn btn-default" ng-if="mc.filters.image_date_taken_max" ng-click="mc.clearFilter('image_date_taken_max')">
           <i class="glyphicon glyphicon-remove-circle"></i>
@@ -123,12 +123,12 @@ My Meals: view latest for this user
     </div>
   </form>
 
-  <pre ng-if="mc.showDebug">{{mc.params  | toJson:true}}</pre>
   <pre ng-if="mc.showDebug">{{mc.filters | toJson:true}}</pre>
+  <pre ng-if="mc.showDebug">{{mc.params  | toJson:true}}</pre>
 </div>
 
 <div id="page-content-wrapper">
-  <div class="hidden-print">
+  <span class="hidden-print">
     <a class="btn btn-default menu-toggle glyphicon glyphicon-search" title="toggle filters" ng-hide="lc.sidebar" ng-click="lc.toggleSidebar(true);  mc.resizeGrid(400, 800);"></a>
     <a class="btn btn-default glyphicon glyphicon-menu-hamburger" title="grid options" ng-click="mc.showOptions=!mc.showOptions"></a>
     <spinner label="columns:" value="mc.options.columns"  min="1" max="8" loop="true" mobile="true" hold="true" change="mc.searchMore"></spinner> 
@@ -141,13 +141,14 @@ My Meals: view latest for this user
         &nbsp;<input type="checkbox" ng-model="mc.options.shadow" /> shadow
         &nbsp;<input type="checkbox" ng-model="mc.showDebug" /> debug
     </span>
-  </div>
+  </span>
+  <span class="h3 nowrap text-center">{{mc.title}}</span>
+
   <div ng-if="mc.showDebug">{{mc.options | toJson:true}}</div>
   <div ng-if="mc.showDebug">{{mc.users | toJson:true }}</div>
   <pre ng-if="mc.showDebug && mc.queries">{{mc.queries | toJson:true }}</pre>
   
   <div id="grids">
-    <h2 class="text-center">{{mc.title}}</h2>
     <div ng-class="mc.gridClasses()" ng-repeat="group in mc.searchResults">
         <h3 class="text-center" ng-if="mc.searchResults.length>1">{{group.key}}</h3>
         <image-grid main="mc" images="group.value" options="mc.options" show-debug="mc.showDebug"></image-grid>
