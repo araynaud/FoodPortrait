@@ -66,7 +66,7 @@ angular.module('app')
                 else if(window.scrollX < prevX)
                     direction = "left";
 
-                console.log("onScrollH: " + window.scrollX + " / " + max);
+                console.log("onScrollH: " + direction + " " + window.scrollX + " / " + max);
 
                 if(window.scrollX <= 0)
                 {
