@@ -142,7 +142,7 @@ My Meals: view latest for this user
         &nbsp;<input type="checkbox" ng-model="mc.showDebug" /> debug
     </span>
   </span>
-  <span class="h3 nowrap text-center">{{mc.title}}</span>
+  <span class="h3" ng-class="{nowrap: !lc.isMobile}">{{mc.title}}</span>
 
   <div ng-if="mc.showDebug">{{mc.options | toJson:true}}</div>
   <div ng-if="mc.showDebug">{{mc.users | toJson:true }}</div>
