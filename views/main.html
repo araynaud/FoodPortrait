@@ -43,7 +43,7 @@ My Meals: view latest for this user
           <i class="glyphicon" ng-class="mc.orderArrow()"></i>
         </button> 
       </span>
-      <select id="dd_order" ng-model="mc.filters.order_by" name="order" class="form-control" ng-options="item for item in mc.dropdown.order_by.$keys" ng-change="mc.search()">
+      <select id="dd_order" ng-model="mc.filters.order_by" name="order" class="form-control" ng-options="item for item in mc.dropdown.order_by_keys" ng-change="mc.search()">
       </select>
     </div>
     <div class="input-group border-collapse">
@@ -62,7 +62,7 @@ My Meals: view latest for this user
       ng-model="mc.filters.image_date_taken_min" uib-datepicker-popup="{{mc.dateFormat}}" ng-click="mc.pickDate(1)"
       is-open="mc.datepickerOpen1" datepicker-options="mc.dateOptions" close-text="Close" placeholder="From date"  ng-change="mc.search()"/>
       <span class="input-group-btn">
-        <button type="button" class="btn btn-default" ng-if="mc.filters.image_date_taken_min" ng-click="mc.clearFilter('image_date_taken_min')">
+        <button type="button" class="btn btn-default" ng-if="mc.filters.image_date_taken_min" ng-click="mc.clearFilter('image_date_taken_min'); mc.search();">
           <i class="glyphicon glyphicon-remove-circle"></i>
         </button> 
         <button type="button" class="btn btn-default" ng-click="mc.pickDate(1)">
@@ -76,7 +76,7 @@ My Meals: view latest for this user
       ng-model="mc.filters.image_date_taken_max" uib-datepicker-popup="{{mc.dateFormat}}" ng-click="mc.pickDate(2)"
       is-open="mc.datepickerOpen2" datepicker-options="mc.dateOptions" close-text="Close" placeholder="To date"  ng-change="mc.search()"/>
       <span class="input-group-btn">
-        <button type="button" class="btn btn-default" ng-if="mc.filters.image_date_taken_max" ng-click="mc.clearFilter('image_date_taken_max')">
+        <button type="button" class="btn btn-default" ng-if="mc.filters.image_date_taken_max" ng-click="mc.clearFilter('image_date_taken_max'); mc.search();">
           <i class="glyphicon glyphicon-remove-circle"></i>
         </button> 
         <button type="button" class="btn btn-default" ng-click="mc.pickDate(2)">

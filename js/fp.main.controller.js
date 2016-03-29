@@ -39,7 +39,7 @@ function ($window, $state,  $timeout, ProfileService, QueryService)
         mc.labels = ProfileService.getConfig("labels.filters");
         mc.dropdown = ProfileService.getConfig("dropdown");
         if(isDefined("dropdown.order_by", mc))
-            mc.dropdown.order_by.$keys = Object.keys(mc.dropdown.order_by);
+            mc.dropdown.order_by_keys = Object.keys(mc.dropdown.order_by);
 
         mc.getFilters();
         mc.search();
