@@ -50,22 +50,35 @@ angular.module('app')
         console.log("onScrollH " + attr.onScrollH);
         if(!attr.onScrollH) return;
 
+        var prevX = 0;
+        var direction;
         var tag = tagName(el);
+
         if(tag == "body" || tag == "html")
             angular.element(window).bind('scroll', function(evt) 
             {
                 var max = document.documentElement.scrollWidth - window.innerWidth;
+                if(window.scrollX == prevX)
+                    return console.log("scroll V");
+
+                if(window.scrollX > prevX)
+                    direction = "right";
+                else if(window.scrollX < prevX)
+                    direction = "left";
+
                 console.log("onScrollH: " + window.scrollX + " / " + max);
-                if (window.scrollX <= 0)
+
+                if(window.scrollX <= 0)
                 {
                     console.log("onScrollH reached left");
                     scope.$apply(attr.onScrollH);
                 }
-                if (window.scrollX >= max)
+                if(window.scrollX >= max)
                 {
                     console.log("onScrollH reached right");
                     scope.$apply(attr.onScrollH);
                 }
+                prevX = window.scrollX;
             });
         else
             el.bind('scroll', function(evt) 
@@ -78,6 +91,7 @@ angular.module('app')
                     console.log("onScrollH reached right");
                     scope.$apply(attr.onScrollH);
                 }
+                prevX = window.scrollX;
             });
     };
 });
