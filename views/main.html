@@ -31,14 +31,14 @@ My Meals: view latest for this user
     <br/>
     <div class="input-group">
       <span class="input-group-btn">
-         <button type="button" class="btn btn-default"><label for="dd_portrait">Portrait</label></button> 
+         <button type="button" class="btn btn-default dropdown-label"><label for="dd_portrait">Portrait</label></button> 
       </span>
       <select id="dd_portrait" ng-model="mc.filters.portrait" name="meal" class="form-control" ng-options="item for item in mc.dropdown.portrait" ng-change="mc.search()">
         </select>
     </div>
-    <div class="input-group">
+    <div class="input-group border-collapse">
       <span class="input-group-btn">
-        <button type="button" class="btn btn-default" ng-click="mc.filters.reverse = !mc.filters.reverse; mc.search()">
+        <button type="button" class="btn btn-default dropdown-label" ng-click="mc.filters.reverse = !mc.filters.reverse; mc.search()">
           <label for="dd_order">Order</label>
           <i class="glyphicon" ng-class="mc.orderArrow()"></i>
         </button> 
@@ -46,9 +46,9 @@ My Meals: view latest for this user
       <select id="dd_order" ng-model="mc.filters.order_by" name="order" class="form-control" ng-options="item for item in mc.dropdown.order" ng-change="mc.search()">
       </select>
     </div>
-    <div class="input-group">
+    <div class="input-group border-collapse">
       <span class="input-group-btn">
-        <button type="button" class="btn btn-default"><label for="dd_group">Grid by</label></button> 
+        <button type="button" class="btn btn-default dropdown-label"><label for="dd_group">Grid by</label></button> 
       </span>
         <select id="dd_group" ng-model="mc.filters.group" name="group" class="form-control" ng-options="item for item in mc.getGroupOptions()" ng-change="mc.search()">
           <option value="">1 grid</option>
@@ -71,7 +71,7 @@ My Meals: view latest for this user
       </span>
     </div>
 
-    <div class="input-group">
+    <div class="input-group border-collapse">
       <input type="text" id="inputDateMax" name="date_max" class="form-control"
       ng-model="mc.filters.image_date_taken_max" uib-datepicker-popup="{{mc.dateFormat}}" ng-click="mc.pickDate(2)"
       is-open="mc.datepickerOpen2" datepicker-options="mc.dateOptions" close-text="Close" placeholder="To date"/>
@@ -89,34 +89,33 @@ My Meals: view latest for this user
 
     <div class="input-group">
       <span class="input-group-btn">
-         <button type="button" class="btn btn-default"><label for="dd_meal">Meal</label></button> 
+         <button type="button" class="btn btn-default dropdown-label"><label for="dd_meal">Meal</label></button> 
       </span>
       <select id="dd_meal" ng-model="mc.filters.meal" name="meal" class="form-control" ng-options="item.name for item in mc.dropdown.meal" ng-change="mc.search()">
           <option value="">-</option>
         </select>
     </div>
 
-    <!--div class="input-group">
+    <!--div class="input-group border-collapse">
       <span class="input-group-btn">
-        <button type="button" class="btn btn-default"><label for="dd_course">Course</label></button> 
+        <button type="button" class="btn btn-default dropdown-label"><label for="dd_course">Course</label></button> 
       </span>
       <select id="dd_course" ng-model="mc.filters.course" name="course" class="form-control" ng-options="item for item in mc.getCourses()" ng-change="mc.search()">
           <option value="">-</option>
       </select>
     </div>
 
-    <div class="input-group">
+    <div class="input-group border-collapse">
       <span class="input-group-btn">
-        <button type="button" class="btn btn-default"><label for="dd_mood">Mood</label></button> 
+        <button type="button" class="btn btn-default dropdown-label"><label for="dd_mood">Mood</label></button> 
       </span>
       <select id="dd_mood" ng-model="mc.filters.mood" name="mood" class="form-control" ng-options="item for item in mc.dropdown.mood" ng-change="mc.search()">
           <option value="">-</option>
       </select>
     </div-->
-    <br/>
-    <div class="input-group" ng-repeat="q in mc.questions" ng-if="mc.isFilter(q) && mc.filters.portrait=='demographic'">
+    <div class="input-group border-collapse" ng-repeat="q in mc.questions" ng-if="mc.isFilter(q) && mc.filters.portrait=='demographic'">
       <span class="input-group-btn">
-        <button type="button" class="btn btn-default"><label for="dd_{{q.field_name}}">{{q.title}}</label></button> 
+        <button type="button" class="btn btn-default dropdown-label"><label for="dd_{{q.field_name}}">{{q.title}}</label></button> 
       </span>
       <select id="dd_{{q.field_name}}" name="{{q.field_name}}" class="form-control" ng-model="mc.filters[q.field_name]" ng-options="a.label for a in q.form_answers" ng-change="mc.search()">
         <option value="">-</option>

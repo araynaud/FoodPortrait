@@ -250,3 +250,13 @@ a.glyphicon
 {
   color: black;
 }
+
+.dropdown-label
+{
+    width: 80px;
+}
+
+.border-collapse
+{
+  margin-top: -1px;
+}
