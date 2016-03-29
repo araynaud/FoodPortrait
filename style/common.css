@@ -154,6 +154,10 @@ img.cover
     padding: 10px;
 }
 
+.pad60 {
+    padding: 0 60px;
+}
+
 .z-2 {
  z-index: -2;
 }
