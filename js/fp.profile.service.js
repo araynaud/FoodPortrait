@@ -3,10 +3,10 @@
 angular.module('fpServices', ['ngResource'])
 .service('ProfileService', ['$window', '$http', '$resource', '$q', function($window, $http, $resource, $q) 
 {
-    var service = this;
+    var svc = this;
     this.init = function()
     {
-//        $window.ProfileService = this;
+        $window.ProfileService = this;
         this.config = $window.fpConfig;
 
         this.questions = [];
@@ -40,17 +40,17 @@ angular.module('fpServices', ['ngResource'])
 
     this.getConfig = function(key)
     {
-        return valueIfDefined(key, service.config);
+        return valueIfDefined(key, svc.config);
     }
 
     this.isDebug = function()
     {
-        return service.getConfig("debug.angular");
+        return svc.getConfig("debug.angular");
     };
     
     this.isOffline = function()
     {
-        return service.getConfig("debug.offline");
+        return svc.getConfig("debug.offline");
     };
 
     this.serviceExt = function()
@@ -64,9 +64,9 @@ angular.module('fpServices', ['ngResource'])
 
         $http.get("api/countries.csv").then(function(response) 
         {
-            service.countries = String.parseCsv(response.data, true);
-            service.countries.byCode = service.countries.indexBy("country_code");
-            deferred.resolve(service.countries);
+            svc.countries = String.parseCsv(response.data, true);
+            svc.countries.byCode = svc.countries.indexBy("country_code");
+            deferred.resolve(svc.countries);
         });
         return deferred.promise;
     };
@@ -76,7 +76,7 @@ angular.module('fpServices', ['ngResource'])
         var deferred = $q.defer();
         this.configResource.get(function(response)
         {
-            service.config = response;
+            svc.config = response;
             deferred.resolve(response);
         });
         return deferred.promise;
@@ -96,7 +96,7 @@ angular.module('fpServices', ['ngResource'])
         //formData.action = "login"; //or register or logout
         this.loginResource.save(formData, function(response) 
         {
-            service.user = response.user;
+            svc.user = response.user;
             deferred.resolve(response);
         });
         return deferred.promise;
@@ -107,18 +107,35 @@ angular.module('fpServices', ['ngResource'])
         return this.user ? this.user.username : null;
     };
 
+    this.isLoggedIn = function()
+    {
+      return !!this.user;
+    };
+
     this.isAdmin = function()
     {
         return this.user && this.user.is_admin;
     };
 
+    this.getRole = function(max)
+    {
+        var roles = this.getConfig("user.roles");
+        var level = svc.getAccessLevel();
+        return roles[level];
+    }
+
+    this.getAccessLevel = function()
+    {
+        return svc.isLoggedIn() + svc.isAdmin();
+    }
+
     this.userFullName = function()
     {
-        if(!this.user) return "nobody";
-        if(!this.user.first_name && !this.user.last_name)   return this.user.username;
-        if(!this.user.first_name)   return this.user.last_name;
-        if(!this.user.last_name)    return this.user.first_name;
-        return this.user.first_name + " " + this.user.last_name;
+        if(!svc.user) return "nobody";
+        if(!svc.user.first_name && !svc.user.last_name)   return svc.user.username;
+        if(!svc.user.first_name)   return svc.user.last_name;
+        if(!svc.user.last_name)    return svc.user.first_name;
+        return svc.user.first_name + " " + svc.user.last_name;
     };
 
 //Profile form
@@ -128,7 +145,7 @@ angular.module('fpServices', ['ngResource'])
         //optional: pass username? pass form_id. section_id
 	    this.formResource.get(function(response)
         {
-            service.form = response;
+            svc.form = response;
             deferred.resolve(response);
         }); 		
         return deferred.promise;
@@ -145,10 +162,9 @@ angular.module('fpServices', ['ngResource'])
         return deferred.promise;
     };
 
-
     this.isMobile = function() 
     { 
-        return !!navigator.userAgent.match(/Android|webOS|iPhone|iPad|iPod|BlackBerry|Phone|mobile/i);
+        return this.clientIs("Android|webOS|iPhone|iPod|BlackBerry|Phone|mobile") && !this.clientIs("iPad");
     }
 
     this.clientIs = function(str) 

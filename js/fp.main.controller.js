@@ -19,7 +19,7 @@ function ($window, $state,  $timeout, ProfileService, QueryService)
 
     mc.init = function()
     {
-        mc.filters = { portrait: "demographic", reverse: true, order_by: "Photo Date" };
+        mc.filters = QueryService.filters;
         mc.searchResults=[];
         mc.showOptions = ProfileService.getConfig("grid.showOptions");
         mc.options = ProfileService.getConfig("grid.options")
@@ -38,6 +38,14 @@ function ($window, $state,  $timeout, ProfileService, QueryService)
 
         mc.labels = ProfileService.getConfig("labels.filters");
         mc.dropdown = ProfileService.getConfig("dropdown");
+        
+        var pkey = ProfileService.getRole();
+        mc.portrait = mc.dropdown.portrait[pkey];
+        if(isString(mc.portrait)) 
+            mc.portrait = [mc.portrait]; 
+        if(mc.portrait.indexOf(mc.filters.portrait) == -1)
+            mc.filters.portrait = mc.portrait[0];
+
         if(isDefined("dropdown.order_by", mc))
             mc.dropdown.order_by_keys = Object.keys(mc.dropdown.order_by);
 

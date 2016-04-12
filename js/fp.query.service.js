@@ -3,27 +3,29 @@
 //service that handles loading image grid data
 
 angular.module('fpServices')
-.service('QueryService', ['$resource', '$q', '$window', 'ProfileService', function($resource, $q, $window, ProfileService) 
+.service('QueryService', ['$resource', '$q', 'ProfileService', function($resource, $q, ProfileService) 
 {
-    var service = this;
-    this.init = function()
+    var svc = this;
+    window.QueryService = this;
+    
+    svc.init = function()
     {
-        //$window.QueryService = this;
-        this.queryResource = ProfileService.getResource("foodportrait", "query" + ProfileService.serviceExt());
+        svc.queryResource = ProfileService.getResource("foodportrait", "query" + ProfileService.serviceExt());
+        svc.filters = ProfileService.getConfig("filters"); 
     };
     
-    this.loadQuery = function(filters)
+    svc.loadQuery = function(filters)
     {
         var deferred = $q.defer();
-        this.queryResource.get(filters, function(response)
+        svc.queryResource.get(filters, function(response)
         {
-            service.results = Object.toArray(response.results);
-            service.users = response.users;
-            service.queries = response.queries;
-            deferred.resolve(service.results);
+            svc.results = Object.toArray(response.results);
+            svc.users = response.users;
+            svc.queries = response.queries;
+            deferred.resolve(svc.results);
         });
         return deferred.promise;
     };
  
-    this.init();
+    svc.init();
 }]);
