@@ -147,7 +147,7 @@ My Meals: view latest for this user
     <a class="btn btn-default menu-toggle glyphicon glyphicon-search" title="toggle filters" ng-hide="lc.sidebar" ng-click="lc.toggleSidebar(true);  mc.resizeGrid(400, 800);"></a>
   </div>
 
-  <h3 class="centered" ng-class="{nowrap: !lc.isMobile}">{{mc.title}}</h3>
+  <h3 class="centered" ng-class="{nowrap: !lc.isMobile, pad60: !lc.sidebar}">{{mc.title}}</h3>
 
   <div ng-if="mc.showDebug">{{mc.options | toJson:true}}</div>
   <div ng-if="mc.showDebug">{{mc.users | toJson:true }}</div>
