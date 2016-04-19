@@ -114,7 +114,7 @@ angular.module('fpServices', ['ngResource'])
 
     this.isAdmin = function()
     {
-        return this.user && this.user.is_admin;
+        return !!this.user && !!this.user.is_admin;
     };
 
     this.getRole = function(max)
@@ -155,7 +155,7 @@ angular.module('fpServices', ['ngResource'])
     this.saveForm = function(formData)
     {
         var deferred = $q.defer();
-        this.formResource.save({action: "saveForm", formData: formData}, function(response) 
+        svc.formResource.save({action: "saveForm", formData: formData}, function(response) 
         {
             deferred.resolve(response);
         });
@@ -164,7 +164,7 @@ angular.module('fpServices', ['ngResource'])
 
     this.isMobile = function() 
     { 
-        return this.clientIs("Android|webOS|iPhone|iPod|BlackBerry|Phone|mobile") && !this.clientIs("iPad");
+        return svc.clientIs("Android|webOS|iPhone|iPod|BlackBerry|Phone|mobile") && !svc.clientIs("iPad");
     }
 
     this.clientIs = function(str) 
@@ -175,7 +175,7 @@ angular.module('fpServices', ['ngResource'])
 
     this.clientIsIE = function() 
     { 
-        return this.clientIs("MSIE|Trident");
+        return svc.clientIs("MSIE|Trident");
     }
 
     this.init();

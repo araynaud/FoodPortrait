@@ -123,7 +123,9 @@ My Meals: view latest for this user
     </div>
   </form>
 
+  <div ng-if="mc.showDebug">filters</div>
   <pre ng-if="mc.showDebug">{{mc.filters | toJson:true}}</pre>
+  <div ng-if="mc.showDebug">params</div>
   <pre ng-if="mc.showDebug">{{mc.params  | toJson:true}}</pre>
 </div>
 

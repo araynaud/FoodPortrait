@@ -17,6 +17,7 @@ function ($scope, $window, $state, $stateParams, $timeout, Upload, ProfileServic
         uc.baseUrl = ProfileService.getConfig("upload.baseUrl");
         uc.baseServer = ProfileService.getConfig("upload.server");
         uc.offline = ProfileService.isOffline();
+        uc.isIE11 = ProfileService.clientIs("Trident/7.0");
 
         uc.newUpload = !$stateParams.uploadId;
         uc.queued = true;
@@ -65,6 +66,7 @@ function ($scope, $window, $state, $stateParams, $timeout, Upload, ProfileServic
             if(!uc.form)
                 return uc.errorMessage();
             
+            uc.form.image_date_taken = new Date(uc.form.image_date_taken);
             uc.imageUrl =  uc.getImageUrl(uc.form, ".ss");
             uc.uploadUrl = uc.getImageUrl(uc.form, ".tn");
             delete uc.form.exists; 
