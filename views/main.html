@@ -55,6 +55,19 @@ My Meals: view latest for this user
         </select>
     </div>
 
+    <div>
+      <spinner label="columns:" value="mc.options.columns"  min="1" max="8" loop="true" mobile="true" hold="true" change="mc.searchMore"></spinner> 
+      <spinner label="rows:"    value="mc.options.rows"     min="1" max="8" loop="true" mobile="true" hold="true" change="mc.searchMore"></spinner>
+      <a class="btn btn-default glyphicon glyphicon-menu-hamburger" title="grid options" ng-click="mc.showOptions=!mc.showOptions"></a>
+      <span ng-if="mc.showOptions">
+          <spinner label="margin:" value="mc.options.margin"   min="-1" max="50" loop="true" mobile="true" hold="true"></spinner>
+          <spinner label="border:" value="mc.options.border"   min="0"  max="10" loop="true" mobile="true" hold="true"></spinner>
+          <spinner label="ratio:"  value="mc.options.ratio"    min="0.5" max="4" loop="true" mobile="true" hold="true" step="0.05"></spinner>
+          &nbsp;<input type="checkbox" ng-model="mc.options.shadow" /> shadow
+          &nbsp;<input type="checkbox" ng-model="mc.showDebug" /> debug
+      </span>
+    </div>
+
     <br/>
 
     <div class="input-group">
@@ -130,21 +143,11 @@ My Meals: view latest for this user
 </div>
 
 <div id="page-content-wrapper">
-  <span class="hidden-print">
+  <div class="fixedTopLeft hidden-print">
     <a class="btn btn-default menu-toggle glyphicon glyphicon-search" title="toggle filters" ng-hide="lc.sidebar" ng-click="lc.toggleSidebar(true);  mc.resizeGrid(400, 800);"></a>
-    <a class="btn btn-default glyphicon glyphicon-menu-hamburger" title="grid options" ng-click="mc.showOptions=!mc.showOptions"></a>
-    <spinner label="columns:" value="mc.options.columns"  min="1" max="8" loop="true" mobile="true" hold="true" change="mc.searchMore"></spinner> 
-    <spinner label="rows:"    value="mc.options.rows"     min="1" max="8" loop="true" mobile="true" hold="true" change="mc.searchMore"></spinner>
-    &nbsp;
-    <span ng-if="mc.showOptions">
-        <spinner label="margin:" value="mc.options.margin"   min="-1" max="50" loop="true" mobile="true" hold="true"></spinner>
-        <spinner label="border:" value="mc.options.border"   min="0"  max="10" loop="true" mobile="true" hold="true"></spinner>
-        <spinner label="ratio:"  value="mc.options.ratio"    min="0.5" max="4" loop="true" mobile="true" hold="true" step="0.05"></spinner>
-        &nbsp;<input type="checkbox" ng-model="mc.options.shadow" /> shadow
-        &nbsp;<input type="checkbox" ng-model="mc.showDebug" /> debug
-    </span>
-  </span>
-  <span class="h3" ng-class="{nowrap: !lc.isMobile}">{{mc.title}}</span>
+  </div>
+
+  <h3 class="centered" ng-class="{nowrap: !lc.isMobile}">{{mc.title}}</h3>
 
   <div ng-if="mc.showDebug">{{mc.options | toJson:true}}</div>
   <div ng-if="mc.showDebug">{{mc.users | toJson:true }}</div>

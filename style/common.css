@@ -270,3 +270,17 @@ a.glyphicon
 {
   margin-top: -1px;
 }
+
+.fixedTopLeft
+{
+    position: fixed;
+    top: 60px;
+    left: 10px;
+}
+
+.fixedTopRight
+{
+    position: fixed;
+    top: 60px;
+    right: 10px;
+}
