@@ -1,4 +1,4 @@
-<span class="spinner-wrapper">
+<span class="spinner-wrapper nowrap">
 	<label ng-if="vm.label" class="noselect">{{vm.label}}</label> <span class="spinner noselect" ng-if="vm.isMobile" title="{{vm.min}} - {{vm.max}}">
 	    <button class="glyphicon glyphicon-minus-sign" ng-mousedown="vm.addValue(-1)"></button>
 	    <span class="value" ng-class="{decimal: vm.step < 1 }">{{vm.value}}</span>
