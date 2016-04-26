@@ -1,0 +1,36 @@
+<style id="addedCSS" type="text/css">{{vm.addedCss}}</style>
+
+<span class="form-signin-heading">{{vm.options.title}}</span>
+
+<span ng-if="vm.showDebug">	
+	grid: {{vm.options.columns}}C x {{vm.options.rows}}R {{vm.gridWidth}} x {{vm.gridHeight}}  / {{vm.roundRatio(vm.gridRatio)}}
+	available: {{vm.availableWidth}} x {{vm.availableHeight}} / {{vm.roundRatio(vm.availableRatio)}} 
+	fit: {{vm.fit}}
+</span>
+
+<div class="alert alert-danger" role="alert" ng-if="!vm.images">
+	<span class="glyphicon glyphicon-exclamation-sign"></span> No results found.
+</div>
+
+<div id="{{vm.id}}" class="imageGrid centered">
+	<div ng-repeat="im in vm.images" ng-if="im.upload_id && $index < vm.options.rows * vm.options.columns" class="bgCenterCover cell ratio-wrapper" ng-class="vm.imageClasses(im)" ng-style="vm.imageStyle(im)" ng-click="vm.openImage(im)">
+
+    	<fp-popover ng-if="!vm.isMobile" pop-title="{{vm.imageTitle(im)}}" pop-content="{{vm.imageDescription(im, true)}}" placement="{{vm.popoverPlacement($index)}}"></fp-popover>
+
+	  	<div class="ratio-content">
+	    	<img class="stretch cover" ng-if="!vm.isIE" ng-src="{{vm.imageUrl(im)}}" alt="{{im.filename}}"/>
+
+	    	<div class="caption stretchW right">
+		    	<div class="textOutline" ng-if="vm.showDebug">{{$index}} {{vm.imageWidth(im.colspan)}}
+		    		<br/>{{im.filename}}
+		    		<br/>{{vm.options.columns}} {{vm.popoverPlacement($index)}}
+		    		<br/>{{vm.imageTitle(im)}}
+				</div>
+			    <i class="textOutline glyphicon glyphicon-edit" ng-if="vm.isMine(im)" ui-sref="upload({uploadId: im.upload_id})" ng-click="$event.stopPropagation();"></i>
+			</div>
+		</div>
+
+	</div>
+</div>
+
+<pre ng-if="vm.showDebug" class="fixedBottomRight">{{vm.addedCss}}</pre>

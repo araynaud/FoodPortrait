@@ -13,7 +13,7 @@ My Meals: view latest for this user
 <form name="filterForm">
     <div class="input-group">
       <span class="input-group-btn">
-        <button type="button" class="btn btn-default" ng-click="lc.toggleSidebar(false);  mc.resizeGrid(400, 800);">
+        <button type="button" class="btn btn-default" ng-click="lc.toggleSidebar(false);  mc.resizeGrids(500);">
           <i class="glyphicon glyphicon-triangle-left"></i>
         </button> 
         <button type="button" class="btn btn-default" ng-if="mc.filters.searchText" ng-click="mc.clearFilter('searchText', true)">
@@ -60,9 +60,10 @@ My Meals: view latest for this user
       <spinner label="rows:"    value="mc.options.rows"     min="1" max="8" loop="true" mobile="true" hold="true" change="mc.searchMore"></spinner>
       <a class="btn btn-default glyphicon glyphicon-menu-hamburger" title="grid options" ng-click="mc.showOptions=!mc.showOptions"></a>
       <span ng-if="mc.showOptions">
-          <spinner label="margin:" value="mc.options.margin"   min="-1" max="50" loop="true" mobile="true" hold="true"></spinner>
-          <spinner label="border:" value="mc.options.border"   min="0"  max="10" loop="true" mobile="true" hold="true"></spinner>
-          <spinner label="ratio:"  value="mc.options.ratio"    min="0.5" max="4" loop="true" mobile="true" hold="true" step="0.05"></spinner>
+          <spinner label="margin:" value="mc.options.margin"   min="-1" max="50" loop="true" mobile="true" hold="true" change="mc.resizeGrids"></spinner>
+          <spinner label="border:" value="mc.options.border"   min="0"  max="10" loop="true" mobile="true" hold="true" change="mc.resizeGrids"></spinner>
+          <br/>
+          <spinner label="ratio:"  value="mc.options.ratio"    min="0.25" max="4" loop="true" mobile="true" hold="true" step="0.25" change="mc.resizeGrids"></spinner>
           &nbsp;<input type="checkbox" ng-model="mc.options.shadow" /> shadow
           &nbsp;<input type="checkbox" ng-model="mc.showDebug" /> debug
       </span>
@@ -143,21 +144,31 @@ My Meals: view latest for this user
 </div>
 
 <div id="page-content-wrapper">
-  <div class="fixedTopLeft hidden-print">
-    <a class="btn btn-default menu-toggle glyphicon glyphicon-search" title="toggle filters" ng-hide="lc.sidebar" ng-click="lc.toggleSidebar(true);  mc.resizeGrid(400, 800);"></a>
-  </div>
-
   <h3 class="centered" ng-class="{nowrap: !lc.isMobile, pad60: !lc.sidebar}">{{mc.title}}</h3>
 
   <div ng-if="mc.showDebug">{{mc.options | toJson:true}}</div>
   <div ng-if="mc.showDebug">{{mc.users | toJson:true }}</div>
   <pre ng-if="mc.showDebug && mc.queries">{{mc.queries | toJson:true }}</pre>
+
+  <div class="alert alert-danger text-center" role="alert" ng-if="!mc.loading && !mc.searchResults.length">
+    <span class="glyphicon glyphicon-exclamation-sign"></span> No results found.
+  </div>
   
   <div id="grids">
     <div ng-class="mc.gridClasses()" ng-repeat="group in mc.searchResults">
-        <h3 class="text-center" ng-if="mc.searchResults.length>1">{{group.key}}</h3>
-        <image-grid main="mc" images="group.value" options="mc.options" show-debug="mc.showDebug"></image-grid>
+        <h4 class="text-center" ng-if="mc.multipleGrids()">{{group.key}}</h4>
+        <image-grid-pc main="mc" key="group.key" images="group.value" options="mc.options" show-debug="mc.showDebug"></image-grid>
     </div>
   </div>
+
+  <div class="fixedTopLeft hidden-print">
+    <a class="btn btn-default menu-toggle glyphicon glyphicon-search" title="toggle filters" ng-hide="lc.sidebar" ng-click="lc.toggleSidebar(true);"></a>
+    <span ng-if="mc.loading">Loading...</span>
+  </div>
+
+  <div class="fixedTopRight hidden-print">
+    <a class="btn btn-default menu-toggle glyphicon glyphicon-refresh" title="toggle filters" ng-hide="lc.sidebar" ng-click="mc.search();"></a>
+  </div>
+
 </div>
 </div>

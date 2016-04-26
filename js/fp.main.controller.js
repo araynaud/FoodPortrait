@@ -49,6 +49,13 @@ function ($window, $state,  $timeout, ProfileService, QueryService)
         if(isDefined("dropdown.order_by", mc))
             mc.dropdown.order_by_keys = Object.keys(mc.dropdown.order_by);
 
+        mc.win = angular.element(window);
+
+        mc.win.bind("resize", function() 
+        {
+            mc.resizeGrids();
+        });
+
         mc.getFilters();
         mc.search();
     }
@@ -111,21 +118,24 @@ function ($window, $state,  $timeout, ProfileService, QueryService)
     mc.gridClasses = function()
     {
         var classes = {};
-        if(!mc.searchResults || mc.searchResults.length <= 1) return classes;
+        if(!mc.multipleGrids()) return classes;
         var nbCols = 12 / mc.searchResults.length;
-        var lg = Math.max(nbCols, 3); //large: 4 grids per row
         var sm = Math.max(nbCols, 6); //small: 2 grids per row
-
         classes["col-sm-"+sm] = true;
-        //classes["col-lg-"+lg] = true;
-
         return classes;
     }
 
-    mc.resizeGrid = function(delay, last)
+    mc.multipleGrids = function(delay)
     {
-        if(window.imageGrid)
-            imageGrid.resizeInterval(delay, last);       
+        return mc.searchResults && mc.searchResults.length>1;
+    }
+
+    mc.resizeGrids = function(delay)
+    {
+        if(mc.imageGrids)
+            for(var i=0; i < mc.imageGrids.length; i++)
+                mc.imageGrids[i].resizeAfter(delay);       
+        console.log("resizing grid: " + mc.imageGrids.length);
     };
 
     mc.getGridTitle = function()
@@ -186,8 +196,11 @@ function ($window, $state,  $timeout, ProfileService, QueryService)
         mc.loading = true;
         mc.params = mc.getSearchParams();
         mc.title = mc.getGridTitle();
+        mc.imageGrids = [];
+
         QueryService.loadQuery(mc.params).then(function(response) 
         {
+            mc.loading = false;
             mc.searchResults = response; 
             mc.users = QueryService.users;
             mc.queries = QueryService.queries;

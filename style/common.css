@@ -284,3 +284,17 @@ a.glyphicon
     top: 60px;
     right: 10px;
 }
+
+.fixedBottomLeft
+{
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+}
+
+.fixedBottomRight
+{
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+}

@@ -1,8 +1,3 @@
-image-grid > .imageGrid
-{
-	font-size: 0px;
-}
-
 .imageGrid
 {
 	text-align: left;
@@ -22,4 +17,27 @@ image-grid > .imageGrid
     font-size: 14px;
     background-color: #eee;
     position: relative;
+}
+
+.ratio-wrapper 
+{
+  display: inline-block;
+  position: relative;
+}
+
+.ratio-wrapper:after 
+{
+  padding-top: 100%; /* override according to ratio: 16/9 => 56.25%;*/
+  display: block;
+  content: '';
+}
+
+.ratio-content
+{
+  /* fill parent */
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
 }
