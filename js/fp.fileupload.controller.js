@@ -66,7 +66,7 @@ function ($scope, $window, $state, $stateParams, $timeout, Upload, ProfileServic
             if(!uc.form)
                 return uc.errorMessage();
             
-            uc.form.image_date_taken = new Date(uc.form.image_date_taken);
+            uc.form.image_date_taken = new Date(uc.form.image_date_taken.replace(" ", "T"));
             uc.imageUrl =  uc.getImageUrl(uc.form, ".ss");
             uc.uploadUrl = uc.getImageUrl(uc.form, ".tn");
             delete uc.form.exists; 

@@ -1,17 +1,19 @@
 <form class="file-uploader container pad10" name="uploadForm" novalidate>
     {{uc.showDebug && uc.form.upload_id}}
-    <div class="col-xs-8 col-xs-offset-2" ng-if="uc.newUpload"> 
-        <label for="inputFiles" ng-if="uc.isIE11">Select Photo:</label>
-        <input type="file" id="inputFiles" ngf-select ng-model="uc.files" name="file" ngf-multiple="true" accept="image/*" required ngf-change="uc.upload()" ng-class="{size0: !uc.isIE11}" />
+
+    <div class="row">
+      <div class="row col-xs-8 col-xs-offset-2" ng-if="uc.newUpload"> 
         <label for="inputFiles" class="uploadThumbnail shadow">
           <div ng-show="uc.newUpload && !uc.form.upload_id" class="uploadLabel stretchW">Click to Select Photo</div>
           <div ng-show="uc.newUpload && !uc.form.upload_id">{{uc.progressPercentage}}</div>
           <img id="thumbnail" ng-src="{{uc.uploadUrl}}" ng-show="uc.newUpload && uc.form.upload_id"/> 
         </label> 
-    </div>
+        <input type="file" id="inputFiles" class="size0" ngf-select ng-model="uc.files" name="file" ngf-multiple="true" accept="image/*" required ngf-change="uc.upload()" />
+      </div>
 
-    <div class="col-sm-8 col-sm-offset-2" ng-if="!uc.newUpload && uc.imageUrl"> 
-      <img class="preview img-responsive" ng-class="{portrait: uc.form.image_width < uc.form.image_height}" ng-src="{{uc.imageUrl}}"/> 
+      <div class="row col-sm-8 col-sm-offset-2" ng-if="!uc.newUpload && uc.imageUrl"> 
+        <img class="preview img-responsive" ng-class="{portrait: uc.form.image_width < uc.form.image_height}" ng-src="{{uc.imageUrl}}"/> 
+      </div>
     </div>
 
     <div class="col-sm-6" ng-class="{'has-error': uploadForm.image_date_taken.$invalid }">
