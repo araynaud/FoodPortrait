@@ -54,7 +54,7 @@ function ($window, $state,  $timeout, ProfileService, QueryService)
 
         mc.win.bind("resize", function() 
         {
-            mc.resizeGrids();
+            mc.resizeGrids(200);
         });
 
         mc.getFilters();
@@ -203,6 +203,9 @@ function ($window, $state,  $timeout, ProfileService, QueryService)
         {
             mc.loading = false;
             mc.searchResults = response; 
+            mc.maxGrid = mc.searchResults.max("value.length");
+            mc.minGrid = mc.searchResults.min("value.length");
+            mc.total   = mc.searchResults.sum("value.length");
             mc.users = QueryService.users;
             mc.queries = QueryService.queries;
         }, 
@@ -211,8 +214,10 @@ function ($window, $state,  $timeout, ProfileService, QueryService)
 
     mc.searchMore = function()
     {
-        if(!mc.searchResults || mc.searchResults.length < mc.options.rows * mc.options.columns)
+        if(!mc.searchResults || mc.maxGrid < mc.options.rows * mc.options.columns)
             mc.search();
+        else
+            mc.resizeGrids();
     };
 
     mc.clearSearch = function(refresh)

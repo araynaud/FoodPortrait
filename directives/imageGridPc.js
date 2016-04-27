@@ -231,7 +231,7 @@ angular.module('app').directive('imageGridPc', function ()
             vm.gridWidth = 100;
             if(vm.fit == "height" && !vm.isMobile && !vm.main.multipleGrids())
             {
-                var pc = 92 - 2 * vm.options.rows;
+                var pc = 90; //92 - 2 * vm.options.rows;
                 vm.gridWidth = vm.roundRatio(pc * vm.gridRatio / vm.availableRatio);
             }
 
