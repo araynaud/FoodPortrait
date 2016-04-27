@@ -46,6 +46,11 @@
   background-color: white;
 }
 
+.bggray
+{
+  background-color: #EEE;
+}
+
 img.contain
 {
     object-position: center center;

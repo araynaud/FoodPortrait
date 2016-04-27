@@ -46,7 +46,7 @@ $meta["og:url"] = currentUrlDir();
 </script>
 
 </head>
-<body ng-controller="LayoutController as lc" ng-class="lc.bodyClasses()" on-scroll-h="lc.sidebar=false">
+<body ng-controller="LayoutController as lc" ng-class="lc.bodyClasses()" on-scroll-h="lc.sidebar=false" class="bggray">
 
   <!-- Static navbar -->
   <nav class="navbar navbar-default navbar-fixed-top">
