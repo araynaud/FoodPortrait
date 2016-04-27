@@ -47,9 +47,12 @@ angular.module('app').directive('spinner', [ "$timeout", function ($timeout)
                     vm.value = vm.loop ? vm.min : vm.max;
                 else if(vm.value < vm.min)
                     vm.value = vm.loop ? vm.max : vm.min;
+
+                console.log("spinner: " + vm.oldValue + " => "+ vm.value)
                 if(angular.isFunction(vm.change))
-                    vm.change(vm.value, vm.oldValue);
-                return vm.value;
+                    $timeout(vm.change, 0);
+
+                return true;
             };
 
             vm.addValue = function(incr)
@@ -65,12 +68,15 @@ angular.module('app').directive('spinner', [ "$timeout", function ($timeout)
                     vm.value += incr * vm.step;
                     vm.value = Math.roundDigits(vm.value, 2);
                 }
+
+                console.log("spinner: " + vm.oldValue + " => "+ vm.value)
                 if(angular.isFunction(vm.change))
-                    vm.change(vm.value, vm.oldValue);
+                    $timeout(vm.change, 0);
 
                 if(vm.hold)
                     timeout = $timeout(function() { vm.addValue(incr); }, 200);
-                return vm.value;
+
+                return true;
             };
 
             vm.cancelTimeout = function (e) 

@@ -60,8 +60,8 @@ My Meals: view latest for this user
       <spinner label="rows:"    value="mc.options.rows"     min="1" max="8" loop="true" mobile="true" hold="true" change="mc.searchMore"></spinner>
       <a class="btn btn-default glyphicon glyphicon-menu-hamburger" title="grid options" ng-click="mc.showOptions=!mc.showOptions"></a>
       <span ng-if="mc.showOptions">
-          <spinner label="margin:" value="mc.options.margin"   min="-1" max="50" loop="true" mobile="true" hold="true" change="mc.resizeGrids"></spinner>
-          <spinner label="border:" value="mc.options.border"   min="0"  max="10" loop="true" mobile="true" hold="true" change="mc.resizeGrids"></spinner>
+          <spinner label="margin:" value="mc.options.margin"   min="0" max="25" loop="true" mobile="true" hold="true" change="mc.resizeGrids"></spinner>
+          <spinner label="border:" value="mc.options.border"   min="0" max="10" loop="true" mobile="true" hold="true" change="mc.resizeGrids"></spinner>
           <br/>
           <spinner label="ratio:"  value="mc.options.ratio"    min="0.25" max="4" loop="true" mobile="true" hold="true" step="0.25" change="mc.resizeGrids"></spinner>
           &nbsp;<input type="checkbox" ng-model="mc.options.shadow" /> shadow
@@ -162,7 +162,7 @@ My Meals: view latest for this user
   </div>
 
   <div class="fixedTopLeft hidden-print">
-    <a class="btn btn-default menu-toggle glyphicon glyphicon-search" title="toggle filters" ng-hide="lc.sidebar" ng-click="lc.toggleSidebar(true);"></a>
+    <a class="btn btn-default menu-toggle glyphicon glyphicon-search" title="toggle filters" ng-hide="lc.sidebar" ng-click="lc.toggleSidebar(true); mc.resizeGrids(500);"></a>
     <span ng-if="mc.loading">Loading...</span>
   </div>
 

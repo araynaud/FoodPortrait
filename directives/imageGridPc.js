@@ -43,11 +43,7 @@ angular.module('app').directive('imageGridPc', function ()
                 delete vm.thumbnails.sizes[vm.thumbnails.keep];
             vm.tnsizes = Object.toArray(vm.thumbnails.sizes);
 
-            if(vm.options.ratio)
-            {
-                vm.ratioClass = 'ratio-' + vm.options.ratio.toString().replace(/\//g,"-").replace(/\./g,"-");
-                vm.pad = vm.roundRatio(100 / vm.options.ratio);
-            }
+            vm.getRatio();
 
         
 /*          vm.win.bind("resize", function() 
@@ -67,6 +63,15 @@ angular.module('app').directive('imageGridPc', function ()
             if(vm.key) 
                 vm.main.imageGrids[vm.key] = vm;
         };
+
+        vm.getRatio = function()
+        {
+            var ratio = valueOrDefault(vm.options.ratio, 1);
+            vm.ratioClass = 'ratio-' + ratio.toString().replace(/\//g,"-").replace(/\./g,"-");
+            vm.ratioPad = vm.roundRatio(100 / ratio);
+            return ratio;
+        };
+
 
         vm.initOptions = function(opts)
         {
@@ -232,7 +237,7 @@ angular.module('app').directive('imageGridPc', function ()
 
         vm.resizeGrid = function()
         {
-            console.log("vm.resizeGrid " + vm.id + " " + vm.count++);
+            console.log("vm.resizeGrid " + vm.id + " " + vm.count++, vm.options);
             vm.prevWidth = vm.gridWidth;
 
             vm.availableWidth  = vm.parent.width();
@@ -242,28 +247,32 @@ angular.module('app').directive('imageGridPc', function ()
             vm.firstGrid = vm.main.imageGrids[0].grid;
             vm.availableHeight = vm.win.height() - vm.firstGrid.offset().top;
             vm.availableRatio = vm.availableWidth / vm.availableHeight;
-            vm.gridRatio = vm.options.ratio * vm.options.columns / vm.options.rows;
+
+            var ratio = vm.getRatio();
+            vm.gridRatio = ratio * vm.options.columns / vm.options.rows;
             vm.fit = vm.availableRatio > vm.gridRatio ? "height" : "width";
 
             vm.gridWidth = 100;
-//            if(vm.fit == "height")
-//                vm.gridWidth = vm.roundRatio(100 * vm.gridRatio / vm.availableRatio);
+            if(vm.fit == "height" && !vm.main.multipleGrids())
+                vm.gridWidth = vm.roundRatio(100 * vm.gridRatio / vm.availableRatio);
 
             vm.width = vm.imageWidthPercent();
             vm.height = vm.imageHeightPercent();
             vm.subdir = vm.selectImageSize();
-
-            if(!vm.options.borderColor) 
-                vm.options.borderColor = 'black';
-            if(vm.options.border)
-                vm.options.borderStyle = "{0}px solid {1}".format(vm.options.border, vm.options.borderColor);
-            else 
+          
+            if(vm.options.border == 0)
                 vm.options.borderStyle = "none";
+            else 
+            {
+                if(!vm.options.borderColor) 
+                    vm.options.borderColor = 'black';
+                vm.options.borderStyle = "{0}px solid {1}".format(vm.options.border, vm.options.borderColor);
+            }
 
             vm.addedCss ="";
             vm.addedCss += "{0} { width:{1}%; padding:{2}%; }\n".format(vm.gridSelector, vm.gridWidth, vm.options.margin/2);
             vm.addedCss += "{0} { width:{1}%; border:{2}; margin:{3}%; }\n".format(vm.selector, vm.width, vm.options.borderStyle, vm.options.margin/2);
-            vm.addedCss += ".ratio-wrapper.{0}:after { padding-top:{1}% }\n".format(vm.ratioClass, vm.pad); 
+            vm.addedCss += ".ratio-wrapper.{0}:after { padding-top:{1}% }\n".format(vm.ratioClass, vm.ratioPad); 
 
             return vm.addedCss;
         }
