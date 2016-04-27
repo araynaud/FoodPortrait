@@ -50,6 +50,7 @@ function ($window, $state,  $timeout, ProfileService, QueryService)
             mc.dropdown.order_by_keys = Object.keys(mc.dropdown.order_by);
 
         mc.win = angular.element(window);
+        mc.gridContainer = angular.element("#grids");
 
         mc.win.bind("resize", function() 
         {
@@ -210,10 +211,8 @@ function ($window, $state,  $timeout, ProfileService, QueryService)
 
     mc.searchMore = function()
     {
-         $timeout(function() { 
-            if(!mc.searchResults || mc.searchResults.length < mc.options.rows * mc.options.columns)
-                mc.search();
-          }, 0);
+        if(!mc.searchResults || mc.searchResults.length < mc.options.rows * mc.options.columns)
+            mc.search();
     };
 
     mc.clearSearch = function(refresh)
@@ -229,7 +228,6 @@ function ($window, $state,  $timeout, ProfileService, QueryService)
         if(refresh)
             mc.search();
     };
-
 
     mc.errorMessage =  function (result)
     {

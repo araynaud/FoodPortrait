@@ -5,7 +5,9 @@
 <span ng-if="vm.showDebug">	
 	grid: {{vm.options.columns}}C x {{vm.options.rows}}R {{vm.gridWidth}} x {{vm.gridHeight}}  / {{vm.roundRatio(vm.gridRatio)}}
 	available: {{vm.availableWidth}} x {{vm.availableHeight}} / {{vm.roundRatio(vm.availableRatio)}} 
-	fit: {{vm.fit}}
+	fit: {{vm.fit}} 
+	width: {{vm.width}}% = {{vm.pixSize}} 
+	size: {{vm.subdir}}
 </span>
 
 <div class="alert alert-danger" role="alert" ng-if="!vm.images">

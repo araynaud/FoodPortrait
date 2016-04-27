@@ -153,7 +153,7 @@ My Meals: view latest for this user
   <div class="alert alert-danger text-center" role="alert" ng-if="!mc.loading && !mc.searchResults.length">
     <span class="glyphicon glyphicon-exclamation-sign"></span> No results found.
   </div>
-  
+
   <div id="grids">
     <div ng-class="mc.gridClasses()" ng-repeat="group in mc.searchResults">
         <h4 class="text-center" ng-if="mc.multipleGrids()">{{group.key}}</h4>
@@ -167,7 +167,7 @@ My Meals: view latest for this user
   </div>
 
   <div class="fixedTopRight hidden-print">
-    <a class="btn btn-default menu-toggle glyphicon glyphicon-refresh" title="toggle filters" ng-hide="lc.sidebar" ng-click="mc.search();"></a>
+    <a class="btn btn-default menu-toggle glyphicon glyphicon-refresh" title="toggle filters" ng-click="mc.search();"></a>
   </div>
 
 </div>

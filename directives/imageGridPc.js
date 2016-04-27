@@ -42,15 +42,7 @@ angular.module('app').directive('imageGridPc', function ()
             if(vm.thumbnails.keep)
                 delete vm.thumbnails.sizes[vm.thumbnails.keep];
             vm.tnsizes = Object.toArray(vm.thumbnails.sizes);
-
             vm.getRatio();
-
-        
-/*          vm.win.bind("resize", function() 
-            {
-                vm.resizeGrid();
-            });
-*/
         };
 
         vm.addGrid = function()
@@ -71,7 +63,6 @@ angular.module('app').directive('imageGridPc', function ()
             vm.ratioPad = vm.roundRatio(100 / ratio);
             return ratio;
         };
-
 
         vm.initOptions = function(opts)
         {
@@ -117,9 +108,9 @@ angular.module('app').directive('imageGridPc', function ()
         vm.selectImageSize = function()
         {
             var tn = "";
-            var maxSize = Math.min(vm.width, vm.height);
+            vm.pixSize = vm.availableWidth  * vm.gridWidth * vm.width / 10000;
             for(var i=0; i<vm.tnsizes.length; i++)
-                if(maxSize <= vm.tnsizes[i].value)
+                if(vm.pixSize <= vm.tnsizes[i].value * vm.thumbnails.maxStretch)
                     tn = "." + vm.tnsizes[i].key;
             return tn;
         };
@@ -221,18 +212,7 @@ angular.module('app').directive('imageGridPc', function ()
                 width  = width * n / vm.options.columns;
 
             width -= vm.options.margin;
-            return Math.floor(width);
-        };
-
-        vm.imageHeightPercent = function(n)
-        {
-            n = n || 1;
-            var height = 100; 
-            if(n < vm.options.rows)
-                height = height * n / vm.options.rows;
-
-            height -= vm.options.margin;
-            return Math.floor(height);
+            return vm.roundRatio(width);
         };
 
         vm.resizeGrid = function()
@@ -241,8 +221,7 @@ angular.module('app').directive('imageGridPc', function ()
             vm.prevWidth = vm.gridWidth;
 
             vm.availableWidth  = vm.parent.width();
-            vm.firstGrid = vm.main.imageGrids[0].grid;
-            vm.availableHeight = vm.win.height() - vm.firstGrid.offset().top;
+            vm.availableHeight = vm.win.height() - vm.main.gridContainer.offset().top;
             vm.availableRatio = vm.availableWidth / vm.availableHeight;
 
             var ratio = vm.getRatio();
@@ -251,10 +230,12 @@ angular.module('app').directive('imageGridPc', function ()
 
             vm.gridWidth = 100;
             if(vm.fit == "height" && !vm.isMobile && !vm.main.multipleGrids())
-                vm.gridWidth = vm.roundRatio(90 * vm.gridRatio / vm.availableRatio);
+            {
+                var pc = 92 - 2 * vm.options.rows;
+                vm.gridWidth = vm.roundRatio(pc * vm.gridRatio / vm.availableRatio);
+            }
 
             vm.width = vm.imageWidthPercent();
-            vm.height = vm.imageHeightPercent();
             vm.subdir = vm.selectImageSize();
           
             if(vm.options.border == 0)
