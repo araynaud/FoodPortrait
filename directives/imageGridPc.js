@@ -200,7 +200,7 @@ angular.module('app').directive('imageGridPc', function ()
 
         vm.roundRatio = function(r)
         {
-            return Math.roundDigits(r, 2);
+            return Math.roundDigits(r, 2, "floor");
         };
 
         //fit grid in containing element, keep aspect ratio
