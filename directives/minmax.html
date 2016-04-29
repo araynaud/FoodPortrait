@@ -1,0 +1,110 @@
+<style type="text/css">
+
+table.minmax td.bar
+{
+	cursor: ew-resize;
+}
+
+table.minmax td.limit
+{
+	text-align: center;
+	font-weight: bold;
+	padding: 0px 2px;
+	width: 30px;
+}
+
+.bottomRow td.bar
+{
+	border-top: 1px dotted grey;
+}
+
+.bottomRow .range
+{
+	border-top: 2px solid green;
+}
+
+.topRow .range
+{
+	border-bottom: 2px solid green;
+}
+
+.limit.upper
+{
+	border-left: 1px solid grey;
+}
+
+.limit.lower
+{
+	border-right: 1px solid grey;
+}
+
+.min-value, .max-value
+{
+	width: 30px;
+	text-align: center;
+	font-weight: bold;
+	padding: 0px 2px;	
+	border: 1px solid black;
+}
+
+.max-value
+{
+	background-color: lightgreen;
+}
+
+.min-value
+{
+	background-color: orange;
+}
+
+table.minmax td.locked
+{
+	cursor: not-allowed;
+}
+
+table.minmax td.remove
+{
+	width: 20px;
+}
+
+
+table.minmax td.bar
+{
+	width: 1px;
+}
+
+</style>
+
+<div class="minmax-wrapper bgwhite" style="width: 500px;">
+	<label ng-if="vm.label" class="noselect">{{vm.label}}</label> 
+	<table class="minmax stretchW">
+		<tr class="topRow">
+			<td rowspan="2" class="noselect limit lower right">
+				<a ng-click="vm.setMinValue(vm.min)">{{vm.min}}</a>
+			</td>
+			<td class="bar noselect" ng-class="{'max-value': val == vm.maxValue, 'min-value': val == vm.minValue && val != vm.maxValue, locked: val < vm.minValue, range: val > vm.minValue && val < vm.maxValue }"  
+				ng-repeat="val in vm.values" title="max {{val}}" 
+				ng-mousedown="vm.selectMax=true" ng-mouseup="vm.selectMax=false"
+				ng-click="vm.setMaxValue(val)" ng-mouseenter="vm.selectMaxValue(val)">
+				{{val == vm.maxValue ? val : "&nbsp;"}}		
+			</td>
+			<td rowspan="2" class="noselect limit upper left">
+				<a ng-click="vm.setMaxValue(vm.max)">{{vm.max}}</a>
+			</td>
+			<td ng-if="vm.hasMaxValue()" class="remove">
+				<i class="glyphicon glyphicon-remove-circle" ng-click="vm.clearMaxValue()" title="clear maximum"></i>
+			</td>
+		</tr>
+		<tr class="bottomRow">
+			<td class="bar noselect" ng-class="{'min-value': val == vm.minValue, 'max-value': val == vm.maxValue && val != vm.minValue, locked: val > vm.maxValue, range: val > vm.minValue && val < vm.maxValue }"
+				ng-repeat="val in vm.values" title="min {{val}}" 
+				ng-mousedown="vm.selectMin=true" ng-mouseup="vm.selectMin=false"
+				ng-click="vm.setMinValue(val)" ng-mouseenter="vm.selectMinValue(val)">
+				{{val == vm.minValue ? val : "&nbsp;"}}		
+			</td>
+			<td ng-if="vm.hasMinValue()" class="remove">
+				<i class="glyphicon glyphicon-remove-circle" ng-click="vm.clearMinValue()" title="clear minimum"></i>
+			</td>
+		</tr>
+	</table>
+</div>
