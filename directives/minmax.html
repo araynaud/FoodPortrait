@@ -13,32 +13,37 @@ table.minmax td.limit
 	width: 30px;
 }
 
-.bottomRow td.bar
+table.minmax tr.bottomRow td.bar
 {
 	border-top: 1px dotted grey;
 }
 
-.bottomRow .range
+table.minmax tr.bottomRow .range
 {
 	border-top: 2px solid green;
 }
 
-.topRow .range
+table.minmax tr.topRow .range
 {
 	border-bottom: 2px solid green;
 }
 
-.limit.upper
+table.minmax td.limit.upper
 {
 	border-left: 1px solid grey;
 }
 
-.limit.lower
+table.minmax td.limit.lower
 {
 	border-right: 1px solid grey;
 }
 
-.min-value, .max-value
+table.minmax td.bar
+{
+	width: 1px;
+}
+
+table.minmax td.min-value, table.minmax td.max-value
 {
 	width: 30px;
 	text-align: center;
@@ -47,12 +52,12 @@ table.minmax td.limit
 	border: 1px solid black;
 }
 
-.max-value
+table.minmax td.max-value
 {
 	background-color: lightgreen;
 }
 
-.min-value
+table.minmax td.min-value
 {
 	background-color: orange;
 }
@@ -65,12 +70,6 @@ table.minmax td.locked
 table.minmax td.remove
 {
 	width: 20px;
-}
-
-
-table.minmax td.bar
-{
-	width: 1px;
 }
 
 </style>
