@@ -18,6 +18,10 @@ passed directly or computed via min,max,step
         templateUrl: '../foodportrait/directives/minmax.html',
         controllerAs: 'vm',
         bindToController: true,
+        link: function (scope, element, attr, vm)
+        {
+            vm.bar = element.find("div.bar");
+        },
         controller: function ()
         {
             var vm = this;
@@ -27,17 +31,8 @@ passed directly or computed via min,max,step
             {
                 vm.isMobile = vm.mobile || app.isMobile();
                 vm.step = valueOrDefault(vm.step, 1);
-
-                if(!vm.values || !vm.values.length)
-                {
-                    vm.values = [];
-                    var i = vm.min;
-                    for(i = vm.min; i <= vm.max; i+= vm.step)
-                        vm.values.push(i);
-                    i -= vm.step;
-                    if(i<vm.max)
-                        vm.values.push(vm.max);
-                }
+                vm.setMinValue();
+                vm.setMaxValue();
             };
 
             vm.minMaxArray = function()
@@ -45,28 +40,59 @@ passed directly or computed via min,max,step
                 return [vm.minValue, vm.maxValue];
             };
 
-            vm.selectMinValue = function(val) 
+            vm.sortMinMax = function()
+            {
+                var mm = vm.minMaxArray();
+                mm.sortObjectsBy("");
+                vm.minValue = mm[0];
+                vm.maxValue = mm[1];
+
+                mm=[vm.minX, vm.maxX].sortObjectsBy("");
+                vm.minX = mm[0];
+                vm.maxX = mm[1];
+            };
+
+
+            vm.selectMinValue = function(event) 
             {
                 if(vm.selectMin)
-                    vm.setMinValue(val); 
+                    vm.setMinValue(event); 
             };
 
-            vm.setMinValue = function(val) 
-            {
-                if(isMissing(vm.maxValue) ||  val <= vm.maxValue)
-                    vm.minValue = val;
-            };
-
-            vm.selectMaxValue = function(val) 
+            vm.selectMaxValue = function(event) 
             {
                 if(vm.selectMax)
-                    vm.setMaxValue(val); 
+                    vm.setMaxValue(event); 
             };
 
-            vm.setMaxValue = function(val) 
+            vm.setMinValue = function(event) 
             {
-                if(isMissing(vm.minValue) || val >= vm.minValue)
-                    vm.maxValue = val;
+                if(!event)
+                { 
+                    vm.minX = 0;
+                    return vm.minValue = vm.min;
+                }
+
+                vm.getValue(event.pageX);
+                vm.minValue = Math.min(vm.val, vm.maxValue);
+                vm.minValue = Math.max(vm.minValue, vm.min);
+                vm.getPercent(vm.minValue);
+                vm.minX = vm.percent;                    
+            };
+
+            vm.setMaxValue = function(event)
+            {
+                if(!event)
+                { 
+                    vm.maxX = 100;
+                    return vm.maxValue = vm.max;
+                }
+
+                vm.getValue(event.pageX);
+                vm.maxValue = Math.max(vm.val, vm.minValue);
+                vm.maxValue = Math.min(vm.maxValue, vm.max);
+                vm.getPercent(vm.maxValue);
+                vm.maxX = vm.percent;                    
             };
 
             vm.hasMaxValue = function()
@@ -94,6 +120,29 @@ passed directly or computed via min,max,step
                 if (timeout)    $timeout.cancel(timeout);
                 timeout = null;
             };
+
+            vm.getValue = function(x)
+            {
+                x -= vm.bar.offset().left;
+                vm.x = Math.round(x);
+                var width = vm.bar.width();                
+                vm.val = vm.roundStep(vm.min + (vm.max - vm.min) * x / width);
+                return vm.val;
+            };
+
+            vm.getPercent = function(val)
+            {
+                val = valueOrDefault(val, vm.val);
+                vm.percent = Math.roundDigits(100 * (val - vm.min) / (vm.max - vm.min), 2);
+                console.log(val, vm.percent + '%');
+                return vm.percent;
+            }
+
+            vm.roundStep = function(value)
+            {
+                if(!vm.step || vm.step==1) return Math.round(value);
+                return vm.step * Math.round(value/vm.step);
+            }
 
             vm.init();
         }         

@@ -1,109 +1,121 @@
 <style type="text/css">
-
-table.minmax td.bar
-{
+.bar {
 	cursor: ew-resize;
+	height: 40px;
+	border: 1px solid grey;
+	border: 1px solid grey;
 }
 
-table.minmax td.limit
-{
+.limit {
 	text-align: center;
 	font-weight: bold;
 	padding: 0px 2px;
-	width: 30px;
+	height: 100%;
 }
 
-table.minmax tr.bottomRow td.bar
+.minmax-wrapper
+{
+	font-size: 0.9em;
+	margin-left: 5px;
+	margin-right: 5px;
+}
+
+.borderGrey1
+{
+	border: 1px solid grey;
+}
+
+.topRow, .bottomRow
+{
+	width: 100%;
+	height: 50%;
+}
+
+.bottomRow
 {
 	border-top: 1px dotted grey;
 }
 
-table.minmax tr.bottomRow .range
+.min-value, .max-value
 {
-	border-top: 2px solid green;
-}
-
-table.minmax tr.topRow .range
-{
-	border-bottom: 2px solid green;
-}
-
-table.minmax td.limit.upper
-{
-	border-left: 1px solid grey;
-}
-
-table.minmax td.limit.lower
-{
-	border-right: 1px solid grey;
-}
-
-table.minmax td.bar
-{
-	width: 1px;
-}
-
-table.minmax td.min-value, table.minmax td.max-value
-{
-	width: 30px;
+	position: absolute;
+	width: 40px;
+	height: 100%;
+	margin-left: -20px;
 	text-align: center;
 	font-weight: bold;
 	padding: 0px 2px;	
 	border: 1px solid black;
 }
 
-table.minmax td.max-value
+.min-value-bar, .max-value-bar
 {
+	position: absolute;
+	width: 3px;
+	margin-left: -1px;
+	height: 100%;
+	border: 1px solid black;
+}
+
+.max-value, .max-value-bar
+{
+	left: {{vm.maxX}}%;
 	background-color: lightgreen;
 }
 
-table.minmax td.min-value
+.min-value, .min-value-bar
 {
+	left: {{vm.minX}}%;
 	background-color: orange;
 }
 
-table.minmax td.locked
+.locked
 {
 	cursor: not-allowed;
 }
 
-table.minmax td.remove
+.remove
 {
 	width: 20px;
 }
 
+div.bar
+{
+	padding: 0px;
+}
+
+div.topRow, div.bottomRow
+{
+	position: relative;
+}
 </style>
 
-<div class="minmax-wrapper">
-	<label ng-if="vm.label" class="noselect">{{vm.label}}</label> 
-	<table class="minmax stretchW">
-		<tr class="topRow">
-			<td rowspan="2" class="noselect limit lower right">
-				<a ng-click="vm.setMinValue(vm.min)">{{vm.min}}</a>
-			</td>
-			<td class="bar noselect" ng-class="{'max-value': val == vm.maxValue, 'min-value': val == vm.minValue && val != vm.maxValue, locked: val < vm.minValue, range: val > vm.minValue && val < vm.maxValue }"  
-				ng-repeat="val in vm.values" title="max {{val}}" 
-				ng-mousedown="vm.selectMax=true" ng-mouseup="vm.selectMax=false"
-				ng-click="vm.setMaxValue(val)" ng-mouseenter="vm.selectMaxValue(val)">
-				{{val == vm.maxValue ? val : "&nbsp;"}}		
-			</td>
-			<td rowspan="2" class="noselect limit upper left">
-				<a ng-click="vm.setMaxValue(vm.max)">{{vm.max}}</a>
-			</td>
-			<td ng-if="vm.hasMaxValue()" class="remove">
-				<i class="glyphicon glyphicon-remove-circle" ng-click="vm.clearMaxValue()" title="clear maximum"></i>
-			</td>
-		</tr>
-		<tr class="bottomRow">
-			<td class="bar noselect" ng-class="{'min-value': val == vm.minValue, 'max-value': val == vm.maxValue && val != vm.minValue, locked: val > vm.maxValue, range: val > vm.minValue && val < vm.maxValue }"
-				ng-repeat="val in vm.values" title="min {{val}}" 
-				ng-mousedown="vm.selectMin=true" ng-mouseup="vm.selectMin=false"
-				ng-click="vm.setMinValue(val)" ng-mouseenter="vm.selectMinValue(val)">
-				{{val == vm.minValue ? val : "&nbsp;"}}		
-			</td>
-			<td ng-if="vm.hasMinValue()" class="remove">
-				<i class="glyphicon glyphicon-remove-circle" ng-click="vm.clearMinValue()" title="clear minimum"></i>
-			</td>
-		</tr>
-	</table>
+<label ng-if="vm.label" class="noselect">{{vm.label}}</label> 
+<div class="minmax-wrapper row">
+	<div class="col-xs-1 noselect limit right" ng-click="vm.setMinValue()">
+		<br/>{{vm.min}}
+	</div>
+
+	<div class="col-xs-10 noselect bar">
+		<div class="topRow" ng-click="vm.setMaxValue($event)" ng-mouseover="vm.selectMaxValue($event)"
+		ng-mousedown="vm.selectMax=true" ng-mouseup="vm.selectMax=false" ng-mouseleave="vm.selectMax=false">
+			<div class="min-value-bar"></div>
+			<div class="max-value" title="{{vm.maxValue}} = {{vm.maxX}}%">{{vm.maxValue}}</div>
+		</div>
+		<div class="bottomRow" ng-click="vm.setMinValue($event)" ng-mouseover="vm.selectMinValue($event)"
+		ng-mousedown="vm.selectMin=true" ng-mouseup="vm.selectMin=false" ng-mouseleave="vm.selectMin=false">
+			<div class="max-value-bar"></div>
+			<div class="min-value" title="{{vm.minValue}} = {{vm.minX}}%">{{vm.minValue}}</div>
+		</div>
+	</div>
+
+	<div class="col-xs-1 noselect limit upper left" ng-click="vm.setMaxValue()">
+		<br/>{{vm.max}}
+	</div>
 </div>
+
+<!--br/>
+<pre class="noselect">
+{{vm.x}}px = {{vm.val}} - {{vm.percent}}% / smax:{{vm.selectMax}} smin:{{vm.selectMin}}
+{{vm.minX}}% to {{vm.maxX}}%
+</pre-->
