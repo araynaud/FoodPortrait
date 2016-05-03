@@ -86,6 +86,7 @@ passed directly or computed via min,max,step
                 if(vm.hasMaxValue())    vm.minValue = Math.min(vm.val, vm.maxValue);
                 if(vm.hasMinValue())    vm.minValue = Math.max(vm.minValue, vm.min);
                 vm.minX = vm.getPercent(vm.minValue);
+                vm.onChange();
             };
 
             vm.setMaxValue = function(event)
@@ -100,6 +101,7 @@ passed directly or computed via min,max,step
                 if(vm.hasMinValue())    vm.maxValue = Math.max(vm.val, vm.minValue);
                 if(vm.hasMaxValue())    vm.maxValue = Math.min(vm.maxValue, vm.max);
                 vm.maxX = vm.getPercent(vm.maxValue);
+                vm.onChange();
             };
 
             vm.hasMaxValue = function()
@@ -116,13 +118,21 @@ passed directly or computed via min,max,step
             {
                 delete vm.minValue;
                 vm.minX = 0;
+                vm.onChange();
             }
 
             vm.clearMaxValue = function() 
             {
                 delete vm.maxValue;
                 vm.maxX = 100;
+                vm.onChange();
             }
+
+            vm.onChange = function()
+            {
+                if(angular.isFunction(vm.change))
+                    $timeout(vm.change, 0);
+            };
 
             vm.getValue = function(x)
             {
