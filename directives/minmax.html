@@ -39,9 +39,9 @@
 .min-value, .max-value
 {
 	position: absolute;
-	width: 40px;
+	width: 30px;
 	height: 100%;
-	margin-left: -20px;
+	margin-left: -15px;
 	text-align: center;
 	font-weight: bold;
 	padding: 0px 2px;	
@@ -100,12 +100,12 @@ div.topRow, div.bottomRow
 		<div class="topRow" ng-click="vm.setMaxValue($event)" ng-mouseover="vm.selectMaxValue($event)"
 		ng-mousedown="vm.selectMax=true" ng-mouseup="vm.selectMax=false" ng-mouseleave="vm.selectMax=false">
 			<div class="min-value-bar"></div>
-			<div class="max-value" title="{{vm.maxValue}} = {{vm.maxX}}%">{{vm.maxValue}}</div>
+			<div class="max-value" title="{{vm.maxValue}} = {{vm.maxX}}%" ng-click="vm.setMaxValue($event)">{{vm.maxValue}}</div>
 		</div>
 		<div class="bottomRow" ng-click="vm.setMinValue($event)" ng-mouseover="vm.selectMinValue($event)"
 		ng-mousedown="vm.selectMin=true" ng-mouseup="vm.selectMin=false" ng-mouseleave="vm.selectMin=false">
 			<div class="max-value-bar"></div>
-			<div class="min-value" title="{{vm.minValue}} = {{vm.minX}}%">{{vm.minValue}}</div>
+			<div class="min-value" title="{{vm.minValue}} = {{vm.minX}}%" ng-click="vm.setMinValue($event)">{{vm.minValue}}</div>
 		</div>
 	</div>
 
@@ -114,8 +114,8 @@ div.topRow, div.bottomRow
 	</div>
 </div>
 
-<!--br/>
-<pre class="noselect">
-{{vm.x}}px = {{vm.val}} - {{vm.percent}}% / smax:{{vm.selectMax}} smin:{{vm.selectMin}}
+<pre class="noselect" ng-show="vm.showDebug">
+{{vm.x}}px = {{vm.val}} - {{vm.percent}}%
+smax:{{vm.selectMax}} smin:{{vm.selectMin}}
 {{vm.minX}}% to {{vm.maxX}}%
-</pre-->
+</pre>

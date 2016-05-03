@@ -14,7 +14,7 @@ passed directly or computed via min,max,step
 */
 
     return {
-        scope: { label: "@", values: "=", minValue: "=", maxValue: "=", min: "=", max: "=", step: "=", change: '=' },
+        scope: { label: "@", minValue: "=", maxValue: "=", min: "=", max: "=", step: "=", values: "=", change: '=', showDebug: '=' },
         templateUrl: '../foodportrait/directives/minmax.html',
         controllerAs: 'vm',
         bindToController: true,
