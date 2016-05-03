@@ -31,8 +31,8 @@ passed directly or computed via min,max,step
             {
                 vm.isMobile = vm.mobile || app.isMobile();
                 vm.step = valueOrDefault(vm.step, 1);
-                vm.setMinValue();
-                vm.setMaxValue();
+                vm.minX = vm.getPercent(valueOrDefault(vm.minValue, vm.min));
+                vm.maxX = vm.getPercent(valueOrDefault(vm.maxValue, vm.max));
             };
 
             vm.minMaxArray = function()
@@ -43,6 +43,7 @@ passed directly or computed via min,max,step
             vm.sortMinMax = function()
             {
                 var mm = vm.minMaxArray();
+                if(isMissing(mm[0]) || isMissing(mm[1])) return;
                 mm.sortObjectsBy("");
                 vm.minValue = mm[0];
                 vm.maxValue = mm[1];
@@ -52,6 +53,14 @@ passed directly or computed via min,max,step
                 vm.maxX = mm[1];
             };
 
+            vm.range = function()
+            {
+                if(!vm.hasMinValue() && !vm.hasMaxValue()) return "-";
+                if(!vm.hasMinValue()) return "up to " + vm.maxValue;
+                if(!vm.hasMaxValue()) return vm.minValue + " and over";
+                if(vm.maxValue == vm.minValue) return vm.minValue;
+                return String.append(vm.minValue, " to ", vm.maxValue);
+            }
 
             vm.selectMinValue = function(event) 
             {
@@ -73,11 +82,10 @@ passed directly or computed via min,max,step
                     return vm.minValue = vm.min;
                 }
 
-                vm.getValue(event.pageX);
-                vm.minValue = Math.min(vm.val, vm.maxValue);
-                vm.minValue = Math.max(vm.minValue, vm.min);
-                vm.getPercent(vm.minValue);
-                vm.minX = vm.percent;                    
+                vm.minValue = vm.getValue(event.pageX);
+                if(vm.hasMaxValue())    vm.minValue = Math.min(vm.val, vm.maxValue);
+                if(vm.hasMinValue())    vm.minValue = Math.max(vm.minValue, vm.min);
+                vm.minX = vm.getPercent(vm.minValue);
             };
 
             vm.setMaxValue = function(event)
@@ -88,11 +96,10 @@ passed directly or computed via min,max,step
                     return vm.maxValue = vm.max;
                 }
 
-                vm.getValue(event.pageX);
-                vm.maxValue = Math.max(vm.val, vm.minValue);
-                vm.maxValue = Math.min(vm.maxValue, vm.max);
-                vm.getPercent(vm.maxValue);
-                vm.maxX = vm.percent;                    
+                vm.maxValue = vm.getValue(event.pageX);
+                if(vm.hasMinValue())    vm.maxValue = Math.max(vm.val, vm.minValue);
+                if(vm.hasMaxValue())    vm.maxValue = Math.min(vm.maxValue, vm.max);
+                vm.maxX = vm.getPercent(vm.maxValue);
             };
 
             vm.hasMaxValue = function()
@@ -108,18 +115,14 @@ passed directly or computed via min,max,step
             vm.clearMinValue = function() 
             {
                 delete vm.minValue;
+                vm.minX = 0;
             }
 
             vm.clearMaxValue = function() 
             {
                 delete vm.maxValue;
+                vm.maxX = 100;
             }
-
-            vm.cancelTimeout = function (e) 
-            {
-                if (timeout)    $timeout.cancel(timeout);
-                timeout = null;
-            };
 
             vm.getValue = function(x)
             {
@@ -134,7 +137,7 @@ passed directly or computed via min,max,step
             {
                 val = valueOrDefault(val, vm.val);
                 vm.percent = Math.roundDigits(100 * (val - vm.min) / (vm.max - vm.min), 2);
-                console.log(val, vm.percent + '%');
+                //console.log(val, vm.percent + '%');
                 return vm.percent;
             }
 
