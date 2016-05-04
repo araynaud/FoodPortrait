@@ -14,7 +14,7 @@ passed directly or computed via min,max,step
 */
 
     return {
-        scope: { label: "@", minValue: "=", maxValue: "=", min: "=", max: "=", step: "=", values: "=", change: '=', showDebug: '=' },
+        scope: { label: "@", minValue: "=", maxValue: "=", min: "=", max: "=", step: "=", array: "=", change: '=', showDebug: '=' },
         templateUrl: '../foodportrait/directives/minmax.html',
         controllerAs: 'vm',
         bindToController: true,
@@ -37,20 +37,7 @@ passed directly or computed via min,max,step
 
             vm.minMaxArray = function()
             {
-                return [vm.minValue, vm.maxValue];
-            };
-
-            vm.sortMinMax = function()
-            {
-                var mm = vm.minMaxArray();
-                if(isMissing(mm[0]) || isMissing(mm[1])) return;
-                mm.sortObjectsBy("");
-                vm.minValue = mm[0];
-                vm.maxValue = mm[1];
-
-                mm=[vm.minX, vm.maxX].sortObjectsBy("");
-                vm.minX = mm[0];
-                vm.maxX = mm[1];
+                return vm.array = (vm.minValue == vm.maxValue) ? [vm.minValue] : [vm.minValue, vm.maxValue];
             };
 
             vm.range = function()
@@ -79,7 +66,8 @@ passed directly or computed via min,max,step
                 if(!event)
                 { 
                     vm.minX = 0;
-                    return vm.minValue = vm.min;
+                    vm.minValue = vm.min;
+                    return vm.onChange();
                 }
 
                 vm.minValue = vm.getValue(event.pageX);
@@ -94,7 +82,8 @@ passed directly or computed via min,max,step
                 if(!event)
                 { 
                     vm.maxX = 100;
-                    return vm.maxValue = vm.max;
+                    vm.maxValue = vm.max;
+                    return vm.onChange();
                 }
 
                 vm.maxValue = vm.getValue(event.pageX);
@@ -130,7 +119,8 @@ passed directly or computed via min,max,step
 
             vm.onChange = function()
             {
-                if(angular.isFunction(vm.change))
+                vm.minMaxArray();
+                if(!vm.selectMax && !vm.selectMin && angular.isFunction(vm.change))
                     $timeout(vm.change, 0);
             };
 

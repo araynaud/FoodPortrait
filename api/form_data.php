@@ -21,8 +21,7 @@ switch ($action)
 		break;
 	case "form_questions":
 	default:
-		$section_id = reqParam("section_id");
-		$response["questions"] = getFormQuestions($db, $section_id);
+		$response["questions"] = getFormQuestions($db, $_REQUEST);
 		if($username)
 			$response["user_answers"] = $db->selectWhere(array("table" => "user_answer", "username" => $username));
 }

@@ -45,7 +45,7 @@ function setExists(&$uploads)
     }
 }
 
-function getFormQuestions($db, $section_id=null)
+function getFormQuestions($db, $filters=null)
 {
     if(!$db || $db->offline)
     {
@@ -55,11 +55,16 @@ function getFormQuestions($db, $section_id=null)
         return $questions;
     }
 
-    if(contains($section_id, ","))
-        $section_id = explode(",", $section_id);
+
     $p = array("table" => "form_question", "order_by" => "section_id, position, id", "required" => 1);
-    if($section_id) 
-        $p["section_id"] = $section_id;
+    if($filters)
+        foreach ($filters as $key => &$value) 
+        {
+            if(contains($value, ","))
+                $value = explode(",", $value);
+            if($value) 
+                $p[$key] = $value;
+        }
     $form_questions = $db->selectWhere($p);
 
     $p = array("table" => "form_answer", "order_by" => "question_id, position, id");

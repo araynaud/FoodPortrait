@@ -26,6 +26,28 @@ function demographicPortrait($db, $filters, $portraitType)
 	return $uploads;
 }
 
+//convert age to year_born
+function ageToYearBorn($db, &$params)
+{
+	$age = arrayExtract($params, "age");
+	if(!$age) return;
+	
+	$age = explode(":", $age);
+	$currentYear = date("Y");
+	$years = array();
+	foreach ($age as $a) 
+		array_unshift($years, $a ? ($currentYear - $a) : $a);
+
+	$question = getFormQuestions($db, array("field_name" => "year_born"));
+	if(!count($question)) return;
+
+debug("question", $question, true);
+	$qid = $question[0]["id"];
+	$params["Q_$qid"] = $years;
+}
+
+
+
 function getDistinctGroups($db, $params, $groupBy)
 {
 	$params["table"] = "user_upload";
@@ -96,12 +118,43 @@ debug("filterUsers", $filters);
 //and username in (select username from user_answer where question_id = 16 and answer_id = 65)
 function userFilterCondition($filters)
 {
+	global $questions;
 	$and="";
 	$query = "";
-	foreach ($filters as $questionId => $answerId)
+	foreach ($filters as $questionId => &$answerId)
 	{
+        if(contains($answerId, ":"))
+            $answerId = explode(":", $answerId);
+
+		$qtype = @$questions[$questionId]["data_type"];
+debug("Q $questionId $qtype", $answerId, true, true);		
+
 		//if not multiple choice : answer_value = $answerId
-		$query .= " $and username in (select username from user_answer where question_id = $questionId and answer_id = $answerId)";
+		$query .= " $and username in (select username from user_answer where question_id = $questionId";
+
+		if($qtype == "number" && is_array($answerId) && count($answerId) == 2) // min <= value <= max
+		{
+			if($min = $answerId[0])
+				$query .= " and answer_value >= $min";
+		
+			if($max = $answerId[1])
+				$query .= " and answer_value <= $max";
+		}
+		else if($qtype == "number" && is_array($answerId) && count($answerId) == 1) // == value
+		{
+			if($min = $answerId[0])
+				$query .= " and answer_value = $min";
+		}
+		else if($qtype == "number")
+			$query .= " and answer_value = $answerId";
+		else if($qtype == "text")
+			$query .= " and answer_text = '$answerId'";
+		else 
+			$query .=" and answer_id = $answerId";
+
+		$query .=  ")";
+
+
 		$and="AND";
 	}
 	debug("userFilterCondition", $query);

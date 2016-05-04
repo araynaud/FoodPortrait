@@ -13,13 +13,21 @@ if(!$params) $params = $_REQUEST;
 $username = fpCurrentUsername();
 
 $db = new SqlManager($fpConfig);
+
 if($db->offline)
 {
 	echo file_get_contents("query.json");
 	return;
 }
 
+$questions = getFormQuestions($db);
+$questions = arrayIndexBy($questions, "id");
+debugVar("questions");
+
 $portraitType = arrayExtract($params, "portrait");
+//convert age to year_born
+ageToYearBorn($db, $params);
+
 $order = arrayExtract($params, "order");
 $groupBy = arrayExtract($params, "group");
 $limit = reqParam("limit", 20);
@@ -50,7 +58,7 @@ $db->disconnect();
 
 $response=array();
 $response["time"] = getTimer();
-addVarsToArray($response, "params queries users results");
+addVarsToArray($response, "params age years users queries results");
 echo jsValue($response, true);
 getTimer();
 ?>

@@ -168,6 +168,9 @@ function ($window, $state,  $timeout, ProfileService, QueryService)
         if(filter.toLocaleDateString)
             return filter.toISOString().substringBefore('T');
 
+        if(angular.isArray(filter))
+            return filter.join(":");
+
         //convert dropdown label into value
         var ddValue = valueIfDefined([key, filter], mc.dropdown);
 
