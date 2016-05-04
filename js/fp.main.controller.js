@@ -145,7 +145,9 @@ function ($window, $state,  $timeout, ProfileService, QueryService)
         for(var f in mc.filters)
         {
             if(!mc.filters[f] || mc.filters[f] === true) continue;
-            params.push(mc.filterTitle(mc.filters[f], f));
+            var title = mc.filterTitle(mc.filters[f], f);
+            if(title)
+                params.push(title);
         }
         return params.join(", ");
     }
@@ -157,10 +159,24 @@ function ($window, $state,  $timeout, ProfileService, QueryService)
         var suffix = angular.isArray(label) ? label[1] : "";
 
         var title = filter.label || filter.name || filter;
-        if(filter.toLocaleDateString)
+        if(angular.isArray(filter))
+        {
+            title = mc.rangeTitle(filter);
+            if(!title) return title;
+        }
+        else if(filter.toLocaleDateString)
             title = filter.toLocaleDateString();
         title = prefix + " " + title + " " + suffix;
         return title.trim();
+    };
+
+    mc.rangeTitle = function(filter)
+    {
+        if(!filter[0] && !filter[1]) return "";
+        if(filter[0] == filter[1]) return filter[0];
+        if(!filter[0]) return mc.labels.range[0] + " " + filter[1];
+        if(!filter[1]) return filter[0] + " " + mc.labels.range[2];
+        return "{0} {1} {2}".format(filter[0], mc.labels.range[1], filter[1]);
     };
 
     mc.filterValue = function(filter, key)
