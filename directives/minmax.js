@@ -29,7 +29,7 @@ passed directly or computed via min,max,step
         {
             var vm = this;
             window.minmax = vm;
-            var timeout = null;
+
             vm.init = function()
             {
                 if(vm.id) vm.ids = "#" + vm.id;
@@ -37,7 +37,7 @@ passed directly or computed via min,max,step
                 vm.step = valueOrDefault(vm.step, 1);
                 vm.checkBounds();
                 vm.minX = vm.getPercent(valueOrDefault(vm.minValue, vm.min));
-                vm.maxX = vm.getPercent(valueOrDefault(vm.maxValue, vm.max));
+                vm.maxX = isMissing(vm.max) ? 100 : vm.getPercent(valueOrDefault(vm.maxValue, vm.max));
             };
 
             vm.checkBounds = function()
@@ -161,11 +161,10 @@ passed directly or computed via min,max,step
             };
 
             vm.getPercent = function(val)
-            {
+            {                
                 val = valueOrDefault(val, vm.val);
-                vm.percent = Math.roundDigits(100 * (val - vm.min) / (vm.max - vm.min), 2);
-                //console.log(val, vm.percent + '%');
-                return vm.percent;
+                if(val == vm.min) return vm.percent = 0;
+                return vm.percent = Math.roundDigits(100 * (val - vm.min) / (vm.max - vm.min), 2);
             }
 
             vm.roundStep = function(value)
