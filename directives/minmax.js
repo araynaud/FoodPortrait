@@ -49,7 +49,7 @@ passed directly or computed via min,max,step
 
             vm.minMaxArray = function()
             {
-                return vm.array = (vm.minValue == vm.maxValue) ? [vm.minValue] : [vm.minValue, vm.maxValue];
+                return vm.array = (vm.minValue == vm.maxValue) ? [ vm.getItemValue(vm.minValue) ] : [ vm.getItemValue(vm.minValue), vm.getItemValue(vm.maxValue) ];
             };
 
             vm.getItemLabel = function(value)
