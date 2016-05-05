@@ -14,7 +14,10 @@ passed directly or computed via min,max,step
 */
 
     return {
-        scope: { label: "@", minValue: "=", maxValue: "=", min: "=", max: "=", step: "=", array: "=", change: '=', showDebug: '=' },
+        scope: { label: "@", id: "@",
+            items: "=", itemValue: "@", itemLabel: "@", 
+            minValue: "=", maxValue: "=", min: "=", max: "=", step: "=", array: "=", 
+            change: '=', showDebug: '=' },
         templateUrl: '../foodportrait/directives/minmax.html',
         controllerAs: 'vm',
         bindToController: true,
@@ -29,10 +32,19 @@ passed directly or computed via min,max,step
             var timeout = null;
             vm.init = function()
             {
+                if(vm.id) vm.ids = "#" + vm.id;
                 vm.isMobile = vm.mobile || app.isMobile();
                 vm.step = valueOrDefault(vm.step, 1);
+                vm.checkBounds();
                 vm.minX = vm.getPercent(valueOrDefault(vm.minValue, vm.min));
                 vm.maxX = vm.getPercent(valueOrDefault(vm.maxValue, vm.max));
+            };
+
+            vm.checkBounds = function()
+            {
+                vm.min = valueOrDefault(vm.min, 0);
+                if(vm.items)
+                    vm.max = valueOrDefault(vm.max, vm.items.length-1);
             };
 
             vm.minMaxArray = function()
@@ -40,13 +52,26 @@ passed directly or computed via min,max,step
                 return vm.array = (vm.minValue == vm.maxValue) ? [vm.minValue] : [vm.minValue, vm.maxValue];
             };
 
+            vm.getItemLabel = function(value)
+            {
+                if(isMissing(value)) return "";
+                return vm.items && vm.itemLabel ? vm.items[value][vm.itemLabel] : value;
+            };
+
+            vm.getItemValue = function(value)
+            {
+                if(isMissing(value)) return value;
+                return vm.items && vm.itemValue ? vm.items[value][vm.itemValue] : value;
+            };
+
             vm.range = function()
             {
+                vm.checkBounds();
                 if(!vm.hasMinValue() && !vm.hasMaxValue()) return "-";
-                if(!vm.hasMinValue()) return "up to " + vm.maxValue;
-                if(!vm.hasMaxValue()) return vm.minValue + " and over";
-                if(vm.maxValue == vm.minValue) return vm.minValue;
-                return String.append(vm.minValue, " to ", vm.maxValue);
+                if(!vm.hasMinValue()) return "up to " + vm.getItemLabel(vm.maxValue);
+                if(!vm.hasMaxValue()) return vm.getItemLabel(vm.minValue) + " and over";
+                if(vm.maxValue == vm.minValue) return vm.getItemLabel(vm.minValue);
+                return String.append( vm.getItemLabel(vm.minValue), " to ", vm.getItemLabel(vm.maxValue));
             }
 
             vm.selectMinValue = function(event) 
@@ -63,6 +88,7 @@ passed directly or computed via min,max,step
 
             vm.setMinValue = function(event) 
             {
+                vm.checkBounds();
                 if(!event)
                 { 
                     vm.minX = 0;
@@ -79,6 +105,7 @@ passed directly or computed via min,max,step
 
             vm.setMaxValue = function(event)
             {
+                vm.checkBounds();
                 if(!event)
                 { 
                     vm.maxX = 100;

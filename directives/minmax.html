@@ -40,29 +40,31 @@ div.bar {
 .min-value, .max-value
 {
 	position: absolute;
-	width: 20px;
+	width: 30px;
 	height: 100%;
-	margin-left: -10px;
+	margin-left: -15px;
 	text-align: center;
 	font-weight: bold;
 	padding: 0px 2px;	
 	border: 1px solid black;
+	border-radius: 8px;
 }
 
-.max-value
+/* dynamic css : must have slider instance id*/
+{{vm.ids}} .max-value
 {
 	left: {{vm.maxX}}%;
 	background-color: green;
 	color: white;
 }
 
-.min-value
+{{vm.ids}} .min-value
 {
 	left: {{vm.minX}}%;
 	background-color: orange;
 }
 
-.range
+{{vm.ids}} .range
 {
 	position: absolute;
 	left: {{vm.minX}}%;
@@ -74,9 +76,9 @@ div.bar {
 </style>
 
 <label ng-if="vm.label" class="noselect">{{vm.label}} {{vm.range()}}</label> 
-<div class="minmax-wrapper row">
+<div class="minmax-wrapper row" id="{{vm.id}}">
 	<div class="col-xs-1 noselect limit">
-		<a ng-click="vm.setMinValue()">{{vm.min}}</a>
+		<a ng-click="vm.setMinValue()">{{vm.getItemValue(vm.min)}}</a>
 		<br/>
 		<i ng-if="vm.hasMinValue()" class="remove glyphicon glyphicon-remove-circle" ng-click="vm.clearMinValue()" title="clear minimum"></i>
 	</div>
@@ -85,18 +87,18 @@ div.bar {
 		<div class="topRow" ng-click="vm.setMaxValue($event)" ng-mouseover="vm.selectMaxValue($event)"
 		ng-mousedown="vm.selectMax=true" ng-mouseup="vm.selectMax=false" ng-mouseleave="vm.selectMax=false">
 			<div class="range bgwhite"></div>
-			<div class="max-value" title="{{vm.maxValue}} = {{vm.maxX}}%" ng-click="vm.setMaxValue($event)">{{vm.maxValue}}</div>
+			<div class="max-value" title="{{vm.maxValue}} = {{vm.maxX}}%" ng-click="vm.setMaxValue($event)">{{vm.getItemValue(vm.maxValue)}}</div>
 		</div>
 		<div class="bottomRow" ng-click="vm.setMinValue($event)" ng-mouseover="vm.selectMinValue($event)"
 		ng-mousedown="vm.selectMin=true" ng-mouseup="vm.selectMin=false" ng-mouseleave="vm.selectMin=false">
 			<div class="range bgwhite"></div>
-			<div class="min-value" title="{{vm.minValue}} = {{vm.minX}}%" ng-click="vm.setMinValue($event)">{{vm.minValue}}</div>
+			<div class="min-value" title="{{vm.minValue}} = {{vm.minX}}%" ng-click="vm.setMinValue($event)">{{vm.getItemValue(vm.minValue)}}</div>
 		</div>
 	</div>
 
 	<div class="col-xs-1 noselect limit" >
 		<i ng-if="vm.hasMaxValue()" class="remove glyphicon glyphicon-remove-circle" ng-click="vm.clearMaxValue()" title="clear maximum"></i>
-		<br/><a ng-click="vm.setMaxValue()">{{vm.max}}</a>
+		<br/><a ng-click="vm.setMaxValue()">{{vm.getItemValue(vm.max)}}</a>
 	</div>
 </div>
 
