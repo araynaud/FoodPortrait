@@ -55,18 +55,18 @@ My Meals: view latest for this user
         </select>
     </div>
 
+    <br/>
+
     <div>
-      <spinner label="columns:" value="mc.options.columns"  min="1" max="8" loop="true" mobile="true" hold="true" change="mc.searchMore"></spinner> 
-      <spinner label="rows:"    value="mc.options.rows"     min="1" max="8" loop="true" mobile="true" hold="true" change="mc.searchMore"></spinner>
-      <a class="btn btn-default glyphicon glyphicon-menu-hamburger" title="grid options" ng-click="mc.showOptions=!mc.showOptions"></a>
-      <span ng-if="mc.showOptions">
-          <spinner label="margin:" value="mc.options.margin"   min="0" max="25" loop="true" mobile="true" hold="true" change="mc.resizeGrids"></spinner>
-          <spinner label="border:" value="mc.options.border"   min="0" max="10" loop="true" mobile="true" hold="true" change="mc.resizeGrids"></spinner>
-          <br/>
-          <spinner label="ratio:"  value="mc.options.ratio"    min="0.25" max="4" loop="true" mobile="true" hold="true" step="0.25" change="mc.resizeGrids"></spinner>
-          &nbsp;<input type="checkbox" ng-model="mc.options.shadow" /> shadow
-          &nbsp;<input type="checkbox" ng-model="mc.showDebug" /> debug
-      </span>
+      <spinner label="Columns:" value="mc.options.columns"  min="1" max="8" loop="true" mobile="true" hold="true" change="mc.searchMore"></spinner> 
+      <spinner label="Rows:"    value="mc.options.rows"     min="1" max="8" loop="true" mobile="true" hold="true" change="mc.searchMore"></spinner>
+      <br/>
+      <spinner label="Margin:" value="mc.options.margin"   min="0" max="25" loop="true" mobile="true" hold="true" change="mc.resizeGrids"></spinner>
+      <spinner label="Border:" value="mc.options.border"   min="0" max="10" loop="true" mobile="true" hold="true" change="mc.resizeGrids"></spinner>
+      <br/>
+      <spinner label="Ratio:"  value="mc.options.ratio"    min="0.25" max="4" loop="true" mobile="true" hold="true" step="0.25" change="mc.resizeGrids"></spinner>
+      &nbsp;<input type="checkbox" ng-model="mc.options.shadow" /> Shadow
+      &nbsp;<input type="checkbox" ng-model="mc.showDebug" /> Debug
     </div>
 
     <br/>
@@ -99,8 +99,6 @@ My Meals: view latest for this user
       </span>
     </div>
 
-    <br/>
-    <min-max label="Age:" min="20" max="85" show-debug0="mc.showDebug" array="mc.filters.age" change="mc.search"></min-max>
     <br/>
 
     <div class="input-group">
@@ -137,6 +135,12 @@ My Meals: view latest for this user
         <option value="">-</option>
         </select>
     </div>
+
+    <br/>
+    <min-max id="age-slider" label="Age:" max="90" show-debug0="mc.showDebug" array="mc.filters.age" change="mc.search"></min-max>
+    <br/>
+    <!--min-max id="income-slider" label="Income:" items="mc.questions.byId[12].form_answers" item-value="value" item-label="label"
+      show-debug="mc.showDebug" array="mc.income" change="mc.search"></min-max-->
   </form>
 
   <div ng-if="mc.showDebug">filters</div>
@@ -146,7 +150,7 @@ My Meals: view latest for this user
 </div>
 
 <div id="page-content-wrapper">
-  <h3 class="centered" ng-class="{nowrap: !lc.isMobile, pad60: !lc.sidebar}">{{mc.title}}</h3>
+  <h3 class="centered" ng-class="{pad60: !lc.sidebar}">{{mc.title}}</h3>
 
   <div ng-if="mc.showDebug">{{mc.options | toJson:true}}</div>
   <div ng-if="mc.showDebug">{{mc.users | toJson:true }}</div>

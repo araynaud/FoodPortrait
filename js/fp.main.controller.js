@@ -173,7 +173,7 @@ function ($window, $state,  $timeout, ProfileService, QueryService)
     mc.rangeTitle = function(filter)
     {
         if(!filter[0] && !filter[1]) return "";
-        if(filter[0] == filter[1]) return filter[0];
+        if(filter.length==1 || filter[0] == filter[1]) return filter[0];
         if(!filter[0]) return mc.labels.range[0] + " " + filter[1];
         if(!filter[1]) return filter[0] + " " + mc.labels.range[2];
         return "{0} {1} {2}".format(filter[0], mc.labels.range[1], filter[1]);
