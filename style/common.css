@@ -26,6 +26,11 @@
     text-align: right;
 }
 
+.border1black
+{
+  border: 1px solid black;
+}
+
 .bold
 {
     font-weight: bold;    
@@ -48,7 +53,7 @@
 
 .bggray
 {
-  background-color: #EEE;
+  background-color: #E0E0E0;
 }
 
 img.contain
@@ -167,6 +172,12 @@ img.cover
 {
   width: 0px; 
   height: 0px;
+}
+
+.size10
+{
+  width: 10px; 
+  height: 10px;
 }
 
 .z-2 {

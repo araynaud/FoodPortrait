@@ -48,6 +48,13 @@ function ($scope, $window, $state, $stateParams, $timeout, Upload, ProfileServic
         }
     };
 
+//IE11 hack for file input label
+    uc.browse = function(e)
+    {
+        if(uc.isIE11)
+            angular.element("label[for=file-input]").click();
+    }
+
 //load existing image info from DB
     uc.loadData = function()
     {

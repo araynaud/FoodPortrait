@@ -1,21 +1,19 @@
 <form class="file-uploader container pad10" name="uploadForm" novalidate>
     {{uc.showDebug && uc.form.upload_id}}
 
-    <div class="row">
-      <div class="row col-xs-8 col-xs-offset-2" ng-if="uc.newUpload"> 
-        <label for="inputFiles" class="uploadThumbnail shadow">
-          <div ng-show="uc.newUpload && !uc.form.upload_id" class="uploadLabel stretchW">Click to Select Photo</div>
-          <div ng-show="uc.newUpload && !uc.form.upload_id">{{uc.progressPercentage}}</div>
-          <img id="thumbnail" ng-src="{{uc.uploadUrl}}" ng-show="uc.newUpload && uc.form.upload_id"/> 
-        </label> 
-        <input type="file" id="inputFiles" class="size0" ngf-select ng-model="uc.files" name="file" ngf-multiple="true" accept="image/*" required ngf-change="uc.upload()" />
-      </div>
+<div class="centered">
+      <label for="file-input" class="uploadThumbnail border1black shadow" ng-if="uc.newUpload" ng-click="uc.browse()">
+          <div ng-show="uc.newUpload && !uc.form.upload_id" class="uploadLabel">Click to Select Photo<br/>{{uc.progressPercentage}}</div>
+          <img ng-src="{{uc.uploadUrl}}" ng-show="uc.form.upload_id"/> 
+      </label> 
 
-      <div class="row col-sm-8 col-sm-offset-2" ng-if="!uc.newUpload && uc.imageUrl"> 
-        <img class="preview img-responsive" ng-class="{portrait: uc.form.image_width < uc.form.image_height}" ng-src="{{uc.imageUrl}}"/> 
-      </div>
-    </div>
+      <input type="file" class="centered size0" id="file-input" ngf-select ng-model="uc.files" name="file" ngf-multiple="true" accept="image/*" required ngf-change="uc.upload()" />
 
+      <div ng-if="!uc.newUpload && uc.imageUrl"> 
+        <img class="uploadThumbnail border1black shadow" ng-class="{portrait: uc.form.image_width < uc.form.image_height}" ng-src="{{uc.imageUrl}}"/> 
+      </div>
+</div>
+<br/>
     <div class="col-sm-6" ng-class="{'has-error': uploadForm.image_date_taken.$invalid }">
       <label for="inputDate">Date:</label> 
       <div class="input-group">
@@ -35,7 +33,7 @@
     <div class="col-sm-6">
       <label for="inputShared">Meal shared with:</label>
       <div class="input-group">
-        <spinner value="uc.form.shared_with"  min="1" max="20" loop="true" hold="true"></spinner>&nbsp;persons (including yourself)
+        <spinner value="uc.form.shared_with"  min="1" max="20" mobile="uc.isIE11" loop="true" hold="true"></spinner>&nbsp;persons (including yourself)
       </div>
     </div>
 
