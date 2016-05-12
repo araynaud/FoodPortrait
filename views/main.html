@@ -152,8 +152,8 @@ My Meals: view latest for this user
   <h3 class="centered" ng-class="{pad60: !lc.sidebar}">{{mc.title}}</h3>
 
   <div ng-if="mc.showDebug">{{mc.options | toJson:true}}</div>
-  <div ng-if="mc.showDebug">users: {{mc.users.length}} {{mc.users | toJson:true }}</div>
-  <pre ng-if="mc.showDebug && mc.queries">{{mc.time}} {{mc.queries | toJson:true }}</pre>
+  <div ng-if="mc.showDebug">{{mc.time}} users: {{mc.users.length}} {{mc.users | toJson:true }}</div>
+  <pre ng-if="mc.showDebug && mc.queries">{{mc.queries | toJson:true }}</pre>
 
   <div class="alert alert-danger text-center" role="alert" ng-if="!mc.loading && !mc.searchResults.length">
     <span class="glyphicon glyphicon-exclamation-sign"></span> No results found.
