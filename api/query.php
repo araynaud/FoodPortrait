@@ -35,7 +35,8 @@ $limit = reqParam("limit", 20);
 if(!$groupBy)
 {
 	$results = demographicPortrait($db, $params, $portraitType);
-	$users = arrayDistinct($results, "username");
+	$users = filterUsers($db, $params);
+	arrayDistinct($results, "username");
 	setExists($results);
 	$results = array("all" => $results);
 }

@@ -26,6 +26,25 @@ function demographicPortrait($db, $filters, $portraitType)
 	return $uploads;
 }
 
+//get username list from profile filters
+function filterUsers($db, $filters)
+{
+
+	splitFilters($filters, $imageFilters, $demoFilters);
+	debug("filterUsers", $filters);
+
+	if(!$filters) return null; //all users
+
+	$query = "SELECT username FROM user";
+	$where = userFilterCondition($demoFilters);
+	if($where)
+		$query .= " WHERE $where";
+
+	$users = $db->select($query, null, true);
+	return $users;
+}
+
+
 //convert age to year_born
 function ageToYearBorn($db, &$params)
 {
@@ -96,23 +115,6 @@ function hasDemographicFilters($filters)
 
 //TODO: function searchText for every word like
 
-//get username list from profile filters
-function filterUsers($db, $filters)
-{
-debug("filterUsers", $filters);
-
-	if(!$filters) return null; //all users
-
-	$query = "SELECT username FROM user";
-	$where = userFilterCondition($filters);
-	if($where)
-		$query .= " WHERE $where";
-
-	$users = $db->select($query, null, true);
-	return $users;
-}
-
-
 //where username in (select username from user_answer where question_id = 0 and answer_id = 3)
 //and username in (select username from user_answer where question_id = 16 and answer_id = 65)
 function userFilterCondition($filters)
@@ -143,7 +145,8 @@ debug("Q $questionId $qtype", $answer, true);
 debug("range", $range);
 debug("multiple", $multiple);
 
-		$col = $qtype=="single" ? "getProfileAnswerId(username, $questionId)" : "getProfileFieldById(username, $questionId)";
+		$col = $range || $multiple ? "getProfileFieldById" : "getProfileAnswerId";
+		$col .= "(username, $questionId)";
 
 		if($range)
 		{

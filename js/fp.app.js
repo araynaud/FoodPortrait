@@ -36,7 +36,7 @@ app.toJson = function(data, loop)
 
   if(angular.isArray(data) && !angular.isObject(data[0]))
   {
-    result += angular.toJson(data);
+    result += "[" + data.join(", ") + "]";
     return result;
   }
 
