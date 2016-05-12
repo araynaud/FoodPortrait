@@ -27,10 +27,8 @@ switch ($action)
 }
 $db->disconnect();
 
-if(isAssociativeArray($response))
-	$response["time"] = getTimer(true);
-else if(count($response) && is_array($response[0]))
-	$response[0]["time"] = getTimer(true);
+$response["queries"] = $db->getLog();
+$response["time"] = getTimer(true);
 
 echo jsValue($response);
 ?>

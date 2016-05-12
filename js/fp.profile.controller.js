@@ -43,11 +43,6 @@ function ($window, $state, ProfileService)
     {
         pc.form = response;
         pc.questions = response.questions;
-        if(pc.questions)
-        {
-          pc.questions.byId = pc.questions.indexBy("id");
-          pc.questions.countries = ProfileService.countries;
-        }
         pc.user_answers = response.user_answers; 
         pc.formData = pc.actions.loadUserAnswers();
         pc.successMessage();

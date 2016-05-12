@@ -75,14 +75,8 @@ function ($window, $state,  $timeout, ProfileService, QueryService)
 		mc.loading = true;
 		ProfileService.loadForm().then(function(response) 
 		{
+            mc.questions = response.questions;
 			mc.loading = false;    
-		    mc.questions = response.questions;
-		    if(!mc.questions) return;
-            mc.questions.byId = mc.questions.indexBy("id");
-		  	mc.questions.forEach(function (q) 
-		  	{
-		  		q.title = q.field_name.makeTitle(true);
-		  	});
 		});
 	};
 

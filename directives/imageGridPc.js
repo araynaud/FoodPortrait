@@ -217,7 +217,7 @@ angular.module('app').directive('imageGridPc', function ()
 
         vm.resizeGrid = function()
         {
-            console.log("vm.resizeGrid " + vm.id + " " + vm.count++, vm.options);
+//            console.log("vm.resizeGrid " + vm.id + " " + vm.count++, vm.options);
             vm.prevWidth = vm.gridWidth;
 
             vm.availableWidth  = vm.parent.width();

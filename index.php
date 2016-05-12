@@ -52,7 +52,7 @@ $meta["og:url"] = currentUrlDir();
   <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container">
         <a class="navbar-brand textOutline" ng-class="{active: lc.stateIs('main')}" href="#/main">
-          <img class="stretchH" src="images/logo40.png" alt="FOOD PORTRAIT"/>
+          <img class="stretchH" src="<?=getConfig('app.logo')?>" alt="FOOD PORTRAIT"/>
         </a>
 
       <div class="navbar-header">
@@ -80,7 +80,7 @@ $meta["og:url"] = currentUrlDir();
   </nav>
 
   <a class="navbar-brand navbar-collapse collapse" href="#/">
-    <img class="logo" src="images/FoodPortrait192.png" alt="logo" ng-hide="true || lc.stateIs('home')" />
+    <img class="logo" src="<?=getConfig('app.logo')?>" alt="logo" ng-hide="true || lc.stateIs('home')" />
   </a>
 
   <div id="main" ui-view></div>

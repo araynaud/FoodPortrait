@@ -57,7 +57,7 @@ $queries = $db->getLog();
 $db->disconnect();
 
 $response=array();
-$response["time"] = getTimer();
+$response["time"] = getTimer(true);
 addVarsToArray($response, "params age years users queries results");
 echo jsValue($response, true);
 getTimer();

@@ -253,7 +253,7 @@ debug("statement affected_rows", $statement->affected_rows);
 //			$rows = $status;
 
 		$statement->close();
-debug("returning", $rows);
+//debug("returning", $rows);
 	    return $rows;
 	}
 

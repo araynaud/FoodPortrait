@@ -146,6 +146,16 @@ angular.module('fpServices', ['ngResource'])
 	    this.formResource.get(function(response)
         {
             svc.form = response;
+            if(response && response.questions)
+            {
+                response.questions.byId = response.questions.indexBy("id");
+                response.questions.byField = response.questions.indexBy("field_name");
+                response.questions.countries = svc.countries;
+                response.questions.forEach(function (q) 
+                {
+                    q.title = q.field_name.makeTitle(true);
+                });
+            }
             deferred.resolve(response);
         }); 		
         return deferred.promise;

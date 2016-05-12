@@ -8,7 +8,7 @@ function demographicPortrait($db, $filters, $portraitType)
 
 	if($portraitType == "demographic")
 		$sqlParams["where"] = userFilterCondition($demoFilters);
-	else // if($demoFilters)
+	else
 		$sqlParams["username"] = fpCurrentUsername();
 
 	//searchText: add %%
@@ -43,9 +43,8 @@ function ageToYearBorn($db, &$params)
 
 debug("question", $question, true);
 	$qid = $question[0]["id"];
-	$params["Q_$qid"] = $years;
+	return $params["Q_$qid"] = implode(":", $years);
 }
-
 
 
 function getDistinctGroups($db, $params, $groupBy)
@@ -77,8 +76,8 @@ function splitFilters($filters, &$imageFilters, &$demoFilters)
 		$questionId = substringAfter($key,"Q_");
 		if($questionId==="")
 			$imageFilters[$key] = $value;
-		else
-			$demoFilters[$questionId] =  $value;
+		else if($value !== "")
+			$demoFilters[$questionId] = $value;
 	}
 
 debug("splitFilters I", $imageFilters);
@@ -117,6 +116,61 @@ debug("filterUsers", $filters);
 //where username in (select username from user_answer where question_id = 0 and answer_id = 3)
 //and username in (select username from user_answer where question_id = 16 and answer_id = 65)
 function userFilterCondition($filters)
+{
+debug("userFilterCondition", $filters, "print_r");
+
+	global $questions;
+	$and="";
+	$query = "";
+	foreach ($filters as $questionId => &$answer)
+	{
+		$range = $multiple = false;
+        if(contains($answer, ":"))
+        {
+            $range = true;
+            $answer = explode(":", $answer);
+            if($answer[0] && $answer[1])
+            	sort($answer);
+        }
+        else if(contains($answer, ";"))
+        {     
+            $multiple = true;
+            $answer = explode(";", $answer);
+        }
+
+		$qtype = @$questions[$questionId]["data_type"];
+debug("Q $questionId $qtype", $answer, true);
+debug("range", $range);
+debug("multiple", $multiple);
+
+		$col = $qtype=="single" ? "getProfileAnswerId(username, $questionId)" : "getProfileFieldById(username, $questionId)";
+
+		if($range)
+		{
+			if($min = $answer[0])
+			{
+				$query .= "$and $col >= $min";
+				$and = " AND";
+			}
+			if($max = $answer[1])
+				$query .= "$and $col <= $max";
+		}
+        else if($multiple)
+        {
+        	$values = join(",", $array);
+			$query .= "$and $col IN ($values)";
+        }
+        else
+			$query .= "$and $col = $answer";
+
+		$and = " AND";
+	}
+
+	debug("userFilterCondition", $query);
+	return $query;
+}
+
+function userFilterCondition0($filters)
 {
 	global $questions;
 	$and="";

@@ -137,16 +137,15 @@ My Meals: view latest for this user
     </div>
 
     <br/>
-    <min-max id="age-slider" label="Age:" max="90" show-debug0="mc.showDebug" array="mc.filters.age" change="mc.search"></min-max>
+    <min-max id="age-slider" label="Age:" max="90" array="mc.filters.age" change="mc.search"></min-max>
     <br/>
-    <!--min-max id="income-slider" label="Income:" items="mc.questions.byId[12].form_answers" item-value="value" item-label="label"
-      show-debug="mc.showDebug" array="mc.income" change="mc.search"></min-max-->
-  </form>
+    <min-max id="income-slider" label="Income:" items="mc.questions.byField.income.form_answers" item-value="value" item-label="label" array="mc.filters.Q_12" change="mc.search"></min-max>
 
   <div ng-if="mc.showDebug">filters</div>
   <pre ng-if="mc.showDebug">{{mc.filters | toJson:true}}</pre>
   <div ng-if="mc.showDebug">params</div>
   <pre ng-if="mc.showDebug">{{mc.params  | toJson:true}}</pre>
+  </form>
 </div>
 
 <div id="page-content-wrapper">

@@ -34,6 +34,12 @@ app.toJson = function(data, loop)
   var result = '';
   if(angular.isString(data)) return result + data;
 
+  if(angular.isArray(data) && !angular.isObject(data[0]))
+  {
+    result += angular.toJson(data);
+    return result;
+  }
+
   if(loop && angular.isArray(data))
   {
     data.forEach(function(el)
