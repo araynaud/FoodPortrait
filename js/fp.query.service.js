@@ -21,6 +21,7 @@ angular.module('fpServices')
         {
             svc.results = Object.toArray(response.results);
             svc.users = response.users;
+            svc.time = response.time;
             svc.queries = response.queries;
             deferred.resolve(svc.results);
         });

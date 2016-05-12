@@ -219,6 +219,7 @@ function ($window, $state,  $timeout, ProfileService, QueryService)
             mc.maxGrid = mc.searchResults.max("value.length");
             mc.minGrid = mc.searchResults.min("value.length");
             mc.total   = mc.searchResults.sum("value.length");
+            mc.time = QueryService.time;
             mc.users = QueryService.users;
             mc.queries = QueryService.queries;
         }, 
