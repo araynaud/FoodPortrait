@@ -119,37 +119,28 @@ function hasDemographicFilters($filters)
 //and username in (select username from user_answer where question_id = 16 and answer_id = 65)
 function userFilterCondition($filters)
 {
-debug("userFilterCondition", $filters, "print_r");
+	debug("userFilterCondition", $filters, "print_r");
 
 	global $questions;
 	$and="";
 	$query = "";
 	foreach ($filters as $questionId => &$answer)
 	{
-		$range = $multiple = false;
-        if(contains($answer, ":"))
-        {
-            $range = true;
-            $answer = explode(":", $answer);
-            if($answer[0] && $answer[1])
-            	sort($answer);
-        }
-        else if(contains($answer, ";"))
-        {     
-            $multiple = true;
-            $answer = explode(";", $answer);
-        }
-
+		$range = contains($answer, ":");
+		$multiple = contains($answer, ",");
 		$qtype = @$questions[$questionId]["data_type"];
-debug("Q $questionId $qtype", $answer, true);
-debug("range", $range);
-debug("multiple", $multiple);
+		debug("Q $questionId $qtype", $answer, true);
 
 		$col = $range || $multiple ? "getProfileFieldById" : "getProfileAnswerId";
 		$col .= "(username, $questionId)";
 
 		if($range)
 		{
+            $answer = explode(":", $answer);
+			debug("range", $answer);
+            if($answer[0] && $answer[1])
+            	sort($answer);
+
 			if($min = $answer[0])
 			{
 				$query .= "$and $col >= $min";
@@ -160,8 +151,8 @@ debug("multiple", $multiple);
 		}
         else if($multiple)
         {
-        	$values = join(",", $array);
-			$query .= "$and $col IN ($values)";
+        	debug("multiple", $answer);
+			$query .= "$and $col IN ($answer)";
         }
         else
 			$query .= "$and $col = $answer";
