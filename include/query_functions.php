@@ -131,32 +131,33 @@ function userFilterCondition($filters)
 		$qtype = @$questions[$questionId]["data_type"];
 		debug("Q $questionId $qtype", $answer, true);
 
-		$col = $range || $multiple ? "getProfileFieldById" : "getProfileAnswerId";
-		$col .= "(username, $questionId)";
-
+		$col = $range || $multiple ? "answer_value" : "answer_id";
+		$subQuery = "select username from user_profile_answer where question_id = $questionId";
+		$subQuery .= " and $col ";
 		if($range)
 		{
             $answer = explode(":", $answer);
 			debug("range", $answer);
-            if($answer[0] && $answer[1])
-            	sort($answer);
-
-			if($min = $answer[0])
-			{
-				$query .= "$and $col >= $min";
-				$and = " AND";
-			}
-			if($max = $answer[1])
-				$query .= "$and $col <= $max";
+            if($answer[0] && $answer[1]) sort($answer);
+			$min = $answer[0];
+			$max = $answer[1];
+			if($min !== "" && $max !== "")
+				$subQuery .= "BETWEEN $min and $max";
+			else if($min !== "")
+				$subQuery .= ">= $min";
+			else if($max !== "")
+				$subQuery .= "<= $max";
 		}
         else if($multiple)
         {
         	debug("multiple", $answer);
-			$query .= "$and $col IN ($answer)";
+			$subQuery .= "IN ($answer)";
         }
         else
-			$query .= "$and $col = $answer";
+			$subQuery .= "= $answer";
 
+		debug("subQuery", $subQuery);
+		$query .= "$and username in ($subQuery)";
 		$and = " AND";
 	}
 
