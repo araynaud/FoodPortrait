@@ -33,12 +33,30 @@ passed directly or computed via min,max,step
             vm.init = function()
             {
                 if(vm.id) vm.ids = "#" + vm.id;
-                vm.isMobile = vm.mobile || app.isMobile();
+                
+                vm.itemValue = valueOrDefault(vm.itemValue, "value");
+                vm.itemLabel = valueOrDefault(vm.itemLabel, "label");
                 vm.step = valueOrDefault(vm.step, 1);
+                vm.isMobile = vm.mobile || app.isMobile();
+
                 vm.checkBounds();
                 vm.minX = vm.getPercent(valueOrDefault(vm.minValue, vm.min));
                 vm.maxX = isMissing(vm.max) ? 100 : vm.getPercent(valueOrDefault(vm.maxValue, vm.max));
+                if(vm.array)
+                {
+                    vm.minValue = vm.getItemIndex(vm.array[0]);
+                    vm.maxValue = vm.getItemIndex(vm.array[1]);
+                    vm.updateMinValue(vm.minValue);
+                    vm.updateMaxValue(vm.maxValue);
+                }
             };
+
+
+            vm.getItemIndex = function(val)
+            {
+                if(!angular.isArray(vm.items)) return val;
+                return vm.items.findIndex(function(a) { return a[vm.itemValue] == val; });
+            }
 
             vm.checkBounds = function()
             {
@@ -49,19 +67,23 @@ passed directly or computed via min,max,step
 
             vm.minMaxArray = function()
             {
-                return vm.array = (vm.minValue == vm.maxValue) ? [ vm.getItemValue(vm.minValue) ] : [ vm.getItemValue(vm.minValue), vm.getItemValue(vm.maxValue) ];
+                return vm.array = [ vm.getItemValue(vm.minValue), vm.getItemValue(vm.maxValue) ];
             };
 
             vm.getItemLabel = function(value)
             {
                 if(isMissing(value)) return "";
-                return vm.items && vm.itemLabel ? vm.items[value][vm.itemLabel] : value;
+                if(vm.items && vm.items[value] && vm.itemLabel)
+                    return vm.items[value][vm.itemLabel];
+                return value;
             };
 
             vm.getItemValue = function(value)
             {
                 if(isMissing(value)) return value;
-                return vm.items && vm.itemValue ? vm.items[value][vm.itemValue] : value;
+                if(vm.items && vm.items[value] && vm.itemValue)
+                    return vm.items[value][vm.itemValue];
+                return value;
             };
 
             vm.range = function()
@@ -96,12 +118,18 @@ passed directly or computed via min,max,step
                     return vm.onChange();
                 }
 
-                vm.minValue = vm.getValue(event.pageX);
-                if(vm.hasMaxValue())    vm.minValue = Math.min(vm.val, vm.maxValue);
-                if(vm.hasMinValue())    vm.minValue = Math.max(vm.minValue, vm.min);
-                vm.minX = vm.getPercent(vm.minValue);
+                var val = vm.getValue(event.pageX);
+                vm.updateMinValue(val);
                 vm.onChange();
             };
+
+            vm.updateMinValue = function(val)
+            {
+                if(isMissing(val)) return;
+                vm.minValue = setBetween(val, vm.min, vm.maxValue);
+                vm.minX = vm.getPercent(vm.minValue);                
+                return vm.minValue;
+            }
 
             vm.setMaxValue = function(event)
             {
@@ -113,12 +141,26 @@ passed directly or computed via min,max,step
                     return vm.onChange();
                 }
 
-                vm.maxValue = vm.getValue(event.pageX);
-                if(vm.hasMinValue())    vm.maxValue = Math.max(vm.val, vm.minValue);
-                if(vm.hasMaxValue())    vm.maxValue = Math.min(vm.maxValue, vm.max);
-                vm.maxX = vm.getPercent(vm.maxValue);
+                var val = vm.getValue(event.pageX);
+                vm.updateMaxValue(val);
                 vm.onChange();
             };
+
+            vm.updateMaxValue = function(val)
+            {
+                if(isMissing(val)) return;
+                vm.maxValue = setBetween(val, vm.minValue, vm.max);
+                vm.maxX = vm.getPercent(vm.maxValue);
+                return vm.maxValue;
+            }
+
+            function setBetween(val, min, max)
+            {
+                if(isMissing(val)) return val;
+                if(!isMissing(min) && val < min) val = min;
+                if(!isMissing(max) && val > max) val = max;
+                return val;
+            }
 
             vm.hasMaxValue = function()
             {
@@ -156,13 +198,12 @@ passed directly or computed via min,max,step
                 x -= vm.bar.offset().left;
                 vm.x = Math.round(x);
                 var width = vm.bar.width();                
-                vm.val = vm.roundStep(vm.min + (vm.max - vm.min) * x / width);
-                return vm.val;
+                var val = vm.roundStep(vm.min + (vm.max - vm.min) * x / width);
+                return val;
             };
 
             vm.getPercent = function(val)
             {                
-                val = valueOrDefault(val, vm.val);
                 if(val == vm.min) return vm.percent = 0;
                 return vm.percent = Math.roundDigits(100 * (val - vm.min) / (vm.max - vm.min), 2);
             }
