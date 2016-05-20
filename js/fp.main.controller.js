@@ -20,6 +20,7 @@ function ($window, $state,  $timeout, ProfileService, QueryService)
     mc.init = function()
     {
         mc.filters = QueryService.filters;
+        mc.demographic = true;
         mc.searchResults=[];
         mc.showOptions = ProfileService.getConfig("grid.showOptions");
         mc.options = ProfileService.getConfig("grid.options")
@@ -27,6 +28,7 @@ function ($window, $state,  $timeout, ProfileService, QueryService)
             mc.options = { columns: 4, rows: 4, margin: 10, border: 1, ratio: 1, shadow: false};
 
         mc.isMobile =  ProfileService.isMobile();
+        mc.isLoggedIn  =  ProfileService.isLoggedIn();
         mc.isAdmin  =  ProfileService.isAdmin();
         mc.showDebug = ProfileService.isDebug();
 
@@ -48,6 +50,8 @@ function ($window, $state,  $timeout, ProfileService, QueryService)
 
         if(isDefined("dropdown.order_by", mc))
             mc.dropdown.order_by_keys = Object.keys(mc.dropdown.order_by);
+
+        mc.getGroupOptions();
 
         mc.win = angular.element(window);
         mc.gridContainer = angular.element("#grids");
@@ -76,6 +80,9 @@ function ($window, $state,  $timeout, ProfileService, QueryService)
 		ProfileService.loadForm().then(function(response) 
 		{
             mc.questions = response.questions;
+            mc.fieldNames = mc.questions.mapField("field_name");
+            console.log("getFilters", mc.fieldNames);
+            mc.getGroupOptions();
 			mc.loading = false;    
 		});
 	};
@@ -107,7 +114,14 @@ function ($window, $state,  $timeout, ProfileService, QueryService)
     {
         var key = mc.isAdmin ? "admin" : mc.filters.portrait;
         var opts = mc.dropdown.group[key];
-        return angular.isArray(opts) ? opts : [opts];
+        if(!angular.isArray(opts)) opts = [opts];
+
+        //add profile options
+        if(mc.fieldNames && mc.demographic)
+            opts = opts.concat(mc.fieldNames);
+
+        console.log("getGroupOptions", opts);
+        return mc.groupOptions = opts;
     }
 
     mc.gridClasses = function()
@@ -189,7 +203,10 @@ function ($window, $state,  $timeout, ProfileService, QueryService)
 
     mc.getSearchParams = function()
     {
+        mc.demographic = mc.filters.portrait == 'demographic';
         var params = {};
+        if(!mc.filters) return params;
+
         for(var f in mc.filters)
         {
             var filter = mc.filters[f]; 
@@ -199,7 +216,14 @@ function ($window, $state,  $timeout, ProfileService, QueryService)
                 params[key] = mc.filterValue(filter, key);
             }
         }
-        
+
+        if(mc.filters.group)
+        {
+            var questionId = valueIfDefined(["byField", mc.filters.group, "id"], mc.questions);
+            if(!isMissing(questionId))
+                params.group = "Q_" + questionId;
+        }
+
         if(mc.options.rows && mc.options.columns)
             params.limit = mc.options.rows * mc.options.columns;
         return params;
@@ -221,6 +245,7 @@ function ($window, $state,  $timeout, ProfileService, QueryService)
             mc.total   = mc.searchResults.sum("value.length");
             mc.time = QueryService.time;
             mc.users = QueryService.users;
+            mc.groups = QueryService.groups;
             mc.queries = QueryService.queries;
         }, 
         mc.errorMessage);

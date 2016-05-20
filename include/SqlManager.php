@@ -82,12 +82,6 @@ class SqlManager
 	    return $this->select($sql);
 	}
 
-	public function selectAllDistinct($tableName, $column)
-	{
-	    $sql = "SELECT DISTINCT $column FROM $tableName";
-	    return $this->selectColumn($sql);
-	}
-
 	public function selectWhere($params)
 	{	
 		$table   = arrayExtract($params, "table");
@@ -112,6 +106,12 @@ debug("selectWhere SQL: $sql", $params);
 	    $query = "SELECT 1 FROM $table" . $this->sqlWhere($params);
 		$query = "SELECT EXISTS($query) ex";
 		return $this->selectValue($query, $params);
+	}
+
+	public function selectAllDistinct($tableName, $column)
+	{
+	    $sql = "SELECT DISTINCT $column FROM $tableName";
+	    return $this->selectColumn($sql);
 	}
 
 	public function distinct($params)

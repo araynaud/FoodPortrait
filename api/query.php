@@ -43,15 +43,34 @@ if(!$groupBy)
 }
 else
 {
-	splitFilters($params, $imageFilters, $demoFilters);
-	$users = $distinctGroups = getDistinctGroups($db, $imageFilters, $groupBy);
+	$groups = getDistinctGroups($db, $params, $groupBy);
+
+	$questionId = getQuestionId($groupBy);
+	$form_answers = null;
+	if($questionId !== "")
+	{
+		$qtype = getQuestionType($questionId);	
+		if(isset($questions[$questionId]["form_answers"]))
+			$form_answers = arrayIndexBy($questions[$questionId]["form_answers"], "id");
+	}
+
+
+debugVar("groups");
 	$results = array();
-	foreach ($distinctGroups as $value) 
+	foreach ($groups as $value) 
 	{
 		if($value === "NULL") continue;
 		$params[$groupBy] = $value;
-		$results[$value] = demographicPortrait($db, $params, $portraitType);
-		setExists($results[$value]);
+
+		$groupKey = $value;
+		if(is_numeric($value)) 
+			$groupKey = "group_$value";
+
+		if(@$form_answers[$value])
+			$groupTitles[$groupKey] = $form_answers[$value]["label"];
+
+		$results[$groupKey] = demographicPortrait($db, $params, $portraitType);
+		setExists($results[$groupKey]);
 	}
 }
 
@@ -60,7 +79,7 @@ $db->disconnect();
 
 $response=array();
 $response["time"] = getTimer(true);
-addVarsToArray($response, "params age years users queries results");
+addVarsToArray($response, "params age years users groups groupTitles queries results");
 echo jsValue($response, true);
 getTimer();
 ?>

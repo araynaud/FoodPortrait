@@ -20,7 +20,15 @@ angular.module('fpServices')
         svc.queryResource.get(filters, function(response)
         {
             svc.results = Object.toArray(response.results);
+            for(var i=0; i<svc.results.length; i++)
+            {
+                var group = svc.results[i];
+                group.title = response.groupTitles ? response.groupTitles[group.key] : group.key.substringAfter("group_", false, true);
+            }
+
             svc.users = response.users;
+            svc.groups = response.groups;
+
             svc.time = response.time;
             svc.queries = response.queries;
             deferred.resolve(svc.results);

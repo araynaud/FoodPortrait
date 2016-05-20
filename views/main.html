@@ -29,11 +29,11 @@ My Meals: view latest for this user
     </div>
 
     <br/>
-    <div class="input-group">
+    <div class="input-group" ng-if="mc.isLoggedIn">
       <span class="input-group-btn">
          <button type="button" class="btn btn-default dropdown-label"><label for="dd_portrait">Portrait</label></button> 
       </span>
-      <select id="dd_portrait" ng-model="mc.filters.portrait" name="meal" class="form-control" ng-options="item for item in mc.portrait" ng-change="mc.search()">
+      <select id="dd_portrait" ng-model="mc.filters.portrait" name="meal" class="form-control" ng-options="item for item in mc.portrait" ng-change="mc.getGroupOptions(); mc.search()">
         </select>
     </div>
     <div class="input-group border-collapse">
@@ -48,9 +48,9 @@ My Meals: view latest for this user
     </div>
     <div class="input-group border-collapse">
       <span class="input-group-btn">
-        <button type="button" class="btn btn-default dropdown-label"><label for="dd_group">Grid by</label></button> 
+        <button type="button" class="btn btn-default dropdown-label"><label for="dd_group">Group by</label></button> 
       </span>
-        <select id="dd_group" ng-model="mc.filters.group" name="group" class="form-control" ng-options="item for item in mc.getGroupOptions()" ng-change="mc.search()">
+        <select id="dd_group" ng-model="mc.filters.group" name="group" class="form-control" ng-options="item for item in mc.groupOptions" ng-change="mc.search()">
           <option value="">1 grid</option>
         </select>
     </div>
@@ -127,7 +127,7 @@ My Meals: view latest for this user
           <option value="">-</option>
       </select>
     </div-->
-    <div class="input-group border-collapse" ng-repeat="q in mc.questions" ng-if="mc.isFilter(q) && mc.filters.portrait=='demographic'">
+    <div class="input-group border-collapse" ng-repeat="q in mc.questions" ng-if="mc.demographic && mc.isFilter(q)">
       <span class="input-group-btn">
         <button type="button" class="btn btn-default dropdown-label"><label for="dd_{{q.field_name}}">{{q.title}}</label></button> 
       </span>
@@ -137,14 +137,13 @@ My Meals: view latest for this user
     </div>
 
     <br/>
-    <min-max id="age-slider" label="Age:" max="90" array="mc.filters.age" change="mc.search"></min-max>
-    <br/>
-    <min-max id="income-slider" label="Income:" items="mc.questions.byField.income.form_answers" item-value="value" item-label="label" array="mc.filters.Q_12" change="mc.search"></min-max>
+    <min-max ng-if="mc.demographic" id="age-slider" label="Age:" max="90" array="mc.filters.age" change="mc.search"></min-max>
+    <min-max ng-if="mc.demographic" id="income-slider" label="Income:" items="mc.questions.byField.income.form_answers" item-value="value" item-label="label" array="mc.filters.Q_12" change="mc.search"></min-max>
 
-  <div ng-if="mc.showDebug">filters</div>
-  <pre ng-if="mc.showDebug">{{mc.filters | toJson:true}}</pre>
   <div ng-if="mc.showDebug">params</div>
   <pre ng-if="mc.showDebug">{{mc.params  | toJson:true}}</pre>
+  <div ng-if="mc.showDebug">filters</div>
+  <pre ng-if="mc.showDebug">{{mc.filters | toJson:true}}</pre>
   </form>
 </div>
 
@@ -152,8 +151,10 @@ My Meals: view latest for this user
   <h3 class="centered" ng-class="{pad60: !lc.sidebar}">{{mc.title}}</h3>
 
   <div ng-if="mc.showDebug">{{mc.options | toJson:true}}</div>
-  <div ng-if="mc.showDebug">{{mc.time}} users: {{mc.users.length}} {{mc.users | toJson:true }}</div>
-  <pre ng-if="mc.showDebug && mc.queries">{{mc.queries | toJson:true }}</pre>
+  <div ng-if="mc.showDebug && mc.users">users: {{mc.users.length}} {{mc.users | toJson:true }}</div>
+  <div ng-if="mc.showDebug && mc.groups">groups: {{mc.groups.length}} {{mc.groups | toJson:true }}</div>
+  <pre ng-if="mc.showDebug && mc.queries">{{mc.time}}
+{{mc.queries | toJson:true }}</pre>
 
   <div class="alert alert-danger text-center" role="alert" ng-if="!mc.loading && !mc.searchResults.length">
     <span class="glyphicon glyphicon-exclamation-sign"></span> No results found.
@@ -161,7 +162,7 @@ My Meals: view latest for this user
 
   <div id="grids">
     <div ng-class="mc.gridClasses()" ng-repeat="group in mc.searchResults">
-        <h4 class="text-center" ng-if="mc.multipleGrids()">{{group.key}}</h4>
+        <h4 class="text-center" ng-if="mc.multipleGrids()">{{group.title}}</h4>
         <image-grid-pc main="mc" key="group.key" images="group.value" options="mc.options" show-debug="mc.showDebug"></image-grid>
     </div>
   </div>

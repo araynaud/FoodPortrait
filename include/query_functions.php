@@ -6,10 +6,10 @@ function demographicPortrait($db, $filters, $portraitType)
 	splitFilters($filters, $imageFilters, $demoFilters);
 	$sqlParams = array("table" => "user_upload_search");
 
-	if($portraitType == "demographic")
-		$sqlParams["where"] = userFilterCondition($demoFilters);
-	else
+	if($portraitType == "personal")
 		$sqlParams["username"] = fpCurrentUsername();
+	else
+		$sqlParams["where"] = userFilterCondition($demoFilters);
 
 	//searchText: add %%
 	$searchText = searchWords(arrayExtract($imageFilters, "searchText"));
@@ -29,7 +29,6 @@ function demographicPortrait($db, $filters, $portraitType)
 //get username list from profile filters
 function filterUsers($db, $filters)
 {
-
 	splitFilters($filters, $imageFilters, $demoFilters);
 	debug("filterUsers", $filters);
 
@@ -66,10 +65,36 @@ debug("question", $question, true);
 }
 
 
+$answerColumns = array("single" => "answer_id", "multiple" => "answer_id", "text" => "answer_text", "number" => "answer_value");
+function getAnswerColumn($qtype)
+{
+	global $answerColumns;
+	$col = $answerColumns[$qtype];
+	if(!$col)	$col = "answer";
+	return $col;
+}
+
 function getDistinctGroups($db, $params, $groupBy)
 {
+	if(hasDemographicFilters($params))
+	{
+		splitFilters($params, $imageFilters, $demoFilters);
+		$params = $imageFilters;
+		$params["where"] = userFilterCondition($demoFilters);
+	}
+
 	$params["table"] = "user_upload";
 	$params["columns"] = $groupBy;
+
+	$questionId = getQuestionId($groupBy);
+	if($questionId !== "")
+	{
+		$qtype = getQuestionType($questionId);		
+		$params["table"] = "user_profile_answer";
+		$params["columns"] = getAnswerColumn($qtype);
+		$params["question_id"] = $questionId;		
+	}
+
 	return $db->distinct($params);
 }
 
@@ -103,6 +128,11 @@ debug("splitFilters I", $imageFilters);
 debug("splitFilters D", $demoFilters);
 }
 
+function getQuestionId($key)
+{
+	return substringAfter($key,"Q_");
+}
+
 function hasDemographicFilters($filters)
 {
 	foreach ($filters as $key => $answerId) 
@@ -111,6 +141,12 @@ function hasDemographicFilters($filters)
 		if($questionId!=="") return true;
 	}
 	return false;
+}
+
+function getQuestionType($questionId)
+{
+	global $questions;
+	return @$questions[$questionId]["data_type"];
 }
 
 //TODO: function searchText for every word like
@@ -128,10 +164,11 @@ function userFilterCondition($filters)
 	{
 		$range = contains($answer, ":");
 		$multiple = contains($answer, ",");
-		$qtype = @$questions[$questionId]["data_type"];
-		debug("Q $questionId $qtype", $answer, true);
+		$qtype = getQuestionType($questionId);
+		if($range) $qtype = "number";
+		$col = getAnswerColumn($qtype);
+		debug("Q $questionId $qtype $col", $answer);
 
-		$col = $range || $multiple ? "answer_value" : "answer_id";
 		$subQuery = "select username from user_profile_answer where question_id = $questionId";
 		$subQuery .= " and $col ";
 		if($range)
@@ -141,8 +178,9 @@ function userFilterCondition($filters)
             if($answer[0] && $answer[1]) sort($answer);
 			$min = $answer[0];
 			$max = $answer[1];
+
 			if($min !== "" && $max !== "")
-				$subQuery .= "BETWEEN $min and $max";
+				$subQuery .= $min == $max ? "= $min" : "BETWEEN $min and $max";
 			else if($min !== "")
 				$subQuery .= ">= $min";
 			else if($max !== "")
@@ -153,6 +191,8 @@ function userFilterCondition($filters)
         	debug("multiple", $answer);
 			$subQuery .= "IN ($answer)";
         }
+        else if($qtype == "text")
+			$subQuery .= "= '$answer'";
         else
 			$subQuery .= "= $answer";
 
@@ -161,51 +201,6 @@ function userFilterCondition($filters)
 		$and = " AND";
 	}
 
-	debug("userFilterCondition", $query);
-	return $query;
-}
-
-function userFilterCondition0($filters)
-{
-	global $questions;
-	$and="";
-	$query = "";
-	foreach ($filters as $questionId => &$answerId)
-	{
-        if(contains($answerId, ":"))
-            $answerId = explode(":", $answerId);
-
-		$qtype = @$questions[$questionId]["data_type"];
-debug("Q $questionId $qtype", $answerId, true, true);		
-
-		//if not multiple choice : answer_value = $answerId
-		$query .= " $and username in (select username from user_answer where question_id = $questionId";
-
-		if($qtype == "number" && is_array($answerId) && count($answerId) == 2) // min <= value <= max
-		{
-			if($min = $answerId[0])
-				$query .= " and answer_value >= $min";
-		
-			if($max = $answerId[1])
-				$query .= " and answer_value <= $max";
-		}
-		else if($qtype == "number" && is_array($answerId) && count($answerId) == 1) // == value
-		{
-			if($min = $answerId[0])
-				$query .= " and answer_value = $min";
-		}
-		else if($qtype == "number")
-			$query .= " and answer_value = $answerId";
-		else if($qtype == "text")
-			$query .= " and answer_text = '$answerId'";
-		else 
-			$query .=" and answer_id = $answerId";
-
-		$query .=  ")";
-
-
-		$and="AND";
-	}
 	debug("userFilterCondition", $query);
 	return $query;
 }
