@@ -22,7 +22,7 @@ if($db->offline)
 
 $questions = getFormQuestions($db);
 $questions = arrayIndexBy($questions, "id");
-debugVar("questions");
+//debugVar("questions", true);
 
 $portraitType = arrayExtract($params, "portrait");
 //convert age to year_born

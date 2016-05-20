@@ -76,25 +76,32 @@ function getAnswerColumn($qtype)
 
 function getDistinctGroups($db, $params, $groupBy)
 {
+	$where = null;
+	splitFilters($params, $imageFilters, $demoFilters);
 	if(hasDemographicFilters($params))
 	{
-		splitFilters($params, $imageFilters, $demoFilters);
 		$params = $imageFilters;
-		$params["where"] = userFilterCondition($demoFilters);
+		$where = userFilterCondition($demoFilters);
 	}
-
-	$params["table"] = "user_upload";
-	$params["columns"] = $groupBy;
 
 	$questionId = getQuestionId($groupBy);
-	if($questionId !== "")
+	// group by image filter
+	if($questionId === "") 
 	{
-		$qtype = getQuestionType($questionId);		
+		$params["table"] = "user_upload";
+		$params["columns"] = $groupBy;
+	}
+	// group by demographic filter
+	else
+	{
 		$params["table"] = "user_profile_answer";
+		$qtype = getQuestionType($questionId);		
 		$params["columns"] = getAnswerColumn($qtype);
 		$params["question_id"] = $questionId;		
+		$params["where"] = $where;
 	}
 
+debug("getDistinctGroups", $params);
 	return $db->distinct($params);
 }
 
@@ -125,7 +132,7 @@ function splitFilters($filters, &$imageFilters, &$demoFilters)
 	}
 
 debug("splitFilters I", $imageFilters);
-debug("splitFilters D", $demoFilters);
+debug("splitFilters D", $demoFilters, "print_r");
 }
 
 function getQuestionId($key)
