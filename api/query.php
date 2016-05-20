@@ -43,6 +43,14 @@ if(!$groupBy)
 }
 else
 {
+	//if groupBy is a profile question, translate group=gender => group=Q_0
+	$questionsByField = arrayIndexBy($questions, "field_name");
+	if(array_key_exists($groupBy, $questionsByField))
+	{
+		$qid = $questionsByField[$groupBy]["id"];
+		$groupBy = "Q_$qid";
+	}
+
 	$groups = getDistinctGroups($db, $params, $groupBy);
 
 	$questionId = getQuestionId($groupBy);

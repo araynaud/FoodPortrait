@@ -219,13 +219,6 @@ function ($window, $state,  $timeout, ProfileService, QueryService)
             }
         }
 
-        if(mc.filters.group)
-        {
-            var questionId = valueIfDefined(["byField", mc.filters.group, "id"], mc.questions);
-            if(!isMissing(questionId))
-                params.group = "Q_" + questionId;
-        }
-
         if(mc.options.rows && mc.options.columns)
             params.limit = mc.options.rows * mc.options.columns;
         return params;
