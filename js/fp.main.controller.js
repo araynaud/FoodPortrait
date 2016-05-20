@@ -112,6 +112,8 @@ function ($window, $state,  $timeout, ProfileService, QueryService)
 
     mc.getGroupOptions = function()
     {
+        mc.demographic = mc.filters.portrait == 'demographic';
+
         var key = mc.isAdmin ? "admin" : mc.filters.portrait;
         var opts = mc.dropdown.group[key];
         if(!angular.isArray(opts)) opts = [opts];

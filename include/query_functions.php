@@ -76,7 +76,7 @@ function getAnswerColumn($qtype)
 
 function getDistinctGroups($db, $params, $groupBy)
 {
-	$where = null;
+	$where = "";
 	splitFilters($params, $imageFilters, $demoFilters);
 	if(hasDemographicFilters($params))
 	{
@@ -85,19 +85,20 @@ function getDistinctGroups($db, $params, $groupBy)
 	}
 
 	$questionId = getQuestionId($groupBy);
-	// group by image filter
+	// group by image filter: meal='Lunch'
 	if($questionId === "") 
 	{
 		$params["table"] = "user_upload";
 		$params["columns"] = $groupBy;
 	}
-	// group by demographic filter
+	// group by demographic filter: Q_0='2'
 	else
 	{
+		$params = array();
 		$params["table"] = "user_profile_answer";
-		$qtype = getQuestionType($questionId);		
+		$qtype = getQuestionType($questionId);
 		$params["columns"] = getAnswerColumn($qtype);
-		$params["question_id"] = $questionId;		
+		$params["question_id"] = $questionId;
 		$params["where"] = $where;
 	}
 
