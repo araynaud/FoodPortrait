@@ -30,7 +30,7 @@ ageToYearBorn($db, $params);
 
 $order = arrayExtract($params, "order");
 $groupBy = arrayExtract($params, "group");
-$limit = reqParam("limit", 20);
+$interval = arrayExtract($params, "interval");
 
 if(!$groupBy)
 {
@@ -51,7 +51,7 @@ else
 		$groupBy = "Q_$qid";
 	}
 
-	$groups = getDistinctGroups($db, $params, $groupBy);
+	$groups = getDistinctGroups($db, $params, $groupBy, $interval);
 
 	$questionId = getQuestionId($groupBy);
 	$form_answers = null;
@@ -62,23 +62,27 @@ else
 			$form_answers = arrayIndexBy($questions[$questionId]["form_answers"], "id");
 	}
 
-
 debugVar("groups");
 	$results = array();
-	foreach ($groups as $value) 
+	foreach ($groups as $groupValue) 
 	{
-		if($value === "NULL") continue;
-		$params[$groupBy] = $value;
+		if($groupValue === "NULL") continue;
+		$params[$groupBy] = $groupValue;
+		$data = demographicPortrait($db, $params, $portraitType);
+		if(!count($data)) continue;
 
-		$groupKey = $value;
-		if(is_numeric($value)) 
-			$groupKey = "group_$value";
+		setExists($data);
 
-		if(@$form_answers[$value])
-			$groupTitles[$groupKey] = $form_answers[$value]["label"];
+		$groupKey = $groupValue;
+		$groupKey = "group_$groupValue";
+		$groupKey = str_replace(":", "_", $groupKey);
 
-		$results[$groupKey] = demographicPortrait($db, $params, $portraitType);
-		setExists($results[$groupKey]);
+		if(@$form_answers[$groupValue])
+			$groupTitles[$groupKey] = $form_answers[$groupValue]["label"];
+		else if($interval > 1)
+			$groupTitles[$groupKey] = str_replace(":", " to ", $groupValue);
+debugVar("groupTitles", "print_r");
+		$results[$groupKey] = $data;
 	}
 }
 

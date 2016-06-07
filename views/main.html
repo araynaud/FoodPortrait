@@ -55,6 +55,14 @@ My Meals: view latest for this user
         </select>
     </div>
 
+    <div class="input-group border-collapse" ng-if="mc.isFilterNumber(mc.filters.group)">
+      <span class="input-group-btn">
+        <button type="button" class="btn btn-default dropdown-label"><label for="dd_group">Interval</label></button> 
+      </span>
+      <select id="dd_interval" ng-model="mc.filters.interval" name="interval" class="form-control" ng-options="item for item in mc.dropdown.interval" ng-change="mc.search()">
+      </select>
+    </div>
+
     <br/>
 
     <div>
@@ -162,7 +170,7 @@ My Meals: view latest for this user
 
   <div id="grids">
     <div ng-class="mc.gridClasses()" ng-repeat="group in mc.searchResults">
-        <h4 class="text-center" ng-if="mc.multipleGrids()">{{group.title}}</h4>
+        <h4 class="text-center" ng-if="group.title != group.key || mc.multipleGrids()">{{group.title}}</h4>
         <image-grid-pc main="mc" key="group.key" images="group.value" options="mc.options" show-debug="mc.showDebug"></image-grid>
     </div>
   </div>

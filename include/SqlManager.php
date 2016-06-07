@@ -111,7 +111,8 @@ debug("selectWhere SQL: $sql", $params);
 	public function selectAllDistinct($tableName, $column)
 	{
 	    $sql = "SELECT DISTINCT $column FROM $tableName";
-	    return $this->selectColumn($sql);
+		$singleColumn = !contains($columns, ",");
+		return $this->select($sql, null, $singleColumn);
 	}
 
 	public function distinct($params)
@@ -123,7 +124,9 @@ debug("selectWhere SQL: $sql", $params);
 	    $query = "SELECT DISTINCT $columns FROM $table" . $this->sqlWhere($params);
 	    $query .= " ORDER BY 1";
 		if($reverse) $query .= " DESC";
-		return $this->selectColumn($query, $params);
+
+		$singleColumn = !contains($columns, ",");
+		return $this->select($query, $params, $singleColumn);
 	}
 
 	public function count($params)

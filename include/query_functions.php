@@ -4,6 +4,8 @@ function demographicPortrait($db, $filters, $portraitType)
 {
 	global $users;
 	splitFilters($filters, $imageFilters, $demoFilters);
+debug("demographicPortrait", $demoFilters);
+
 	$sqlParams = array("table" => "user_upload_search");
 
 	if($portraitType == "personal")
@@ -66,17 +68,22 @@ debug("question", $question, true);
 
 
 $answerColumns = array("single" => "answer_id", "multiple" => "answer_id", "text" => "answer_text", "number" => "answer_value");
-function getAnswerColumn($qtype)
+function getAnswerColumn($qtype, $interval=0)
 {
 	global $answerColumns;
 	$col = $answerColumns[$qtype];
 	if(!$col)	$col = "answer";
+
+	if($qtype == "number" && $interval > 1)
+		$col = "($col DIV $interval * $interval) min, ($col DIV $interval * $interval + $interval - 1) max";
+
 	return $col;
 }
 
-function getDistinctGroups($db, $params, $groupBy)
+function getDistinctGroups($db, $params, $groupBy, $interval=0)
 {
 	$where = "";
+	$reverse = @$params["reverse"];
 	splitFilters($params, $imageFilters, $demoFilters);
 	if(hasDemographicFilters($params))
 	{
@@ -85,6 +92,7 @@ function getDistinctGroups($db, $params, $groupBy)
 	}
 
 	$questionId = getQuestionId($groupBy);
+	$qtype = getQuestionType($questionId);
 	// group by image filter: meal='Lunch'
 	if($questionId === "") 
 	{
@@ -96,14 +104,19 @@ function getDistinctGroups($db, $params, $groupBy)
 	{
 		$params = array();
 		$params["table"] = "user_profile_answer";
-		$qtype = getQuestionType($questionId);
-		$params["columns"] = getAnswerColumn($qtype);
+		$params["columns"] = getAnswerColumn($qtype, $interval);
 		$params["question_id"] = $questionId;
+		$params["reverse"] = $reverse;
 		$params["where"] = $where;
 	}
 
 debug("getDistinctGroups", $params);
-	return $db->distinct($params);
+	$result = $db->distinct($params);
+	if($qtype == "number" && $interval > 1)
+		foreach ($result as $key => $row)
+			$result[$key] = $row["min"] . ":" . $row["max"];
+
+	return $result;
 }
 
 //searchText: add %% to every word
@@ -183,9 +196,10 @@ function userFilterCondition($filters)
 		{
             $answer = explode(":", $answer);
 			debug("range", $answer);
-            if($answer[0] && $answer[1]) sort($answer);
 			$min = $answer[0];
 			$max = $answer[1];
+			 if($min && $max)
+				sortMinMax($min, $max);
 
 			if($min !== "" && $max !== "")
 				$subQuery .= $min == $max ? "= $min" : "BETWEEN $min and $max";

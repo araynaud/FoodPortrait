@@ -72,7 +72,13 @@ function ($window, $state,  $timeout, ProfileService, QueryService)
     mc.isFilter = function(q)
     {
         return q.searchable && (q.data_type=='single' || q.data_type=='multiple');
-    }
+    };
+
+    mc.isFilterNumber = function(fieldName)
+    {
+        var dataType = valueIfDefined(["questions", "byField", fieldName, "data_type"], mc);
+        return dataType == 'number';
+    };
 
 	mc.getFilters = function()
 	{
@@ -191,6 +197,9 @@ function ($window, $state,  $timeout, ProfileService, QueryService)
 
     mc.filterValue = function(filter, key)
     {
+        if(angular.isNumber(filter)) 
+            return filter;
+
         if(filter.toLocaleDateString)
             return filter.toISOString().substringBefore('T');
 
