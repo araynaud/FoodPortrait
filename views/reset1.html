@@ -1,0 +1,16 @@
+<form role="form" name="signupForm" class='form-signin container'>
+  <h2 class="form-signin-heading">Create your account</h2>
+
+  <div class="marginB" ng-class="{'has-error': signupForm.email.$invalid }">
+    <label for="inputEmail">Email address
+      <span ng-show="signupForm.email.$error.required" class="control-label"></span>
+    </label>
+    <input type="email" id="inputEmail" name="email" class="form-control last" ng-model="lc.form.email" placeholder="Email address" required>
+  </div>
+
+  <div>
+    <p>An email will be sent to you with a link to reset your password.</p>
+    <button class="btn btn-lg btn-primary btn-block" type="submit" ng-click="lc.signup()">Send</button>
+    <p>{{lc.message}}</p>
+  </div>
+</form>
