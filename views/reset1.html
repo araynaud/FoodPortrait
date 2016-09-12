@@ -1,5 +1,5 @@
 <form role="form" name="signupForm" class='form-signin container'>
-  <h2 class="form-signin-heading">Create your account</h2>
+  <h2 class="form-signin-heading">Reset your password</h2>
 
   <div class="marginB" ng-class="{'has-error': signupForm.email.$invalid }">
     <label for="inputEmail">Email address
@@ -10,7 +10,8 @@
 
   <div>
     <p>An email will be sent to you with a link to reset your password.</p>
-    <button class="btn btn-lg btn-primary btn-block" type="submit" ng-click="lc.signup()">Send</button>
-    <p>{{lc.message}}</p>
+    <button class="btn btn-lg btn-primary" type="submit" ng-click="lc.sendResetEmail()">Send</button>
+    <button class="btn btn-lg" ng-click="lc.returnToMain()">Cancel</button>
+    <p class="has-error">{{lc.message}}</p>
   </div>
 </form>

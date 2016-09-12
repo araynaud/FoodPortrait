@@ -45,6 +45,34 @@ function ($window, $state, ProfileService)
       lc.post(postData);
     };
 
+    lc.sendResetEmail = function()
+    {
+      var postData = {action: "sendResetEmail"};
+      angular.merge(postData, lc.form);
+      if(!lc.form.email) 
+        return false;
+
+      return lc.message = "Reset email has been sent. Please check your email inbox.";
+      lc.post(postData);
+    };
+
+
+    lc.resetPassword = function()
+    {
+      var postData = {action: "resetPassword"};
+      angular.merge(postData, lc.form);
+      if(!lc.form.password || !lc.form.password2 || !lc.form.email) 
+        return false;
+
+      if(lc.form.password != lc.form.password2)
+        return lc.message = "Passwords do not match.";
+
+      if($window.md5)
+        postData.password = md5(lc.form.password);
+      delete postData.password2;
+      lc.post(postData);
+    };
+
     lc.post = function(postData)
     {
       lc.loading = true;
@@ -59,6 +87,14 @@ function ($window, $state, ProfileService)
           else if(lc.user)
             $state.go('profile');
       });
+    };
+
+    lc.returnToMain = function(delay)
+    {
+        if(!delay)
+            return $state.go('main');
+
+        $timeout(function() { $state.go('main'); }, delay);
     };
 
 }]);
