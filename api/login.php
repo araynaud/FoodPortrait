@@ -22,13 +22,14 @@ $response = array();
 // GET/POST  {action: logout} unset session["user"], return empty or null user object;
 
 // response: {success: true, user: {}, message: }
+//TODO: add actions: sendResetEmail and resetPassword 
 
+//compare MD5 password in db with MD5 password submitted	
 function validatePassword($dbUser, $postData)
 {
 	if(!$dbUser || !isset($postData["password"]))	return false;
-
 	return $dbUser["password"] == $postData["password"];
-	return $dbUser["password"] == md5($postData["password"]);
+	//return $dbUser["password"] == md5($postData["password"]);
 }
 
 switch ($action)
@@ -36,13 +37,18 @@ switch ($action)
 	case "login":
 		$params = arrayCopyMultiple($postData, "username");
 		$params["table"] = "user";
-		$dbUser = $db->selectWhere($params);
+		$dbUser = $db->selectWhere($params); //find user by username
+		if(!$dbUser) //if not found, find user by email
+		{
+			unset($params["username"]);
+			$params["email"] = $postData["username"];
+			$dbUser = $db->selectWhere($params);
+		}
 		$dbUser = reset($dbUser);
 		debugVar("dbUser");
 		$response["success"] = false;
 		if(validatePassword($dbUser, $postData))
-		{
-			//TODO compare MD5
+		{			
 			$response["success"] = true;
 			$response["message"] = "User logged in.";			
 			unset($dbUser["password"]);
@@ -64,7 +70,7 @@ switch ($action)
 		if($db->insert($params))
 			$response["user"] = fpSetUser($postData);
 		else
-			$response["message"] = "This username is already taken. Please choose a different username, or log in to your account.";
+			$response["message"] = "This username or email is already taken. Please choose a different username, or log in to your account, or reset your password.";
 		break;
 
 	case "logout":
