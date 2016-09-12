@@ -21,8 +21,12 @@ function createEmail($to, $subject, $body, $isHtml)
 
 	// And optionally an alternative body
 	// Add alternative parts with addPart()
-//	$message->addPart('My amazing body in plain text', 'text/plain');
-
+	if($isHtml)
+	{
+		$textBody = strip_tags($body);
+		debug("createEmail textBody", $textBody);
+		$message->addPart($textBody, 'text/plain');
+	}
 	return $message;
 }
 
