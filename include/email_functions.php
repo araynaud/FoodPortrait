@@ -38,20 +38,33 @@ function createEmailFromTemplate($templateName, $to)
 	$template = readTextFile("$APP_DIR/$templateDir/$templateName.html");
 	if(!$template) return null;
 
-	$style = readTextFile("$APP_DIR/$templateDir/email.css");
-	if($style)
-		$style = "<style type=\"text/css\">$style</style>";
+	//$style = readTextFile("$APP_DIR/$templateDir/email.css");
+	//if($style)
+	//	$style = "<style type=\"text/css\">$style</style>";
 	$logo = $email["baseUrl"] . getConfig("app.logo");
 	$name = "Panx Houette";
 	$reset_key = md5(date("Y-m-d H:i:s"));
 	$trans = array("to" => $to, "name" => $name, "logo" => $logo, "site" => getConfig("defaultTitle"),
-		"baseUrl" => $email["baseUrl"], "style" => $style, "reset_key" => $reset_key);
+		"baseUrl" => $email["baseUrl"], "reset_key" => $reset_key);
 	$template = evalTemplate($template, $trans);
 
 	$subject = substringBefore($template, "\n");
 	$body = substringAfter($template, "\n");
-	if($style)
+
+//replace classes with inlineStyles
+	$styles = readConfigFile("$APP_DIR/$templateDir/inline.css");
+	if($styles)
 		$body = "<div class=\"fp-email\">$body</div>";
+	$body = inlineStyles($body, $styles);
+
+// head/style element
+//	if($style)
+//		$body = "$style\n<div class=\"fp-email\">$body</div>";
+
+// body with inline style attribute
+//	if($style)
+//		$body = "<div style=\"$style\">$body</div>";
+
 	debug("createEmail subject", $subject);
 	debug("createEmail body", $body);
 	return createEmail($to, $subject, $body, true);
@@ -64,6 +77,30 @@ function evalTemplate($template, $trans)
 		$data['$' . $key] = $value;
 	$text = strtr($template, $data);
 	return $text;
+}
+
+function replaceVariables($str, $trans)
+{
+	if(!$trans) return $str;
+
+	foreach($trans as $name => $value)
+  		$str = str_replace('$' . $name, $value, $str);
+	return $str;
+}
+
+function inlineStyles($str, $styles)
+{
+	if(!$styles) return $str;
+
+	foreach($styles as $name => $value)
+	{
+		$style = $value; 
+		if(is_array($value))
+			$style = implode("; ", $value);
+		$style = "style=\"$style\"";
+  		$str = str_replace("class=\"$name\"", $style, $str);
+	}
+	return $str;
 }
 
 function getMessageBody($message)

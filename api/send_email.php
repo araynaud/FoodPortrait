@@ -15,9 +15,9 @@ $sentDate = date("Y-m-d H:i:s");
 echo "Sent: $sentDate<br/>";
 $sentDate = md5($sentDate);
 echo "MD5: $sentDate<br/>";
-echo "To: $to<br/>";
+echo "To: $to<br/>\n";
 
-echo $message->getSubject();
+echo $message->getSubject() . "\n";
 echo $message->getBody();
 
 if($send)
