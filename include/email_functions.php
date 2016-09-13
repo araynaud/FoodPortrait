@@ -1,8 +1,6 @@
 <?php
 //require_once("../../lib/swiftmailer/lib/swift_required.php");
 
-setContentType("text","plain");
-
 function createEmail($to, $subject, $body, $isHtml)
 {
 	$email = getConfig("email");
@@ -17,6 +15,8 @@ function createEmail($to, $subject, $body, $isHtml)
 
 	// Give it a body
 	$contentType = $isHtml ? 'text/html' : 'text/plain';
+	if(!$isHtml)
+		$body = strip_tags($body);
 	$message->setBody($body, $contentType);
 
 	// And optionally an alternative body
@@ -30,8 +30,52 @@ function createEmail($to, $subject, $body, $isHtml)
 	return $message;
 }
 
+function createEmailFromTemplate($templateName, $to)
+{
+	global $APP_DIR;
+	$email = getConfig("email");
+	$templateDir = $email["templates"];
+	$template = readTextFile("$APP_DIR/$templateDir/$templateName.html");
+	if(!$template) return null;
+
+	$style = readTextFile("$APP_DIR/$templateDir/email.css");
+	if($style)
+		$style = "<style type=\"text/css\">$style</style>";
+	$logo = $email["baseUrl"] . getConfig("app.logo");
+	$name = "Panx Houette";
+	$reset_key = md5(date("Y-m-d H:i:s"));
+	$trans = array("to" => $to, "name" => $name, "logo" => $logo, "site" => getConfig("defaultTitle"),
+		"baseUrl" => $email["baseUrl"], "style" => $style, "reset_key" => $reset_key);
+	$template = evalTemplate($template, $trans);
+
+	$subject = substringBefore($template, "\n");
+	$body = substringAfter($template, "\n");
+	if($style)
+		$body = "<div class=\"fp-email\">$body</div>";
+	debug("createEmail subject", $subject);
+	debug("createEmail body", $body);
+	return createEmail($to, $subject, $body, true);
+}
+
+function evalTemplate($template, $trans)
+{
+	$data = array();
+	foreach ($trans as $key => $value) 
+		$data['$' . $key] = $value;
+	$text = strtr($template, $data);
+	return $text;
+}
+
+function getMessageBody($message)
+{
+	$stream =& $message->build();
+	return $stream->readFull();
+}
+
 function sendEmail($message)
 {
+	if(!$message) return false;
+
 	$email = getConfig("email");
 
 	$transport = Swift_SmtpTransport::newInstance($email["host"], $email["port"], $email["protocol"]);
