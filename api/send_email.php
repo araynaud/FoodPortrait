@@ -6,9 +6,8 @@ require_once("../include/email_functions.php");
 //setContentType("text","plain");
 $template = getParam("template", "signup");
 $send = getParamBoolean("send");
-// Create the message
-$to = "arthur_raynaud@hotmail.com";
-$to = "arthur.raynaud@icix.com";
+$to = reqParam("to", "arthur_raynaud@hotmail.com");
+//$to = "arthur.raynaud@icix.com";
 $message = createEmailFromTemplate($template, $to);
 
 $sentDate = date("Y-m-d H:i:s");

@@ -42,7 +42,7 @@ function createEmailFromTemplate($templateName, $to)
 	//if($style)
 	//	$style = "<style type=\"text/css\">$style</style>";
 	$logo = $email["baseUrl"] . getConfig("app.logo");
-	$name = "Panx Houette";
+	$name = substringBefore($to, "@");
 	$reset_key = md5(date("Y-m-d H:i:s"));
 	$trans = array("to" => $to, "name" => $name, "logo" => $logo, "site" => getConfig("defaultTitle"),
 		"baseUrl" => $email["baseUrl"], "reset_key" => $reset_key);
