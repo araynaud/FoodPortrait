@@ -16,6 +16,6 @@
 
   	<div>
 		<p>Did you <a ui-sref="reset1">forget your password</a> ?</p>
-		<p class="has-error">{{lc.message}}</p>
+    <p ng-class="{'has-error': !lc.success}">{{lc.message}}</p>
 	</div>
 </form>

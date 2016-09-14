@@ -1,17 +1,24 @@
 <?php
-//require_once("../../lib/swiftmailer/lib/swift_required.php");
+function loadSwiftMailer()
+{
+	global $APP_DIR;
+	$swiftmailer_path =  getConfig("lib.swiftmailer");	
+	require_once("$APP_DIR/$swiftmailer_path/lib/swift_required.php");
+}
 
 function createEmail($to, $subject, $body, $isHtml)
 {
-	$email = getConfig("email");
+	$email_config = getConfig("email");
 
+	loadSwiftMailer();
 	$message = Swift_Message::newInstance();
 	$message->setSubject($subject);
 
-	// Set the From and To address with an associative array
-	$from = @$email["from"] ? array($email["username"] => $email["from"]) : $email["username"];
+	// Set the From and To address with a string or associative array
+	//'email@address.com' or array('email@address.com' => 'Your Name'));
+	$from = @$email_config["from"] ? array($email_config["username"] => $email_config["from"]) : $email_config["username"];
 	$message->setFrom($from);
-	$message->setTo($to); 	//array('arthur.raynaud@icix.com' => 'Arthur icix'));
+	$message->setTo($to);
 
 	// Give it a body
 	$contentType = $isHtml ? 'text/html' : 'text/plain';
@@ -30,44 +37,48 @@ function createEmail($to, $subject, $body, $isHtml)
 	return $message;
 }
 
-function createEmailFromTemplate($templateName, $to)
+function createEmailFromTemplate($templateName, $user)
 {
 	global $APP_DIR;
-	$email = getConfig("email");
-	$templateDir = $email["templates"];
+	$email_config = getConfig("email");
+	if(!$email_config || !$templateName || !$user) return null;
+
+	$templateDir = $email_config["templates"];
 	$template = readTextFile("$APP_DIR/$templateDir/$templateName.html");
 	if(!$template) return null;
 
-	//$style = readTextFile("$APP_DIR/$templateDir/email.css");
-	//if($style)
-	//	$style = "<style type=\"text/css\">$style</style>";
-	$logo = $email["baseUrl"] . getConfig("app.logo");
-	$name = substringBefore($to, "@");
-	$reset_key = md5(date("Y-m-d H:i:s"));
-	$trans = array("to" => $to, "name" => $name, "logo" => $logo, "site" => getConfig("defaultTitle"),
-		"baseUrl" => $email["baseUrl"], "reset_key" => $reset_key);
-	$template = evalTemplate($template, $trans);
+	$name     = is_string($user) ? substringBefore($user, "@") : $user["first_name"] . " " . $user["last_name"];
+	$to_email = is_string($user) ? $user : $user["email"];
+	if(isset($email_config["to"])) $to_email = $email_config["to"];
+
+	$logo = $email_config["baseUrl"] . getConfig("app.logo");
+	$reset_key = getResetKey($to_email);
+	$data = array("site" => getConfig("defaultTitle"), "baseUrl" => $email_config["baseUrl"], "logo" => $logo,
+		"reset_key" => $reset_key, "name"=> $name, "to" => $to_email);
+
+	$template = evalTemplate($template, $data);
+	if(is_array($user))
+		$template = evalTemplate($template, $user);
 
 	$subject = substringBefore($template, "\n");
-	$body = substringAfter($template, "\n");
+	$body    = substringAfter ($template, "\n");
 
-//replace classes with inlineStyles
+	//replace classes with inlineStyles
 	$styles = readConfigFile("$APP_DIR/$templateDir/inline.css");
 	if($styles)
+	{	
 		$body = "<div class=\"fp-email\">$body</div>";
-	$body = inlineStyles($body, $styles);
-
-// head/style element
-//	if($style)
-//		$body = "$style\n<div class=\"fp-email\">$body</div>";
-
-// body with inline style attribute
-//	if($style)
-//		$body = "<div style=\"$style\">$body</div>";
+		$body = inlineStyles($body, $styles);
+	}
 
 	debug("createEmail subject", $subject);
 	debug("createEmail body", $body);
-	return createEmail($to, $subject, $body, true);
+	return createEmail($to_email, $subject, $body, true);
+}
+
+function getResetKey($username)
+{
+	return md5($username . " " . date("Y-m-d H:i:s"));
 }
 
 function evalTemplate($template, $trans)
@@ -103,21 +114,15 @@ function inlineStyles($str, $styles)
 	return $str;
 }
 
-function getMessageBody($message)
-{
-	$stream =& $message->build();
-	return $stream->readFull();
-}
-
 function sendEmail($message)
 {
-	if(!$message) return false;
+	$email_config = getConfig("email");
+	if(!$message || !$email_config) return false;
 
-	$email = getConfig("email");
-
-	$transport = Swift_SmtpTransport::newInstance($email["host"], $email["port"], $email["protocol"]);
-	$transport->setUsername($email["username"]);
-	$transport->setPassword($email["password"]);
+	loadSwiftMailer();
+	$transport = Swift_SmtpTransport::newInstance($email_config["host"], $email_config["port"], $email_config["protocol"]);
+	$transport->setUsername($email_config["username"]);
+	$transport->setPassword($email_config["password"]);
 
 	// Create the Mailer using your created Transport
 	//TODO keep $mailer static, create only once
@@ -125,5 +130,11 @@ function sendEmail($message)
 
 	// Send the message
 	return $mailer->send($message);
+}
+
+function sendEmailFromTemplate($templateName, $user)
+{	
+	$message = createEmailFromTemplate($templateName, $user);
+	return sendEmail($message);
 }
 ?>

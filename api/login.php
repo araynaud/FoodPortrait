@@ -40,10 +40,9 @@ switch ($action)
 		if(!$dbUser)
 			$dbUser = getUser($db, $postData["username"], "email");
 		debugVar("dbUser");
-		$response["success"] = false;
-		if(validatePassword($dbUser, $postData))
+		$response["success"] = validatePassword($dbUser, $postData);
+		if($response["success"])
 		{			
-			$response["success"] = true;
 			$response["message"] = "User logged in.";			
 			unset($dbUser["password"]);
 			$dbUser["hasProfile"] = hasProfile($db, $dbUser["username"]);
@@ -66,12 +65,36 @@ switch ($action)
 			$response["message"] = "This username or email is already taken. Please choose a different username, or log in to your account, or reset your password.";
 		break;
 
+	case "sendResetEmail":
+		$dbUser = getUser($db, $postData["email"], "email");
+		$response["success"] = !!$dbUser;
+		if(!$dbUser)
+			$response["message"] = "No user found with this email address.";
+		else
+		{
+			$response["success"] = sendEmailFromTemplate("reset1", $dbUser);
+			$response["message"] = $response["success"] ? "Reset email has been sent." : "Error sending reset email.";
+		}
+		break;
+
+	case "resetPassword":
+		$dbUser = getUser($db, $postData["email"], "email");
+		$updated = false;
+		if($dbUser)
+		{
+			$where = array("email" => $postData["email"]);
+			$where = array("username" => $dbUser["username"]);
+			$updated = $db->update($postData, $where);
+		}
+		$response["success"] = !!$dbUser && $updated;
+		$response["message"] = $response["success"]  ? "resetPassword done." : "resetPassword error.";
+		break;
+
 	case "logout":
 		fpUserLogout();
 		$response["message"] = "User logged out.";
 	default:
 		$response["user"] = fpCurrentUser();
-		break;
 }
 $db->disconnect();
 

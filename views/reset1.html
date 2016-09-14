@@ -12,6 +12,6 @@
     <p>An email will be sent to you with a link to reset your password.</p>
     <button class="btn btn-lg btn-primary" type="submit" ng-click="lc.sendResetEmail()">Send</button>
     <button class="btn btn-lg" ng-click="lc.returnToMain()">Cancel</button>
-    <p class="has-error">{{lc.message}}</p>
+    <p ng-class="{'has-error': !lc.success}">{{lc.message}}</p>
   </div>
 </form>

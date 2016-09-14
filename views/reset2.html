@@ -25,6 +25,6 @@
   <div>
     <button class="btn btn-lg btn-primary" type="submit" ng-click="lc.resetPassword()">Send</button>
     <button class="btn btn-lg" ng-click="lc.returnToMain()">Cancel</button>
-    <p class="has-error">{{lc.message}}</p>
+    <p ng-class="{'has-error': !lc.success}">{{lc.message}}</p>
   </div>
 </form>

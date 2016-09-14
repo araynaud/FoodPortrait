@@ -17,6 +17,7 @@ function ($window, $state, ProfileService)
     $window.LoginController = this;
     this.state = $state;
     lc.form = { };
+    lc.success = true;
 
     lc.login = function()
     {
@@ -52,7 +53,7 @@ function ($window, $state, ProfileService)
       if(!lc.form.email) 
         return false;
 
-      return lc.message = "Reset email has been sent. Please check your email inbox.";
+      lc.message = "Sending email...";
       lc.post(postData);
     };
 
@@ -80,7 +81,8 @@ function ($window, $state, ProfileService)
       {
           lc.loading = false;
           lc.user = response.user; 
-          lc.loggedIn = response.success;
+          lc.success = !!response.success;
+          lc.loggedIn = lc.success && !!lc.user;
           lc.message = response.message;
           if(lc.user && lc.user.hasProfile)
             $state.go('main');
