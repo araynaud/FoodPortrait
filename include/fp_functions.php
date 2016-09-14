@@ -29,6 +29,14 @@ function errorMessage($msg)
     die(jsValue($response, true));
 }
 
+//find user by username of other field
+function getUser($db, $username, $field="username")
+{
+    $params = array("table" => "user", $field => $username);
+    $dbUser = $db->selectWhere($params);
+    return reset($dbUser);
+}
+
 function hasProfile($db, $username)
 {
     return $db->exists(array("table" => "user_answer", "username" => $username));

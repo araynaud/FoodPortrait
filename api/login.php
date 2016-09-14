@@ -35,16 +35,10 @@ function validatePassword($dbUser, $postData)
 switch ($action)
 {
 	case "login":
-		$params = arrayCopyMultiple($postData, "username");
-		$params["table"] = "user";
-		$dbUser = $db->selectWhere($params); //find user by username
-		if(!$dbUser) //if not found, find user by email
-		{
-			unset($params["username"]);
-			$params["email"] = $postData["username"];
-			$dbUser = $db->selectWhere($params);
-		}
-		$dbUser = reset($dbUser);
+		//find user by username or by email
+		$dbUser = getUser($db, $postData["username"]);
+		if(!$dbUser)
+			$dbUser = getUser($db, $postData["username"], "email");
 		debugVar("dbUser");
 		$response["success"] = false;
 		if(validatePassword($dbUser, $postData))
@@ -53,7 +47,6 @@ switch ($action)
 			$response["message"] = "User logged in.";			
 			unset($dbUser["password"]);
 			$dbUser["hasProfile"] = hasProfile($db, $dbUser["username"]);
-
 			$response["user"] = fpSetUser($dbUser);
 		}
 		else
