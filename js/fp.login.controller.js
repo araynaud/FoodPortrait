@@ -3,8 +3,8 @@
 // =========== LoginController ===========
 // handles login (sign in), register (sign up), logout, 
 angular.module('fpControllers')
-.controller('LoginController', ['$window', '$state', '$stateParams', 'ProfileService', 
-function ($window, $state, $stateParams, ProfileService)
+.controller('LoginController', ['$window', '$state', '$stateParams', '$timeout', 'ProfileService', 
+function ($window, $state, $stateParams, $timeout, ProfileService)
 {
     //TODO:
     //post login, md5(password)
@@ -18,8 +18,11 @@ function ($window, $state, $stateParams, ProfileService)
     this.state = $state;
     lc.form = { };
     lc.success = true;
-    if($state.is("reset") && $stateParams.email)
+    if($state.is("reset"))
+    {
       lc.form.email = $stateParams.email;
+      lc.form.key = $stateParams.key;
+    }
 
     lc.login = function()
     {
@@ -87,9 +90,11 @@ function ($window, $state, $stateParams, ProfileService)
           lc.loggedIn = lc.success && !!lc.user;
           lc.message = response.message;
           if(lc.user && lc.user.hasProfile)
-            $state.go('main');
+              $state.go('main');
           else if(lc.user)
-            $state.go('profile');
+              lc.returnToMain();
+          else if(lc.success)
+              lc.returnToMain(2000);
       });
     };
 

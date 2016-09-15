@@ -37,6 +37,14 @@ function getUser($db, $username, $field="username")
     return reset($dbUser);
 }
 
+function updateUser($db, $dbUser)
+{
+    $username = arrayExtract($dbUser, "username");
+    $dbUser["table"] = "user";
+    $where = array("username" => $username);
+    return $db->update($dbUser, $where);
+}
+
 function hasProfile($db, $username)
 {
     return $db->exists(array("table" => "user_answer", "username" => $username));

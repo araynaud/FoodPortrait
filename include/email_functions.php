@@ -8,7 +8,7 @@ function loadSwiftMailer()
 
 function createEmail($to, $subject, $body, $isHtml)
 {
-	$email_config = getConfig("email");
+	$email_config = getConfig("_email");
 
 	loadSwiftMailer();
 	$message = Swift_Message::newInstance();
@@ -37,10 +37,10 @@ function createEmail($to, $subject, $body, $isHtml)
 	return $message;
 }
 
-function createEmailFromTemplate($templateName, $user)
+function createEmailFromTemplate($templateName, $user, $data=null)
 {
 	global $APP_DIR;
-	$email_config = getConfig("email");
+	$email_config = getConfig("_email");
 	if(!$email_config || !$templateName || !$user) return null;
 
 	$templateDir = $email_config["templates"];
@@ -52,15 +52,13 @@ function createEmailFromTemplate($templateName, $user)
 	if(isset($email_config["to"])) $to_email = $email_config["to"];
 
 	$logo = combine($email_config["baseUrl"], getConfig("app.logo"));
-	$resetKey = getResetKey($to_email);
-	$resetLink = combine($email_config["baseUrl"], "#/reset-password", $to_email, $resetKey);
 
-	$data = array("site" => getConfig("defaultTitle"), "baseUrl" => $email_config["baseUrl"], "logo" => $logo,
-		"resetKey" => $resetKey, "resetLink" => $resetLink, "name"=> $name, "to" => $to_email);
+	$cfg = array("site" => getConfig("defaultTitle"), "baseUrl" => $email_config["baseUrl"], "logo" => $logo,
+		"name"=> $name, "to" => $to_email);
 
-	$template = evalTemplate($template, $data);
-	if(is_array($user))
-		$template = evalTemplate($template, $user);
+	$template = replaceVariables($template, $cfg);
+	$template = replaceVariables($template, $user);
+	$template = replaceVariables($template, $data);
 
 	$subject = substringBefore($template, "\n");
 	$body    = substringAfter ($template, "\n");
@@ -83,8 +81,10 @@ function getResetKey($username)
 	return md5($username . " " . date("Y-m-d H:i:s"));
 }
 
-function evalTemplate($template, $trans)
+function evalTemplate($template, $variables)
 {
+	if(!$template || !is_array($variables)) return $template;
+
 	$data = array();
 	foreach ($trans as $key => $value) 
 		$data['$' . $key] = $value;
@@ -92,18 +92,18 @@ function evalTemplate($template, $trans)
 	return $text;
 }
 
-function replaceVariables($str, $trans)
+function replaceVariables($template, $variables)
 {
-	if(!$trans) return $str;
+	if(!$template || !is_array($variables)) return $template;
 
-	foreach($trans as $name => $value)
-  		$str = str_replace('$' . $name, $value, $str);
-	return $str;
+	foreach($variables as $name => $value)
+  		$template = str_replace('$'.$name, $value, $template);
+	return $template;
 }
 
 function inlineStyles($str, $styles)
 {
-	if(!$styles) return $str;
+	if(!$str || !is_array($styles)) return $str;
 
 	foreach($styles as $name => $value)
 	{
@@ -118,7 +118,7 @@ function inlineStyles($str, $styles)
 
 function sendEmail($message)
 {
-	$email_config = getConfig("email");
+	$email_config = getConfig("_email");
 	if(!$message || !$email_config) return false;
 
 	loadSwiftMailer();
@@ -134,9 +134,9 @@ function sendEmail($message)
 	return $mailer->send($message);
 }
 
-function sendEmailFromTemplate($templateName, $user)
+function sendEmailFromTemplate($templateName, $user, $data=null)
 {	
-	$message = createEmailFromTemplate($templateName, $user);
+	$message = createEmailFromTemplate($templateName, $user, $data);
 	return sendEmail($message);
 }
 ?>

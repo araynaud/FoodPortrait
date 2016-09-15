@@ -18,18 +18,19 @@ $response = array();
 
 // POST: {action: login, username:, password: md5}, return user if successful or null if login fail
 // POST: {action: register, username, email, password: md5, first_name, last_name}, return user if successful or null if login already exists.
+// POST: {action: sendResetEmail, email}, return success or error if user not found
+// POST: {action: resetPassword, email, key, password}, return success or error if user not found or invalid key or empty password
+
 // GET/POST  {}		return current session["user"];
 // GET/POST  {action: logout} unset session["user"], return empty or null user object;
 
 // response: {success: true, user: {}, message: }
-//TODO: add actions: sendResetEmail and resetPassword 
 
 //compare MD5 password in db with MD5 password submitted	
 function validatePassword($dbUser, $postData)
 {
 	if(!$dbUser || !isset($postData["password"]))	return false;
 	return $dbUser["password"] == $postData["password"];
-	//return $dbUser["password"] == md5($postData["password"]);
 }
 
 switch ($action)
@@ -59,8 +60,12 @@ switch ($action)
 		$params = $postData;
 		$params["table"] = "user";
 		unset($params["action"]);
-		if($db->insert($params))
+		$response["success"] = $db->insert($params);
+		if($response["success"])
+		{
+			sendEmailFromTemplate("signup", $params);
 			$response["user"] = fpSetUser($postData);
+		}
 		else
 			$response["message"] = "This username or email is already taken. Please choose a different username, or log in to your account, or reset your password.";
 		break;
@@ -69,12 +74,25 @@ switch ($action)
 		$dbUser = getUser($db, $postData["email"], "email");
 		$response["success"] = !!$dbUser;
 		if(!$dbUser)
-			$response["message"] = "No user found with this email address.";
-		else
 		{
-			$response["success"] = sendEmailFromTemplate("reset1", $dbUser);
-			$response["message"] = $response["success"] ? "Reset email has been sent." : "Error sending reset email.";
+			$response["message"] = "No user found with this email address.";
+			break;
 		}
+
+		//Generate key, update user in db, then send in email
+		$resetKey = getResetKey($dbUser["email"]);
+		$dbUser["reset_key"] = $resetKey;
+		$response["success"] = updateUser($db, $dbUser);
+		if(!$response["success"])
+		{
+			$response["message"] = "Error updating user.";
+			break;
+		}
+
+		$resetLink = combine("#/reset-password", $dbUser["email"], $resetKey);
+		$data = array("resetLink" => $resetLink); 
+		$response["success"] = sendEmailFromTemplate("reset1", $dbUser, $data);
+		$response["message"] = $response["success"] ? "Reset email has been sent." : "Error sending reset email.";
 		break;
 
 	case "resetPassword":
@@ -93,9 +111,16 @@ switch ($action)
 			break;
 		}
 
-		$values = array("table" => "user", "password" => $postData["password"]);
-		$where = array("username" => $dbUser["username"]);
-		$response["success"] = $db->update($values, $where);
+		if($dbUser["reset_key"] !== $postData["key"])
+		{
+			$response["message"] = "Invalid reset key.";
+			break;
+		}
+
+		$dbUser["reset_key"] = "";
+		$dbUser["password"]  = $postData["password"];
+		$response["success"] = updateUser($db, $dbUser);
+
 		$response["message"] = $response["success"]  ? "Password has been changed." : "Error setting Password.";
 		break;
 
