@@ -16,7 +16,7 @@ app.config(function($stateProvider, $urlRouterProvider)
   	.state('signin',  { url: "/signin",  controller: 'LoginController',  controllerAs: 'lc', templateUrl: "views/signin.html" })
   	.state('signup',  { url: "/signup",  controller: 'LoginController',  controllerAs: 'lc', templateUrl: "views/signup.html" })
     .state('reset1',  { url: "/reset1",  controller: 'LoginController',  controllerAs: 'lc', templateUrl: "views/reset1.html" })
-    .state('reset2',  { url: "/reset2",  controller: 'LoginController',  controllerAs: 'lc', templateUrl: "views/reset2.html" })
+    .state('reset2',  { url: "/reset2/:email",  controller: 'LoginController',  controllerAs: 'lc', templateUrl: "views/reset2.html" })
   	.state('profile', { url: "/profile",
   		controller: 'ProfileController', controllerAs: 'pc', 
   		template: '<object-form actions="pc.actions" questions="pc.questions" form-data="pc.formData" showDebug="pc.showDebug"/>'});

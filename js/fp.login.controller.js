@@ -3,8 +3,8 @@
 // =========== LoginController ===========
 // handles login (sign in), register (sign up), logout, 
 angular.module('fpControllers')
-.controller('LoginController', ['$window', '$state', 'ProfileService', 
-function ($window, $state, ProfileService)
+.controller('LoginController', ['$window', '$state', '$stateParams', 'ProfileService', 
+function ($window, $state, $stateParams, ProfileService)
 {
     //TODO:
     //post login, md5(password)
@@ -18,6 +18,8 @@ function ($window, $state, ProfileService)
     this.state = $state;
     lc.form = { };
     lc.success = true;
+    if($state.is("reset2") && $stateParams.email)
+      lc.form.email = $stateParams.email;
 
     lc.login = function()
     {

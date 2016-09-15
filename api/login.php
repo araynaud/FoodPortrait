@@ -78,16 +78,25 @@ switch ($action)
 		break;
 
 	case "resetPassword":
-		$dbUser = getUser($db, $postData["email"], "email");
-		$updated = false;
-		if($dbUser)
+		$response["success"] = false;
+
+		if(!@$postData["password"])
 		{
-			$where = array("email" => $postData["email"]);
-			$where = array("username" => $dbUser["username"]);
-			$updated = $db->update($postData, $where);
+			$response["message"] = "Password cannot be empty.";
+			break;
 		}
-		$response["success"] = !!$dbUser && $updated;
-		$response["message"] = $response["success"]  ? "resetPassword done." : "resetPassword error.";
+
+		$dbUser = getUser($db, $postData["email"], "email");
+		if(!$dbUser)
+		{
+			$response["message"] = "No user found with this email address.";
+			break;
+		}
+
+		$values = array("table" => "user", "password" => $postData["password"]);
+		$where = array("username" => $dbUser["username"]);
+		$response["success"] = $db->update($values, $where);
+		$response["message"] = $response["success"]  ? "Password has been changed." : "Error setting Password.";
 		break;
 
 	case "logout":
