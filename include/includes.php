@@ -22,10 +22,11 @@ require_once("$MT_DIR/include/json_xml_functions.php");
 require_once("$MT_DIR/include/command_functions.php");
 require_once("$MT_DIR/include/ffmpeg_functions.php");
 
-require_once("$APP_DIR/include/fp_functions.php");
 require_once("$APP_DIR/include/SqlManager.php");
+require_once("$APP_DIR/include/db_functions.php");
+require_once("$APP_DIR/include/fp_functions.php");
 require_once("$APP_DIR/include/query_functions.php");
-require_once("$APP_DIR/include/data_html_functions.php");
+//require_once("$APP_DIR/include/data_html_functions.php");
 require_once("$APP_DIR/include/email_functions.php");
 
 $fpConfig = readConfigFile("$APP_DIR/fp.config");

@@ -2,7 +2,7 @@
 function loadSwiftMailer()
 {
 	global $APP_DIR;
-	$swiftmailer_path =  getConfig("lib.swiftmailer");	
+	$swiftmailer_path =  getConfig("lib._swiftmailer");	
 	require_once("$APP_DIR/$swiftmailer_path/lib/swift_required.php");
 }
 

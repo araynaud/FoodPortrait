@@ -29,27 +29,6 @@ function errorMessage($msg)
     die(jsValue($response, true));
 }
 
-//find user by username of other field
-function getUser($db, $username, $field="username")
-{
-    $params = array("table" => "user", $field => $username);
-    $dbUser = $db->selectWhere($params);
-    return reset($dbUser);
-}
-
-function updateUser($db, $dbUser)
-{
-    $username = arrayExtract($dbUser, "username");
-    $dbUser["table"] = "user";
-    $where = array("username" => $username);
-    return $db->update($dbUser, $where);
-}
-
-function hasProfile($db, $username)
-{
-    return $db->exists(array("table" => "user_answer", "username" => $username));
-}
-
 function setExists(&$uploads)
 {
     if(!$uploads) return;
@@ -59,55 +38,6 @@ function setExists(&$uploads)
         if(!uploadedFileExists($u, ".ss"))
             $u["noss"] = true;
     }
-}
-
-function getFormQuestions($db, $filters=null)
-{
-    if(!$db || $db->offline)
-    {
-        $questions = readJsonFile("../api/form_data.json");
-        if(isset($questions["questions"]))
-            $questions = $questions["questions"];
-        return $questions;
-    }
-
-
-    $p = array("table" => "form_question", "order_by" => "section_id, position, id", "required" => 1);
-    if($filters)
-        foreach ($filters as $key => &$value) 
-        {
-            if(contains($value, ","))
-                $value = explode(",", $value);
-            if($value) 
-                $p[$key] = $value;
-        }
-    $form_questions = $db->selectWhere($p);
-
-    $p = array("table" => "form_answer", "order_by" => "question_id, position, id");
-    $form_answers = $db->selectWhere($p);
-    //group join the 2 results
-    return $db->groupJoinResults($form_questions, $form_answers, "form_answers", "id", "question_id");
-}
-
-//save form: insert,update,delete user_answers for this user
-//loop through $user_answers 
-//try to save each
-//delete answers that are not provided
-function saveAnswers($db, $username, $user_answers)
-{
-    $result = 0;
-    if(!$db || !$username) return $result;
-
-    $status = $db->delete(array("table" => "user_answer", "username" => $username));
-    if($status) $result += $status;
-    foreach ($user_answers as $answer)
-    {
-        $answer["username"] = $username;
-        $answer["table"] = "user_answer";
-        $status = $db->saveRow($answer);
-        if($status) $result++;
-    }
-    return $result;
 }
 
 //process uploaded file
@@ -188,47 +118,6 @@ function processImage($uploadDir, $filename)
     return addVarsToArray($result, "filename filesize mimeType dateTaken description", $vars);
 }
 
-
-$dataMap = array("FileName" => "filename", 
-         "ExifImageWidth"   => "image_width", 
-         "ExifImageLength"  => "image_height",
-         "dateTaken"        => "image_date_taken",
-         "ImageDescription" => "caption", 
-         "IPTC.Caption"     => "caption", 
-         "meal"             => "meal",
-         "course"           => "course",
-         "mood"             => "mood");
-
-function saveUploadData($db, $metadata)
-{   
-    global $dataMap, $fpConfig;
-
-    $dbConnected = ($db != NULL);
-    if(!$dbConnected)
-        $db = new SqlManager($fpConfig);
-
-    if($db->offline) return -1;
-
-    //TODO: use remap between exif data and db row?
-    //step 1: insert record based on image EXIF metadata
-    if(!isset($metadata["upload_id"]))
-    {
-        $data = arrayRemap($metadata, $dataMap);
-//        $data["meal"] = selectMeal($data["image_date_taken"]);
-    }
-    else //step 2: update record based on form data
-        $data = $metadata;
-
-    $data["username"] = fpCurrentUsername();
-    $data["table"] = "user_upload";
-    $result = $db->saveRow($data);
-
-    if(!$dbConnected)
-        $db->disconnect();
-
-    return $result;
-}
-
 //select meal based on photo time
 function selectMeal($date)
 {
@@ -260,118 +149,4 @@ function uploadedFileExists($u, $subdir="")
     $imagePath = getImagePath($u, $subdir);
     return file_exists($imagePath);
 }
-
-function loadUsers($filename)
-{
-    if(!$filename) return;
-    $data = readCsvTableFile($filename, false, true);
-    return $data;
-}
-
-// === USER IMPORT FUNCTIONS
-function importUsers($users, $questions)
-{
-    $rows = array();
-    foreach ($users as $user)
-    {
-        $username = arrayExtract($user, "username");
-        if(!$username) continue;
-        $username = str_replace(" ", "", $username);
-        if(!$username) continue;
-
-    //1 insert into user
-        $userRow = array();
-        $userRow["table"] = "user";
-        $userRow["username"] = $username;
-        $userRow["password"] = md5($username);
-        $rows[] = $userRow;
-
-    //2 insert into user_answer 1 row per user column
-        foreach ($user as $column => $userValues)
-        {
-            if(!isset($questions[$column]) || !$userValues) continue;
-
-            $q = $questions[$column];
-//TODO: if question type == multiple,  $userValue is array: insert several rows
-            $userValues = toArray($userValues, ";");
-            foreach ($userValues as $key => $userValue)
-            {
-                $row = array();
-                $row["table"] = "user_answer";
-                $row["username"] = $username;
-//              $row["field"] = $column;
-//              $row["value"] = $userValue;
-                $row["question_id"] = $q["id"];
-                $answer = findAnswer($q, $userValue);
-                if($answer)
-                {
-                    $row["answer_id"] = $answer["id"];
-//                  $row["answer"] = $answer;
-
-                    if(@$answer["value"])
-                        $row["answer_value"] = $answer["value"];
-                    else if(@$answer["data_type"] == "number")
-                        $row["answer_value"] = $userValue;
-                    else if(@$answer["data_type"] == "text")
-                        $row["answer_text"] = $userValue;
-                }
-                else if(@$q["data_type"] == "number")
-                    $row["answer_value"] = $userValue;
-                else if(@$q["data_type"] == "text")
-                    $row["answer_text"] = $userValue;
-
-                if(@$row["answer_id"] || @$row["answer_text"] || @$row["answer_value"])
-                    $rows[] = $row;
-            }
-        }
-    }
-    return $rows;
-}
-
-//TODO: Find answer id, match by  partial text;
-function findAnswer($question, $userValue)
-{
-    if(!isset($question["form_answers"])) return null;
-
-    $ans = null;
-    foreach ($question["form_answers"] as $ans)
-        if(matchStrings($userValue, $ans["label"]))
-            return $ans;
-    if(@$ans["data_type"])  return $ans;
-    return null;
-}
-
-//match first word ?
-function matchStrings($userValue, $label)
-{
-//  debug("matchStrings $label", $userValue);
-
-    if(!strcasecmp($userValue, $label)) return true;
-    
-    $firstWord = substringBefore($label, " ");
-    return startsWith($userValue, $firstWord);
-}
-
-
-//loop all images in a dir
-//find files that are not in database => insert into user_uploads
-function importImages($db, $username)
-{
-    // list files in dir that are not in the database for this user
-
-    $dataRoot = getConfig("upload._diskPath");
-    $userDir = combine($dataRoot, $username);
-    $files = scandir($userDir);
-    array_shift($files);
-    array_shift($files);
-debug(count($files) . " files", $files);
-
-$dbImages = $db->select("SELECT distinct filename from user_upload where username='$username'", null, true);
-debug(count($dbImages) . " DB filenames", $dbImages);
-    //difference: insert
-    //interserction : update or ignore ?
-}
-
-// === End USER IMPORT FUNCTIONS
-
 ?>
