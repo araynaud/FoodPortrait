@@ -15,7 +15,7 @@
   	ng-disabled="loginForm.user.$dirty && loginForm.username.$invalid || loginForm.password.$dirty && loginForm.password.$invalid">Log in</button>
 
   	<div>
-		<p>Did you <a ui-sref="reset1">forget your password</a> ?</p>
+		<p>Did you <a ui-sref="forgot">forget your password</a> ?</p>
     <p ng-class="{'has-error': !lc.success}">{{lc.message}}</p>
 	</div>
 </form>

@@ -18,7 +18,7 @@ function ($window, $state, $stateParams, ProfileService)
     this.state = $state;
     lc.form = { };
     lc.success = true;
-    if($state.is("reset2") && $stateParams.email)
+    if($state.is("reset") && $stateParams.email)
       lc.form.email = $stateParams.email;
 
     lc.login = function()

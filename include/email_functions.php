@@ -51,10 +51,12 @@ function createEmailFromTemplate($templateName, $user)
 	$to_email = is_string($user) ? $user : $user["email"];
 	if(isset($email_config["to"])) $to_email = $email_config["to"];
 
-	$logo = $email_config["baseUrl"] . getConfig("app.logo");
-	$reset_key = getResetKey($to_email);
+	$logo = combine($email_config["baseUrl"], getConfig("app.logo"));
+	$resetKey = getResetKey($to_email);
+	$resetLink = combine($email_config["baseUrl"], "#/reset-password", $to_email, $resetKey);
+
 	$data = array("site" => getConfig("defaultTitle"), "baseUrl" => $email_config["baseUrl"], "logo" => $logo,
-		"reset_key" => $reset_key, "name"=> $name, "to" => $to_email);
+		"resetKey" => $resetKey, "resetLink" => $resetLink, "name"=> $name, "to" => $to_email);
 
 	$template = evalTemplate($template, $data);
 	if(is_array($user))
