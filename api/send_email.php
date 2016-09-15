@@ -8,7 +8,7 @@ $to = reqParam("to");
 //$to = "arthur.raynaud@icix.com";
 $message = createEmailFromTemplate($template, $to);
 
-$email_config = getConfig("email");
+$email_config = getConfig("_email");
 echoJsVar("email_config");
 
 $sentDate = date("Y-m-d H:i:s");
