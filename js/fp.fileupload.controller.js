@@ -17,7 +17,7 @@ function ($scope, $window, $state, $stateParams, $timeout, Upload, ProfileServic
         uc.baseUrl = ProfileService.getConfig("upload.baseUrl");
         uc.baseServer = ProfileService.getConfig("upload.server");
         uc.offline = ProfileService.isOffline();
-        uc.isIE11 = ProfileService.clientIs("Trident/7.0");
+        uc.isIE11 = ProfileService.clientIs("Trident/7.0|Edge");
 
         uc.newUpload = !$stateParams.uploadId;
         uc.queued = true;

@@ -1,6 +1,6 @@
 @media screen
 {
-  div#main
+  #main, ui-view
   {
     margin-top: 50px;
   }

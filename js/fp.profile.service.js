@@ -185,7 +185,7 @@ angular.module('fpServices', ['ngResource'])
 
     this.clientIsIE = function() 
     { 
-        return svc.clientIs("MSIE|Trident");
+        return svc.clientIs("MSIE|Trident|Edge");
     }
 
     this.init();
